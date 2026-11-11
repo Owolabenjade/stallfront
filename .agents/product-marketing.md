@@ -4,7 +4,7 @@
 **Last updated:** 2026-11-11
 
 ## Product Overview
-**One-liner:** Turn product photos into a PayPal shop in minutes. (Proposed in D-009; it replaces "...a PayPal shop AI agents can buy from" once the builder approves it.)
+**One-liner:** Turn product photos into a PayPal shop in minutes. Always followed by: "AI writes the listings. Shoppers pay with PayPal, or ask their AI assistant to shop for them." (approved, D-009; E-021)
 **Order of the story:** the seller first (photos, listings, PayPal shop, orders without DMs), then shoppers (pay with PayPal, or send an AI assistant), then developers and AI apps (WebMCP and MCP).
 **What it does:** A maker adds photos of what they sell. Stallfront drafts the listings, registers each product with PayPal and opens a shop page where people buy with PayPal, and where AI shopping assistants can search and prepare orders too. The buyer always approves the payment in PayPal.
 **Product category:** Online shop builder for small sellers (the shelf: "simple online store", "PayPal shop", "sell on Instagram").

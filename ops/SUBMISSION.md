@@ -3,7 +3,7 @@
 Paste each field into the Devpost form. Keep it consistent with README.md and ops/CLAIMS.md.
 Check the real form for fields not listed here and add them.
 The human's editable copy is the doc "Stallfront Devpost description" (https://claude.ai/artifact/2UQb5M2ibCJ6vb3ZwHthFP). If it was edited, read it and copy the changes here before submitting.
-Positioning: lead with the seller; AI assistants come second (D-009).
+Positioning: lead with the seller; the AI-assistant line always follows the headline (D-009, E-021).
 Before pasting: check Devpost's preview. If prices between two `$` signs render as a formula, put a backslash before each `$`.
 
 ## Project name
@@ -24,7 +24,7 @@ VIDEO_LINK (YouTube, public, under 3:00)
 javascript, node.js, express, html, css, paypal, paypal-orders-v2, paypal-catalog-products, groq, gpt-oss-120b, qwen, webmcp, model-context-protocol, render, puppeteer
 
 ## Image gallery (upload in this order)
-1. docs/img/cover.png (thumbnail; remake it with the new headline once approved, I-022)
+1. docs/img/cover.png (thumbnail: the headline and the AI-assistant line; rebuild with `node scripts/cover.mjs`)
 2. docs/img/review.png: AI drafts each listing from a photo and lists what the seller should check.
 3. docs/img/shop-assistant.png: Asked for a work bag and a jacket under $280, the shop's assistant prepared a $271.00 PayPal checkout.
 4. docs/img/receipt.png: The buyer approved in PayPal, and the receipt shows the PayPal payment ID.
@@ -37,7 +37,7 @@ javascript, node.js, express, html, css, paypal, paypal-orders-v2, paypal-catalo
 ## About the project (paste as Markdown)
 
 ### Inspiration
-Stallfront is for makers who sell a handful of products through Instagram or WhatsApp posts and get paid with PayPal links. For them, every sale starts with a message: "Is this still available? How much?" The seller answers when they can and sends a PayPal link, and by then some buyers have moved on.
+Stallfront is for makers who sell a handful of products through Instagram or WhatsApp posts and get paid with PayPal links. Picture a sale there. A buyer messages: "Is this still available? How much?" The seller replies when they can with a PayPal link, and by then the buyer may have moved on.
 
 Setting up a full online store is a lot of work for six products. Meanwhile, AI assistants are starting to shop for people, and an assistant can't buy from a post. PayPal [launched agent-ready checkout in September 2026](https://developer.paypal.com/community/blog/WebMCP_PayPal_Agent_Ready), but it is limited to Store Sync merchants today.
 

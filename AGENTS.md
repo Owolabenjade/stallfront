@@ -1,6 +1,6 @@
 # Stallfront: agent guide
 
-For makers who sell a handful of products through social posts and PayPal links, Stallfront turns product photos into a PayPal-backed shop that AI assistants can browse and buy from through WebMCP tools, with the buyer approving every payment in PayPal, so an agent goes from "find me a gift under $40" to a paid PayPal order in a few tool calls.
+For makers who sell a handful of products through social posts and PayPal links, Stallfront turns product photos into a PayPal shop in minutes by drafting each listing with a vision model and registering it in the PayPal catalog, so shoppers can pay with PayPal or send their AI assistant to shop for them, and only the buyer can approve a payment.
 
 This repository is the project's memory; chat history is not. Every session starts from these files and ends by updating them, so any agent can pick up the work in a fresh session.
 
@@ -59,6 +59,6 @@ This repository is the project's memory; chat history is not. Every session star
 | `ops/DEPENDENCIES.md` | Verified dependency facts |
 | `ops/CLOCK.md` | Deadline, gates, session log |
 | `ops/private/` | Gitignored notes that must not be public |
-| `server/` | Node service: shop API, PayPal client, Claude calls, MCP endpoint |
+| `server/` | Node service: shop API, PayPal client, AI calls (Groq), MCP endpoint |
 | `public/` | Pages and browser code, including the WebMCP tool registration |
 | `scripts/` | Smoke check and seed script |

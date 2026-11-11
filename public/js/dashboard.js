@@ -45,7 +45,7 @@ function renderOrders(orders) {
         </div>
         <div class="order-meta ids">PayPal order ${esc(o.paypalOrderId)}${o.captureId ? ` · payment ${esc(o.captureId)}` : ''}${ch.tech ? ` · ${ch.tech}` : ''}</div>
         ${o.note ? `<p class="note">The assistant's note: "${esc(o.note)}"</p>` : ''}
-        ${o.trace?.length ? `<details class="trace"><summary>What the assistant did (${o.trace.length} step${o.trace.length > 1 ? 's' : ''})</summary><ol>${o.trace.map((t) => `<li><span><span class="v">${esc(STEP[t.tool] || t.tool)}.</span> ${esc(t.summary)}</span><span class="tech">${esc(t.tool)}</span></li>`).join('')}</ol></details>` : ''}
+        ${o.trace?.length && o.channel !== 'web' ? `<details class="trace"><summary>What the assistant did (${o.trace.length} step${o.trace.length > 1 ? 's' : ''})</summary><ol>${o.trace.map((t) => `<li><span><span class="v">${esc(STEP[t.tool] || t.tool)}.</span> ${esc(t.summary)}</span><span class="tech">${esc(t.tool)}</span></li>`).join('')}</ol></details>` : ''}
       </article>`;
     })
     .join('');
@@ -53,8 +53,10 @@ function renderOrders(orders) {
 }
 
 function renderActivity(activity) {
-  if (!activity.length) return;
-  $('#activity').innerHTML = activity
+  // The panel is "What assistants did": a shopper's own Buy with PayPal click is not an assistant step.
+  const byAssistants = activity.filter((a) => a.channel !== 'web');
+  if (!byAssistants.length) return;
+  $('#activity').innerHTML = byAssistants
     .map((a) => `<li class="${a.ok ? '' : 'fail'}"><time datetime="${esc(a.at)}">${time(a.at)}</time><span class="t">${esc(STEP[a.tool] || a.tool)}</span><span class="s">${esc(a.summary)}</span><span class="tech">${esc(a.tool)} · ${esc(a.channel === 'mcp' ? 'MCP' : a.channel === 'web' ? 'website' : 'WebMCP')}</span></li>`)
     .join('');
 }

@@ -1,8 +1,10 @@
-# Stallfront: turn product photos into a PayPal shop AI agents can buy from
+# Stallfront: turn product photos into a PayPal shop in minutes
 
 [Live demo](https://stallfront.onrender.com) · [Demo shop](https://stallfront.onrender.com/s/corner-stall) · [Seller view](https://stallfront.onrender.com/s/corner-stall/dashboard) · MCP endpoint: `https://stallfront.onrender.com/mcp/corner-stall` · Video: VIDEO_LINK
 
-For makers who sell a handful of products through social posts and PayPal links, Stallfront turns product photos into a PayPal-backed shop that AI assistants can browse and buy from through WebMCP tools. The buyer approves every payment in PayPal, so an agent goes from "find me a gift under $20" to a paid PayPal order in a few tool calls.
+AI writes the listings. Shoppers pay with PayPal, or ask their AI assistant to shop for them. Only the buyer can approve a payment, in PayPal.
+
+Stallfront is for makers who sell a handful of products through Instagram or WhatsApp posts and get paid with PayPal links. Each listing is drafted from a photo, each published product is registered in the PayPal catalog, and every shop is open to AI assistants from the start: the page offers its actions as WebMCP tools, and other AI apps connect over MCP.
 
 ![The demo shop: the assistant searched the shop and prepared a $271.00 PayPal checkout through the page's WebMCP tools](docs/img/shop-assistant.png)
 
@@ -11,12 +13,13 @@ For makers who sell a handful of products through social posts and PayPal links,
 ## What it does
 
 - **Photos become listings.** A seller adds up to six product photos. A vision model drafts each listing (title, description, price, tags, who it suits as a gift) and flags what the photo can't confirm. The seller checks the drafts and publishes, and each product is registered in the PayPal catalog.
-- **The shop speaks to agents.** Every shop page registers four WebMCP tools: `search_products`, `get_product`, `create_checkout` and `get_order_status`. The same tools are served over MCP at `/mcp/<shop>`, so a browser agent or any MCP client can shop without scraping the page.
+- **Shoppers pay with PayPal.** Every product has a **Buy with PayPal** button. It creates a PayPal order for that product and sends the shopper to PayPal to approve it.
+- **AI assistants can shop too.** Every shop page registers four WebMCP tools: `search_products`, `get_product`, `create_checkout` and `get_order_status`. The same tools are served over MCP at `/mcp/<shop>`, so a browser agent or any MCP client can shop without scraping the page.
 - **The buyer approves in PayPal.** `create_checkout` creates a PayPal order and returns its approval link. The agent can't pay: the buyer signs in to PayPal and approves, and Stallfront captures the payment on return. The seller sees which channel and which agent placed each order, along with the tool calls behind it.
 
 ## Why it matters
 
-AI assistants are starting to shop on people's behalf, but an assistant can only buy where a shop gives it tools to call. PayPal's own WebMCP "agent ready" checkout is limited to Store Sync customers today ([PayPal developer blog, 16 Sep 2026](https://developer.paypal.com/community/blog/WebMCP_PayPal_Agent_Ready)). A maker who sells a few bags and mugs through Instagram posts and PayPal links has no catalog, no structured product data and no agent tools, so agents can't see their stock or check out. Stallfront gives that seller the same thing in a few minutes, starting from the photos they already have.
+A maker who sells a few bags and mugs through Instagram posts and PayPal links has no shop. Buyers often message to ask whether something is still available and what it costs, and setting up a full online store is a lot of work for six products. AI assistants are starting to shop for people too, but an assistant can only buy where a shop gives it tools to call, and PayPal's own WebMCP "agent ready" checkout is limited to Store Sync customers today ([PayPal developer blog, 16 Sep 2026](https://developer.paypal.com/community/blog/WebMCP_PayPal_Agent_Ready)). Stallfront gives that seller a PayPal shop in minutes, starting from the photos they already have, and opens it to AI assistants at the same time.
 
 ## How it works
 
@@ -69,6 +72,7 @@ All checks below ran against the live Render URL unless marked local. The full m
 | Buyer assistant, "a leather work bag and a jacket, under $280 for both" | 10/10 runs reached the briefcase and the jacket for $271.00 in two tool calls; median 3.5 s and max 3.7 s to the PayPal handoff | [`scripts/reliability.mjs`](scripts/reliability.mjs), headless Chrome, E-019 |
 | Buyer assistant, "a gift under $20 for a coffee lover" | 5/5 reached the coffee mug for $24.00; median 4.1 s. An earlier prompt version asked "should I add it to your cart?" instead (0/3), which we fixed | same, E-015, E-019 |
 | Payment captured from the public URL | Order `ord_66d4bdfabdcc`: PayPal order `31P99297WK614384W`, capture `1XT10488423082226`, $271.00, channel WebMCP | [`scripts/approve-sandbox.mjs`](scripts/approve-sandbox.mjs) logs in as the sandbox buyer, E-019 |
+| Shopper's Buy button, no assistant | **Buy with PayPal** on the gold-handle mug opened PayPal checkout 3.4 s after the click. Paid: order `ord_19f98700e5bd`, PayPal order `74U52681SM570642S`, capture `97D51285HA094451P`, $31.00, channel website | [`scripts/buy-check.mjs`](scripts/buy-check.mjs), then `approve-sandbox.mjs`, E-020 |
 | MCP client buys | SDK client: search, get, `create_checkout`, buyer approves, capture (local, E-014); `create_checkout` on Render, PayPal order `3HN04577SY5380117` | [`scripts/mcp-check.mjs`](scripts/mcp-check.mjs) `--checkout`, E-014, E-019 |
 | Photos to a live shop | The four sample photos drafted, published, 4 of 4 PayPal catalog products; about a minute on the free AI plan | [`scripts/onboard-check.mjs`](scripts/onboard-check.mjs), E-016, E-019 |
 | Smoke check and unit tests | Smoke 6/6 on Render and on a fresh clone; `npm test` 13/13 | E-016, E-019 |
@@ -81,7 +85,7 @@ All checks below ran against the live Render URL unless marked local. The full m
 
 **On the live site** (the free plan sleeps when idle, so the first load can take about a minute):
 
-1. Open the [demo shop](https://stallfront.onrender.com/s/corner-stall) and click the suggestion "New job on Monday: get me a leather work bag and a jacket, under $280 for both". Watch the steps appear, then click **Review and pay in PayPal**.
+1. Open the [demo shop](https://stallfront.onrender.com/s/corner-stall). Click **Buy with PayPal** on any product, or click the suggestion "New job on Monday: get me a leather work bag and a jacket, under $280 for both", watch the steps appear, then click **Review and pay in PayPal**.
 2. Log in with the PayPal sandbox test buyer below and pay. This is PayPal's sandbox, so no real money moves. You return to a receipt with the PayPal payment ID.
 3. Open the [seller view](https://stallfront.onrender.com/s/corner-stall/dashboard) to see the order, the assistant that placed it and each step it took.
 4. Optional: connect an MCP client, for example `claude mcp add --transport http corner-stall https://stallfront.onrender.com/mcp/corner-stall`, and ask it to shop.
@@ -116,7 +120,7 @@ npm test               # unit tests, no network
 
 ## Built during the PayPal AI Hackathon
 
-Work started on 2026-11-11 (UTC) and nothing existed before. The code was written with Claude Code (Anthropic) as the coding assistant.
+Work started on 2026-11-11 (UTC) and nothing existed before.
 
 Product photos from Unsplash, under the Unsplash License: [Caio Coelho](https://unsplash.com/photos/QRN47la37gw) (denim jacket), [Latico Leathers](https://unsplash.com/photos/-qgDzKxrHMg) (totes), [Mel Poole](https://unsplash.com/photos/vQQoZzKO9Ig) (slogan mugs), [Noah Smith](https://unsplash.com/photos/LkuH3Txi_gs) (loafers), [Nong](https://unsplash.com/photos/2dDJdOlA3CY) (gold-handle mug) and [PersonalGraphic.com](https://unsplash.com/photos/IFlg3kFbR0E) (briefcase).
 
@@ -126,6 +130,7 @@ Product photos from Unsplash, under the Unsplash License: [Caio Coelho](https://
 
 ## What's next
 
+- Put it in front of real market sellers and see what they change.
 - Per-seller PayPal onboarding, so each shop is paid into its own account.
 - Capture and refund webhooks, and order emails for the seller.
 - Use PayPal's own agent-ready checkout once it opens beyond Store Sync merchants.

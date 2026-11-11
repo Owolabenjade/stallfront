@@ -1,8 +1,8 @@
 # PLAN
 
 Project: Stallfront
-Thesis: For makers who sell a handful of products through social posts and PayPal links, Stallfront turns product photos into a PayPal-backed shop that AI assistants can browse and buy from through WebMCP tools, with the buyer approving every payment in PayPal, so an agent goes from "find me a gift under $40" to a paid PayPal order in a few tool calls.
-Tagline: Turn product photos into a PayPal shop in minutes. (Proposed in D-009, replacing "Turn product photos into a PayPal shop AI agents can buy from." once the human approves it.)
+Thesis: For makers who sell a handful of products through social posts and PayPal links, Stallfront turns product photos into a PayPal shop in minutes by drafting each listing with a vision model and registering it in the PayPal catalog, so shoppers can pay with PayPal or send their AI assistant to shop for them, and only the buyer can approve a payment.
+Tagline: Turn product photos into a PayPal shop in minutes. Always followed by: "AI writes the listings. Shoppers pay with PayPal, or ask their AI assistant to shop for them." (D-009, E-021)
 Timebox: hackathon
 Deadline and gates: see ops/CLOCK.md
 
