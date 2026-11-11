@@ -8,12 +8,12 @@ Role: critical (the demo path breaks without it) | optional
 | Dependency | Pinned version | Role | Verified (UTC) | Evidence | Status | Limits, keys, gotchas |
 |---|---|---|---|---|---|---|
 | Node.js | 22.20.0 | critical | 2026-11-11 | E-001 | verified | Local machine; Render must run 22 too (`engines`) |
-| PayPal sandbox REST: OAuth, Orders v2 create and capture | v2 | critical | 2026-11-11 | E-006, E-007 | unverified | Needs a developer account (I-002). Buyer approval needs the sandbox personal account login |
+| PayPal sandbox REST: OAuth, Orders v2 create and capture | v2 | critical | 2026-11-11 | E-006, E-008 | verified | Needs a developer account (I-002). Buyer approval needs the sandbox personal account login |
 | PayPal sandbox REST: Catalog Products | v1 | critical | | | unverified | Product IDs only; prices live on our side and in order items |
 | PayPal sandbox webhooks | v1 | optional | | | unverified | Needs the public Render URL and a webhook ID for signature verification |
 | Anthropic Messages API (vision, tool use) | @anthropic-ai/sdk 1.8.0 | optional | | | dropped | D-005: no API credit; code removed after abc0f8e |
-| Groq chat completions: openai/gpt-oss-120b (agent, tool use), openai/gpt-oss-20b (fallback) | API v1 (OpenAI-compatible) | critical | | | unverified | Free plan; docs disagree on limits (8K vs 250K TPM). Needs GROQ_API_KEY |
-| Groq vision: qwen/qwen3.8-27b (json_schema strict) | API v1 | critical | | | unverified | Preview model; max 3 images per request; each image counts 2048 input tokens |
+| Groq chat completions: openai/gpt-oss-120b (agent, tool use), openai/gpt-oss-20b (fallback) | API v1 (OpenAI-compatible) | critical | 2026-11-11 | E-009, E-010 | verified | Free plan; docs disagree on limits (8K vs 250K TPM). Needs GROQ_API_KEY |
+| Groq vision: qwen/qwen3.8-27b (json_schema strict) | API v1 | critical | 2026-11-11 | E-009 | verified | No enum in the schema (fails). Preview model; max 3 images per request; each image counts 2048 input tokens |
 | @mcp-b/global (WebMCP polyfill) | 6.2.0 | critical | 2026-11-11 | E-003 | verified | Exposes `document.modelContext`/`navigator.modelContext`; check the registration API before building on it |
 | @modelcontextprotocol/sdk | 1.32.2 | critical | 2026-11-11 | E-005 | verified | Streamable HTTP, stateful sessions held in memory (lost on restart; clients reconnect) |
 | Render web service | free tier | critical | | | unverified | Cold starts after idle; ephemeral disk. Human needs an account |

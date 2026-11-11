@@ -77,3 +77,30 @@ Method: `node --env-file=.env scripts/approve-sandbox.mjs https://www.sandbox.pa
 Result: buyer login succeeded; PayPal redirected to genericError?code=UEFZRUVfQUNDT1VOVF9MT0NLRURfT1JfQ0xPU0VE (base64 for PAYEE_ACCOUNT_LOCKED_OR_CLOSED), page text "The merchant isn't able to accept PayPal payments at this time."
 Label: OBSERVED
 Limits: Cause INFERRED: the app's sandbox business account cannot receive payments (likely its country). Fix in progress: a US sandbox business account and a new app (I-002).
+
+## E-008: Full payment loop in the PayPal sandbox (create, buyer approval, capture)
+Date (UTC): 2026-11-11T09:35Z
+Commit: 8a92017
+Environment: local server, PayPal sandbox app "Original Stallfront" (US sandbox business account), sandbox personal buyer sb-n1jy253844531 (account set to Arabic, Dubai address), headless Chrome
+Method: create_checkout via the WebMCP tool endpoint (strainer + chai), then `node --env-file=.env scripts/approve-sandbox.mjs <approve_url>`, then GET /api/orders/ord_f48eed84bb2d
+Result: buyer logged in, pressed the purchase button, PayPal redirected to /s/kiln-and-leaf/orders/ord_f48eed84bb2d; order page "Paid with PayPal"; status paid, PayPal order 9SU8772198274373F, capture 99K72367WP461105U, total $38.00
+Label: OBSERVED
+Limits: Local server (return URL on localhost); not yet on the public URL. Earlier attempts failed on the first app's locked payee (E-007) and on script bugs (button text, remembered email), since fixed.
+
+## E-009: Groq models, agent tool call and vision listing
+Date (UTC): 2026-11-11T09:35Z
+Commit: 8a92017
+Environment: Groq API with the human's free key; local server
+Method: GET https://api.groq.com/openai/v1/models; POST /api/agent with "Find me a gift under $40 for a tea lover"; direct chat completions on qwen/qwen3.8-27b with json_schema variants; server draftListing() on public/img/samples/mug.jpg
+Result: 11 models on the key, including openai/gpt-oss-120b, openai/gpt-oss-20b and qwen/qwen3.8-27b. Agent turn returned a search_products tool call (669 input, 51 output tokens). Vision: a simple strict json_schema worked (HTTP 200, about 1.8K prompt tokens per image); the full schema with an enum failed ("Failed to generate JSON"); without the enum it worked in 2.5 s and produced "White Ceramic Mug with Red Leaf Design and Blue Rim", $12, needs_seller_check capacity/dimensions. Rate limit headers: 8000 tokens per minute; a 429 reported ITPM limit 7000 for qwen/qwen3.8-27b.
+Label: OBSERVED
+Limits: One photo; listing quality on the other photos not yet seen. The free plan allows roughly three photos per minute.
+
+## E-010: In-page buyer assistant end to end (Groq + WebMCP)
+Date (UTC): 2026-11-11T09:35Z
+Commit: 8a92017
+Environment: headless Chrome, local server, openai/gpt-oss-120b
+Method: `node scripts/agent-check.mjs http://localhost:3000`
+Result: tool calls through WebMCP: search_products ("tea lover gift", max $40) then create_checkout (1 x prd_strn01); handoff card "Total $24.00, Review and pay in PayPal" with a sandbox PayPal link; 3.7 s to handoff.
+Label: OBSERVED
+Limits: One passing run. The first attempt stalled after search_products and the check then recorded no transcript; reliability over repeated runs not measured yet.
