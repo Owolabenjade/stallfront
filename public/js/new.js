@@ -144,8 +144,9 @@ function renderListings() {
         <label class="wide">Card line <input name="summary" value="${esc(l.summary)}" maxlength="160"></label>
         <label class="wide">Description <textarea name="description" maxlength="800">${esc(l.description)}</textarea></label>
         <label>Category <input name="category" value="${esc(l.category)}" maxlength="30"></label>
-        <label>Price (USD) <input name="priceUsd" type="number" min="1" max="1000" step="0.5" value="${esc(l.price_usd)}"><span class="why">${esc(l.price_reasoning)}</span></label>
+        <label>Price (USD) <input name="priceUsd" type="number" min="1" max="1000" step="0.5" value="${esc(l.price_usd)}"></label>
         <label>In stock <input name="stock" type="number" min="0" max="999" value="5"></label>
+        ${l.price_reasoning ? `<p class="why wide"><strong>Why this price:</strong> ${esc(l.price_reasoning)}</p>` : ''}
         <div class="tagline-row">${(l.tags || []).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}${(l.gift_for || []).map((t) => `<span class="tag">gift: ${esc(t)}</span>`).join('')}</div>
         ${l.needs_seller_check?.length ? `<div class="checks"><strong>Check before publishing:</strong> ${l.needs_seller_check.map(esc).join('; ')}</div>` : ''}
       </div>

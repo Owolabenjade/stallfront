@@ -16,7 +16,7 @@ const browser = await puppeteer.launch({ executablePath: exe, headless: true });
 let ok = false;
 try {
   const page = await browser.newPage();
-  await page.setViewport({ width: 1366, height: 900 });
+  await page.setViewport({ width: 1366, height: Number(at('--height') || 900) });
   const turns = []; // one entry per model turn: model name, or the HTTP status when it failed
   page.on('response', async (res) => {
     if (!res.url().endsWith('/api/agent')) return;
@@ -48,7 +48,10 @@ try {
   console.log(`model turns (${turns.length}): ${turns.join(', ')}`);
   console.log(`time to handoff: ${handoffAt.toFixed(1)} s; finished: ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   ok = Boolean(result.handoff);
-  if (SHOT) await page.screenshot({ path: SHOT });
+  if (SHOT) {
+    await new Promise((r) => setTimeout(r, 800)); // let the last message finish its fade-in
+    await page.screenshot({ path: SHOT });
+  }
 } catch (err) {
   console.log(`FAIL ${err.message}`);
 } finally {

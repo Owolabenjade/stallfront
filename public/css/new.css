@@ -39,7 +39,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px
 .listing .fields { display: grid; grid-template-columns: 1fr 120px 90px; gap: 10px 12px; }
 .listing .fields .wide { grid-column: 1 / -1; }
 @media (max-width: 640px) { .listing .fields { grid-template-columns: 1fr 1fr; } }
-.why { font-size: 13px; color: var(--ink-3); margin: 2px 0 0; font-weight: 400; }
+.why { font-size: 13px; color: var(--ink-2); margin: -2px 0 0; font-weight: 400; }
+.why strong { font-weight: 600; }
 .checks { grid-column: 1 / -1; background: var(--amber-soft); color: #5e3d00; border-radius: var(--radius-sm); padding: 8px 12px; font-size: 13px; }
 .checks strong { font-weight: 600; }
 .tagline-row { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }

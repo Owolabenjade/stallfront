@@ -19,8 +19,15 @@ async function chat(body) {
   const json = await res.json().catch(() => ({}));
   if (!res.ok) {
     const retryAfter = Number(res.headers.get('retry-after')) || null;
-    const msg = json.error?.message || `Groq request failed (${res.status})`;
-    throw httpError(res.status === 429 ? 429 : res.status >= 500 ? 502 : res.status, msg, { retryAfter, upstream: true, failedGeneration: json.error?.failed_generation || null });
+    // Groq's own messages name our organization and plan, so they stay in the server log; clients get a plain message.
+    const detail = json.error?.message || `Groq request failed (${res.status})`;
+    if (res.status !== 429) console.warn(`Groq ${res.status} (${body.model}): ${detail.slice(0, 300)}`);
+    const busy = res.status === 429;
+    throw httpError(busy ? 429 : 502, busy ? 'The free AI plan is busy right now; wait a few seconds and try again.' : 'The AI service could not complete this request.', {
+      retryAfter,
+      upstream: true,
+      failedGeneration: json.error?.failed_generation || null,
+    });
   }
   return { json, limits: { tokens: res.headers.get('x-ratelimit-limit-tokens'), requests: res.headers.get('x-ratelimit-limit-requests') } };
 }
@@ -160,13 +167,17 @@ const asList = (a) => (Array.isArray(a) ? a : typeof a === 'string' ? a.split(/[
 const uniq = (a, n) => [...new Set(asList(a).map((s) => String(s).trim().toLowerCase()).filter(Boolean))].slice(0, n);
 
 /** Fill defaults and bound every field; the seller reviews everything before publishing. */
+// The schema can't use enum (Groq strict mode rejects it), so the category is mapped here.
+const CATEGORIES = ['kitchen', 'home', 'bags', 'apparel', 'accessories', 'electronics', 'art', 'stationery', 'beauty', 'toys', 'other'];
+const CATEGORY_ALIASES = { drinkware: 'kitchen', tableware: 'kitchen', glassware: 'kitchen', mug: 'kitchen', luggage: 'bags', bag: 'bags', clothing: 'apparel', jewelry: 'accessories', jewellery: 'accessories', gadgets: 'electronics', tech: 'electronics', office: 'stationery', decor: 'home', furniture: 'home' };
+
 function normalize(l) {
   const attrs = l.attributes && typeof l.attributes === 'object' ? l.attributes : {};
   return {
     title: String(l.title || 'Untitled product').slice(0, 80),
     summary: String(l.summary || '').slice(0, 160),
     description: String(l.description || '').slice(0, 800),
-    category: String(l.category || 'other').toLowerCase().slice(0, 30),
+    category: CATEGORIES.find((c) => String(l.category || '').toLowerCase().includes(c)) || CATEGORY_ALIASES[String(l.category || '').toLowerCase()] || 'other',
     price_usd: Math.min(Math.max(Math.round(Number(l.price_usd || 10) * 2) / 2, 1), 1000),
     price_reasoning: String(l.price_reasoning || '').slice(0, 200),
     attributes: { material: String(attrs.material || 'unknown'), color: String(attrs.color || 'unknown'), size: String(attrs.size || 'unknown') },
@@ -184,7 +195,8 @@ function normalize(l) {
 export async function draftListing(photo, hint) {
   const prompt =
     'This is a product photo from a small independent seller who is listing it in an online shop that AI shopping agents will search. ' +
-    'Write the listing for the main object. Describe only what you can see or reasonably infer, ignore the background, and put anything you cannot confirm in needs_seller_check instead of stating it as fact. ' +
+    'Write the listing for the main object. Describe only what you can see or reasonably infer, and put anything you cannot confirm in needs_seller_check instead of stating it as fact. ' +
+    'Describe the product, not the photo: never mention hands, tables, stools, surfaces or backgrounds. ' +
     'Use concrete titles and tags (material, object, use) because agents match on them. Return JSON only.' +
     (hint ? `\nSeller's note: ${String(hint).slice(0, 300)}` : '');
   const request = (text, response_format) => ({
