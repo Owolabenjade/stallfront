@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order · Stallfront</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18l-1.5-5h-15z"/><path d="M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/></svg>
+        Stallfront
+      </a>
+      <nav><a id="back" href="/">Back to the shop</a></nav>
+    </div>
+  </header>
+  <main class="wrap">
+    <article class="receipt" id="receipt" aria-busy="true">
+      <p class="muted">Loading your order…</p>
+    </article>
+  </main>
+  <script type="module">
+    const [, , slug, , id] = location.pathname.split('/');
+    const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+    const money = (c) => `$${(c / 100).toFixed(2)}`;
+    const CHANNEL = { webmcp: 'AI agent through WebMCP', mcp: 'AI agent through MCP', web: 'Shopper on the website' };
+    document.getElementById('back').href = `/s/${slug}`;
+
+    async function load(refresh) {
+      const res = await fetch(`/api/orders/${encodeURIComponent(id)}${refresh ? '?refresh=1' : ''}`);
+      const box = document.getElementById('receipt');
+      box.removeAttribute('aria-busy');
+      if (!res.ok) { box.innerHTML = '<h1>Order not found</h1><p class="muted">Check the link, or go back to the shop.</p>'; return; }
+      const { order: o, shop } = await res.json();
+      const status = o.status === 'paid' ? ['paid', 'Paid with PayPal'] : o.status === 'cancelled' ? ['cancelled', 'Cancelled'] : ['waiting', 'Waiting for PayPal approval'];
+      box.innerHTML = `
+        <span class="status ${status[0]}">${status[1]}</span>
+        <h1 style="margin-top:14px">${o.status === 'paid' ? 'Thank you, your order is in.' : 'Your order'}</h1>
+        <p class="muted">${esc(shop.name)} has your order. ${o.status === 'paid' ? 'The payment was approved by you and captured through PayPal.' : ''}</p>
+        <table class="lines"><tbody>
+          ${o.items.map((i) => `<tr><td>${esc(i.quantity)} × ${esc(i.title)}</td><td>${money(i.unitCents * i.quantity)}</td></tr>`).join('')}
+          <tr><td>Shipping</td><td>${money(o.shippingCents)}</td></tr>
+          <tr class="total"><td>Total</td><td>${money(o.totalCents)}</td></tr>
+        </tbody></table>
+        <dl class="facts">
+          <dt>Placed by</dt><dd>${esc(CHANNEL[o.channel] || o.channel)}</dd>
+          <dt>Order</dt><dd class="mono">${esc(o.id)}</dd>
+          <dt>PayPal order</dt><dd class="mono">${esc(o.paypalOrderId)}</dd>
+          ${o.captureId ? `<dt>PayPal capture</dt><dd class="mono">${esc(o.captureId)}</dd>` : ''}
+        </dl>
+        ${o.approveUrl ? `<p style="margin-top:20px"><a class="btn btn-paypal" href="${esc(o.approveUrl)}">Review and pay in PayPal</a></p>` : ''}`;
+      if (o.status === 'awaiting_buyer' && !refresh) setTimeout(() => load(true), 1500);
+    }
+    load(false);
+  </script>
+</body>
+</html>

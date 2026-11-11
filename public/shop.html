@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop on Stallfront</title>
+  <meta name="description" content="A PayPal shop that AI agents can browse and buy from through WebMCP tools.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+  <!-- WebMCP: exposes this page's tools to AI agents through document.modelContext -->
+  <script src="/vendor/webmcp.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18l-1.5-5h-15z"/><path d="M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/></svg>
+        Stallfront
+      </a>
+      <nav><a href="/">How it works</a><a id="dash-link" href="#">Seller view</a></nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="notice"></div>
+    <section class="shop-head">
+      <div>
+        <h1 id="shop-name">Loading shop…</h1>
+        <p id="shop-tagline"></p>
+      </div>
+      <div id="agent-ready" class="agent-ready off" role="status">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg>
+        <span>Registering agent tools…</span>
+      </div>
+    </section>
+
+    <div class="shop-layout">
+      <section aria-labelledby="products-h">
+        <h2 id="products-h" class="sr-only">Products</h2>
+        <div id="grid" class="grid" aria-busy="true"></div>
+      </section>
+
+      <aside class="panel" aria-labelledby="agent-h">
+        <div class="panel-head">
+          <h2 id="agent-h">Shop with an AI assistant</h2>
+          <p>The assistant uses this page's WebMCP tools. It can prepare a PayPal checkout, but only you can approve the payment.</p>
+        </div>
+        <div id="chat" class="panel-body" aria-live="polite">
+          <div>
+            <p class="muted" style="margin:0 0 8px;font-size:14px">Tools this page exposes to agents:</p>
+            <ul id="tools" class="tools-list"></ul>
+          </div>
+        </div>
+        <div class="panel-foot">
+          <div class="chips" id="chips">
+            <button class="chip" type="button">Find me a gift under $40 for a tea lover</button>
+            <button class="chip" type="button">Something handmade for a housewarming</button>
+          </div>
+          <form id="composer" class="composer" autocomplete="off">
+            <label for="ask" class="sr-only">Ask the assistant</label>
+            <input id="ask" name="ask" placeholder="Ask for what you need…" maxlength="300">
+            <button class="btn btn-primary" type="submit" id="send">Ask</button>
+          </form>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script type="module" src="/js/shop.js"></script>
+</body>
+</html>

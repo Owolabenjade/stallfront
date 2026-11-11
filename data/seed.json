@@ -1,0 +1,184 @@
+{
+  "shops": [
+    {
+      "slug": "kiln-and-leaf",
+      "name": "Kiln & Leaf",
+      "tagline": "Small-batch stoneware and loose-leaf tea from a two-person studio",
+      "shippingCents": 600,
+      "currency": "USD",
+      "adminKey": "11de971c0b3accc4dc625bf4",
+      "demo": true,
+      "createdAt": "2026-11-11T06:00:00.000Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "prd_mug01",
+      "shopSlug": "kiln-and-leaf",
+      "title": "Speckled stoneware tea mug",
+      "priceCents": 2800,
+      "category": "kitchen",
+      "summary": "Wheel-thrown 12 oz mug with an oatmeal speckle glaze.",
+      "description": "Wheel-thrown stoneware mug, 12 oz, finished in a speckled oatmeal glaze with a raw clay foot. Each one is a little different. Dishwasher and microwave safe.",
+      "attributes": {
+        "material": "stoneware",
+        "color": "oatmeal speckle",
+        "size": "12 oz"
+      },
+      "tags": [
+        "mug",
+        "ceramic",
+        "handmade",
+        "tea",
+        "coffee"
+      ],
+      "giftFor": [
+        "tea lovers",
+        "coffee drinkers",
+        "housewarming"
+      ],
+      "stock": 8,
+      "imageUrl": null,
+      "paypalProductId": null,
+      "status": "live"
+    },
+    {
+      "id": "prd_chai01",
+      "shopSlug": "kiln-and-leaf",
+      "title": "House chai, loose leaf (100 g tin)",
+      "priceCents": 1400,
+      "category": "tea",
+      "summary": "Assam black tea with cardamom, ginger, cinnamon and clove.",
+      "description": "Our house chai: Assam black tea blended in small batches with green cardamom, ginger, cinnamon and clove. About 40 cups per 100 g tin.",
+      "attributes": {
+        "material": "loose-leaf tea",
+        "size": "100 g",
+        "origin": "Assam, India"
+      },
+      "tags": [
+        "tea",
+        "chai",
+        "loose leaf",
+        "spiced"
+      ],
+      "giftFor": [
+        "tea lovers",
+        "chai fans"
+      ],
+      "stock": 24,
+      "imageUrl": null,
+      "paypalProductId": null,
+      "status": "live"
+    },
+    {
+      "id": "prd_strn01",
+      "shopSlug": "kiln-and-leaf",
+      "title": "Ceramic tea strainer",
+      "priceCents": 1800,
+      "category": "kitchen",
+      "summary": "Hand-pierced stoneware strainer that rests on any mug.",
+      "description": "Hand-pierced stoneware strainer with a wide rim that rests on most mugs, plus a small matching drip dish. Pairs with any loose-leaf tea.",
+      "attributes": {
+        "material": "stoneware",
+        "color": "celadon",
+        "size": "9 cm"
+      },
+      "tags": [
+        "tea",
+        "strainer",
+        "ceramic",
+        "loose leaf"
+      ],
+      "giftFor": [
+        "tea lovers"
+      ],
+      "stock": 12,
+      "imageUrl": null,
+      "paypalProductId": null,
+      "status": "live"
+    },
+    {
+      "id": "prd_cndl01",
+      "shopSlug": "kiln-and-leaf",
+      "title": "Beeswax pillar candle",
+      "priceCents": 2200,
+      "category": "home",
+      "summary": "Hand-poured pure beeswax, about 40 hours of burn.",
+      "description": "Hand-poured pillar of pure beeswax with a cotton wick. Smells faintly of honey; about 40 hours of burn time.",
+      "attributes": {
+        "material": "beeswax",
+        "size": "7.5 x 10 cm"
+      },
+      "tags": [
+        "candle",
+        "beeswax",
+        "home"
+      ],
+      "giftFor": [
+        "hosts",
+        "housewarming"
+      ],
+      "stock": 10,
+      "imageUrl": null,
+      "paypalProductId": null,
+      "status": "live"
+    },
+    {
+      "id": "prd_tpot01",
+      "shopSlug": "kiln-and-leaf",
+      "title": "Large stoneware teapot",
+      "priceCents": 6400,
+      "category": "kitchen",
+      "summary": "Six-cup teapot with a built-in strainer.",
+      "description": "Six-cup stoneware teapot with a built-in ceramic strainer and a speckled oatmeal glaze to match our mugs.",
+      "attributes": {
+        "material": "stoneware",
+        "color": "oatmeal speckle",
+        "size": "1.2 L"
+      },
+      "tags": [
+        "teapot",
+        "tea",
+        "ceramic",
+        "handmade"
+      ],
+      "giftFor": [
+        "tea lovers",
+        "families"
+      ],
+      "stock": 3,
+      "imageUrl": null,
+      "paypalProductId": null,
+      "status": "live"
+    },
+    {
+      "id": "prd_towl01",
+      "shopSlug": "kiln-and-leaf",
+      "title": "Linen tea towel, botanical print",
+      "priceCents": 1600,
+      "category": "kitchen",
+      "summary": "Stonewashed linen with a screen-printed tea-plant print.",
+      "description": "Stonewashed European linen tea towel, screen-printed by hand with a camellia (tea plant) botanical. 50 x 70 cm.",
+      "attributes": {
+        "material": "linen",
+        "color": "natural with green print",
+        "size": "50 x 70 cm"
+      },
+      "tags": [
+        "linen",
+        "tea towel",
+        "kitchen"
+      ],
+      "giftFor": [
+        "tea lovers",
+        "cooks"
+      ],
+      "stock": 15,
+      "imageUrl": null,
+      "paypalProductId": null,
+      "status": "live"
+    }
+  ],
+  "orders": [],
+  "activity": []
+}
