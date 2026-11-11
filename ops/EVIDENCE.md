@@ -32,3 +32,21 @@ Method: read https://developer.paypal.com/community/blog/WebMCP_PayPal_Agent_Rea
 Result: Post dated 2026-09-16, "WebMCP is here: PayPal is helping every merchant become agent-ready". States the WebMCP capability through the PayPal JavaScript SDK is optional and "limited to Store Sync customers today". Buyer is handed to PayPal to sign in, choose funding and approve; agents do not take payment credentials. Benchmark: three structured tool calls instead of more than 30 interface steps, called "directional" by PayPal.
 Label: DERIVED
 Limits: A blog post, not API documentation; says nothing about sandbox availability of WebMCP checkout.
+
+## E-003: WebMCP tools register and execute in a real browser
+Date (UTC): 2026-11-11T06:00Z
+Commit: 9cad810
+Environment: Windows 11, headless Chrome via puppeteer-core 25.17.0, local server on port 3111, @mcp-b/global 6.2.0 IIFE served from node_modules
+Method: `node scripts/browser-check.mjs http://localhost:3111 --screenshot <scratchpad>/shop-tracer.png`
+Result: badge "Agent-ready: 4 WebMCP tools on this page"; document.modelContext.getTools() returned create_checkout, get_order_status, get_product, search_products; executeTool(search_products, {query:"tea", max_price_usd:40}) returned 4 results; one trace row rendered on the page; no page errors.
+Label: OBSERVED
+Limits: Polyfill path only (no native WebMCP browser). The checkout tool was not executed here because PayPal credentials are not set yet.
+
+## E-004: Smoke check without PayPal credentials
+Date (UTC): 2026-11-11T05:58Z
+Commit: 9cad810 (code as committed)
+Environment: local, Node 22.20.0, no .env
+Method: `node scripts/smoke.mjs http://localhost:3111`
+Result: health, shop API, tool definitions and search_products (budget respected) passed; create_checkout failed with "PayPal is not configured" as designed; get_order_status skipped as a consequence.
+Label: OBSERVED
+Limits: No PayPal call has run yet.
