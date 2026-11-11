@@ -16,9 +16,12 @@ A `verified` row cites at least one evidence ID that exists in EVIDENCE.
 | C-008 | SDK client: search, get, create_checkout, buyer approves, capture 9DS38542FR532492N (local); create_checkout on Render | README Proof | E-014, E-016 | verified |
 | C-009 | 4 sample photos drafted in 47 s (free plan rate limits), published, 4 of 4 PayPal catalog products | README Proof | E-016 | verified |
 | C-010 | Smoke 6/6 on Render and on a fresh clone; npm test 11/11 | README Proof | E-013, E-016 | verified |
-| C-011 | Every shop is paid into one sandbox merchant account (the app's) | README "What is real" | DERIVED: createOrder sets no payee (server/paypal.js) | verified |
+| C-011 | Every shop is paid into one sandbox merchant account (the app's) | README "What is real" | E-018 | verified |
 | C-012 | the model called the phone stand a "pedal stand", and a footrest in later runs (0 of 3 correct for that photo) | README "What is real" | E-011, E-016 | verified |
-| C-013 | The Render service sleeps after idle (about 50 s to wake) | README "What is real", "Try it" | DERIVED: Render dashboard banner "can delay requests by 50 seconds or more"; not measured by us | verified |
+| C-013 | The Render service sleeps after idle (about 50 s to wake) | README "What is real", "Try it" | E-018 (Render's statement, not measured) | verified |
 | C-014 | photo drafting manages about three photos a minute | README "What is real" | E-016 (4 photos in 47 s and 66.8 s with 429 waits; 8K TPM limit) | estimated |
-| C-015 | Work started on 2026-11-11 (UTC) and nothing existed before | README "Built during" | git history (first commit 2026-11-11), ops/CLOCK.md | verified |
+| C-015 | Work started on 2026-11-11 (UTC) and nothing existed before | README "Built during" | E-018 | verified |
 | C-016 | We have not tested a browser's built-in WebMCP agent. MCP checkout was tested with our own SDK client script, not with Claude Desktop | README "What is real" | E-003, E-014 (limits) | verified |
+| C-017 | Four phone photos became a live shop with four PayPal catalog products in 47 to 67 seconds on the free plan | Submission "Accomplishments" | E-016 | verified |
+| C-018 | The gift request went from 0/3 to 5/5; the travel request passed every time on every prompt version, while the gift request failed on the first two | Submission "Challenges", "What we learned" | E-015 | verified |
+| C-019 | in under five seconds on median (spoken: "twenty out of twenty reached the right checkout") | Video script | E-015 (median 4.75 s) | verified |

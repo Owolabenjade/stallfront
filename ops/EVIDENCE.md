@@ -172,3 +172,12 @@ Method: `node scripts/shots.mjs http://localhost:3000 <dir> 1366` and `... 390`;
 Result: the shop trace reads `create_checkout (Blue Fabric Utility Bag, Foldable Desk Stand)` with no product IDs (also in every E-015 run). Seller view: the price stays on the title row at 1366 px and 390 px; summary reads "3 orders, all from AI agents; 2 paid ($54.50)". Screenshots in docs/img (shop-assistant, seller-view, receipt; review from E-016).
 Label: OBSERVED
 Limits: Chrome only; no screen-reader pass.
+
+## E-018: Facts read from code, the Render dashboard and git history; secrets scan
+Date (UTC): 2026-11-11T12:05Z
+Commit: 8b8ce08
+Environment: repository and Render dashboard
+Method: read `createOrder` in server/paypal.js; Render service page screenshot shared by the builder at 11:03Z; `git log --reverse`; a script that searches `git log -p --all` for the values of PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET and GROQ_API_KEY from `.env`, the first PayPal app's key prefixes, and any `gsk_` key pattern
+Result: `createOrder` sends no `payee`, so every order pays the REST app's own sandbox merchant. Render shows "Your free instance will spin down with inactivity, which can delay requests by 50 seconds or more." First commit e17f1b1 at 2026-11-11T05:18Z ("chore(ops): foundation"). Secrets scan: none of the key values, the old key prefixes or a `gsk_` key appear anywhere in git history. The sandbox test buyer's email and password are in the README on purpose (PayPal sandbox test account, no real money).
+Label: DERIVED (code, dashboard text, git history); the scan is OBSERVED
+Limits: Cold-start delay is Render's statement, not our measurement.
