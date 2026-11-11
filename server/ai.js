@@ -27,7 +27,7 @@ async function chat(body) {
 
 // ---------- buyer agent ----------
 
-function agentSystem(shop) {
+export function agentSystem(shop) {
   return [
     `You are a shopping assistant working for a buyer who is browsing ${shop.name}, a small independent shop (${shop.tagline || 'handmade and everyday goods'}).`,
     'Use the shop tools: search_products, get_product, create_checkout, get_order_status. Never invent products, prices, stock or qualities: describe items only with what the tools return.',
@@ -71,6 +71,24 @@ function checkMessages(messages) {
  */
 export async function agentTurn(shop, rawMessages) {
   const messages = [{ role: 'system', content: agentSystem(shop) }, ...checkMessages(rawMessages)];
+  const turn = await completeTurn(messages);
+  if (!announcesWithoutActing(turn.message)) return turn;
+  // The model said it would act ("I'll create a checkout…") but called no tool. Remind it once; the reminder
+  // is not stored in the buyer's transcript.
+  const retry = await completeTurn([...messages, { role: 'assistant', content: turn.message.content }, { role: 'system', content: NUDGE }]);
+  return retry.message.tool_calls?.length ? { ...retry, nudged: true } : turn;
+}
+
+const NUDGE = 'Reminder from the shop page: your last reply said you would do something but called no tool. Call the tool now, in this turn.';
+const ANNOUNCE = /\b(I['’]ll|I will|I['’]m going to|I am going to|let me|I['’]m now|now I['’]ll)\s+(now\s+|go ahead and\s+|just\s+)?(create|prepare|set up|place|start|search|look|check|get|find|add)\b/i;
+
+/** True when a reply promises an action but carries no tool call. Exported for the check script. */
+export function announcesWithoutActing(message) {
+  return !message.tool_calls?.length && ANNOUNCE.test(message.content || '');
+}
+
+/** One model call with the full message list (system prompt included), falling back to the smaller model on 429. */
+export async function completeTurn(messages) {
   let lastErr;
   for (const model of AGENT_MODELS) {
     try {
