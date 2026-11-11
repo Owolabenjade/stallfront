@@ -38,18 +38,25 @@ function resultData(result) {
   try { return JSON.parse(text); } catch { return { message: text }; }
 }
 
+// The trace names products the way a person would ("Blue Fabric Utility Bag"), not by ID.
+const shortTitle = (t) => String(t || '').split(/\s+(?:with|for|in|and)\s+/i)[0];
+const productName = (id) => {
+  const p = products.find((x) => x.id === id);
+  return p ? shortTitle(p.title) : id;
+};
+
 function summarizeArgs(name, a) {
   if (name === 'search_products') return [a.query && `"${a.query}"`, a.max_price_usd != null && `max $${a.max_price_usd}`].filter(Boolean).join(', ') || 'all products';
-  if (name === 'get_product') return a.product_id;
-  if (name === 'create_checkout') return (a.items || []).map((i) => `${i.quantity || 1} x ${i.product_id}`).join(', ');
+  if (name === 'get_product') return productName(a.product_id);
+  if (name === 'create_checkout') return (a.items || []).map((i) => `${(i.quantity || 1) > 1 ? `${i.quantity} × ` : ''}${productName(i.product_id)}`).join(', ');
   if (name === 'get_order_status') return a.order_id;
   return JSON.stringify(a);
 }
 
 function summarizeResult(name, r, isError) {
   if (isError) return r.message || 'Tool error';
-  if (name === 'search_products') return `${r.results?.length ?? 0} found: ${(r.results || []).map((x) => `${x.title} (${x.price})`).join(', ')}`;
-  if (name === 'get_product') return `${r.title}, ${r.price}, ${r.stock} in stock`;
+  if (name === 'search_products') return r.results?.length ? `${r.results.length} found: ${r.results.map((x) => `${shortTitle(x.title)} ${x.price}`).join(', ')}` : 'nothing found';
+  if (name === 'get_product') return `${shortTitle(r.title)}, ${r.price}, ${r.stock} in stock`;
   if (name === 'create_checkout') return `PayPal order ${r.paypal_order_id} created, total ${r.total}`;
   if (name === 'get_order_status') return `${r.status}${r.paypal_capture_id ? `, capture ${r.paypal_capture_id}` : ''}`;
   return '';

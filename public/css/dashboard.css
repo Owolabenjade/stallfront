@@ -11,9 +11,9 @@
 .orders { display: flex; flex-direction: column; gap: 12px; }
 .order { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; }
 .order.fresh { border-color: var(--moss); box-shadow: 0 0 0 3px var(--moss-soft); }
-.order-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; flex-wrap: wrap; }
-.order-top .what { font-weight: 600; }
-.order-top .amt { font-weight: 700; font-variant-numeric: tabular-nums; }
+.order-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.order-top .what { font-weight: 600; flex: 1; min-width: 0; }
+.order-top .amt { font-weight: 700; font-variant-numeric: tabular-nums; flex-shrink: 0; }
 .order-meta { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 13px; color: var(--ink-2); margin-top: 8px; align-items: center; }
 .channel { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 13px; padding: 3px 10px; border-radius: 999px; background: var(--paper-2); color: var(--ink); }
 .channel svg { width: 14px; height: 14px; }

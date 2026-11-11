@@ -24,6 +24,9 @@ try {
   await page.click('#send');
   await new Promise((r) => setTimeout(r, 1500));
   await page.waitForFunction(() => document.querySelector('.handoff a[href*="paypal.com"]') || document.querySelector('#chat .notice.err') || !document.querySelector('#send').hasAttribute('aria-busy'), { timeout: 120000 });
+  const handoffAt = (Date.now() - t0) / 1000;
+  // The handoff card appears when create_checkout runs; the assistant's closing message comes one model turn later.
+  await page.waitForFunction(() => !document.querySelector('#send').hasAttribute('aria-busy'), { timeout: 60000 }).catch(() => {});
   const result = await page.evaluate(() => ({
     calls: [...document.querySelectorAll('#chat .call')].map((c) => `${c.querySelector('.tool').textContent} (${c.querySelector('.args').textContent})`),
     replies: [...document.querySelectorAll('#chat .msg.assistant')].map((m) => m.innerText.trim()),
@@ -36,7 +39,7 @@ try {
   result.replies.forEach((r) => console.log(`assistant: ${r}`));
   console.log(result.handoff ? `handoff: ${result.handoff}` : `ERROR: ${result.error}`);
   if (result.approve) console.log(`approve_url: ${result.approve}`);
-  console.log(`time to handoff: ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  console.log(`time to handoff: ${handoffAt.toFixed(1)} s; finished: ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   ok = Boolean(result.handoff);
   if (SHOT) await page.screenshot({ path: SHOT });
 } catch (err) {

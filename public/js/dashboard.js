@@ -69,8 +69,12 @@ async function load() {
   document.title = `${shop.name} · Seller view`;
   $('#shop-name').textContent = shop.name;
   const paid = orders.filter((o) => o.status === 'paid');
-  const byAgent = paid.filter((o) => o.channel !== 'web');
-  $('#summary').textContent = `${orders.length} order${orders.length === 1 ? '' : 's'}; ${paid.length} paid (${money(paid.reduce((s, o) => s + o.totalCents, 0))}), ${byAgent.length} of them placed by AI agents.${shop.demo ? ' Demo shop: this view is public.' : ''}`;
+  const byAgent = orders.filter((o) => o.channel !== 'web').length;
+  const who = !orders.length ? '' : byAgent === orders.length ? (orders.length === 1 ? ', from an AI agent' : ', all from AI agents') : `, ${byAgent} from AI agents`;
+  const sum = orders.length
+    ? `${orders.length} order${orders.length === 1 ? '' : 's'}${who}; ${paid.length} paid (${money(paid.reduce((s, o) => s + o.totalCents, 0))}).`
+    : 'No orders yet.';
+  $('#summary').textContent = `${sum}${shop.demo ? ' Demo shop: this view is public.' : ''}`;
   renderOrders(orders);
   renderActivity(activity);
   return true;
