@@ -34,7 +34,7 @@ Label: DERIVED
 Limits: A blog post, not API documentation; says nothing about sandbox availability of WebMCP checkout.
 
 ## E-003: WebMCP tools register and execute in a real browser
-Date (UTC): 2026-11-11T06:00Z
+Date (UTC): 2026-11-11T05:24Z
 Commit: 9cad810
 Environment: Windows 11, headless Chrome via puppeteer-core 25.17.0, local server on port 3111, @mcp-b/global 6.2.0 IIFE served from node_modules
 Method: `node scripts/browser-check.mjs http://localhost:3111 --screenshot <scratchpad>/shop-tracer.png`
@@ -43,7 +43,7 @@ Label: OBSERVED
 Limits: Polyfill path only (no native WebMCP browser). The checkout tool was not executed here because PayPal credentials are not set yet.
 
 ## E-004: Smoke check without PayPal credentials
-Date (UTC): 2026-11-11T05:58Z
+Date (UTC): 2026-11-11T05:23Z
 Commit: 9cad810 (code as committed)
 Environment: local, Node 22.20.0, no .env
 Method: `node scripts/smoke.mjs http://localhost:3111`
