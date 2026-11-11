@@ -115,6 +115,7 @@ npm test               # unit tests, no network
 - **Free hosting and a free AI plan.**
   - The Render service sleeps after idle (about 50 s to wake). Its disk is wiped on every deploy, so shops and orders made on the live site disappear while the seed shop stays.
   - Groq's free plan limits tokens per minute. Photo drafting manages about three photos a minute, and the assistant falls back to a smaller model when the plan is busy.
+- **How assistants find a shop.** A buyer's AI assistant reaches a shop through its link (WebMCP on the page) or its MCP address. There is no directory of shops yet, so an assistant can't discover them on its own.
 - **No seller accounts.** A shop's private seller-view link is its only key. The demo shop's seller view is public on purpose.
 - **Capture on return.** The payment is captured when the buyer comes back from PayPal. There are no webhooks yet, so a buyer who approves and closes the tab leaves the order approved until someone checks its status.
 

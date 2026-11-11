@@ -1,5 +1,5 @@
 # BENCHMARK
-Date (UTC): 2026-11-11T19:25Z    Commit: 9f15a2b    Evaluated: README, video https://youtu.be/KDiFgml6RH0, live URL, ops/SUBMISSION.md
+Date (UTC): 2026-11-11T19:23Z    Commit: 9f15a2b    Evaluated: README, video https://youtu.be/KDiFgml6RH0, live URL, ops/SUBMISSION.md
 Focus: the agentic part (shop assistant, WebMCP tools, MCP endpoint, seller attribution) and the two judging stages. Scores are INFERRED judgments against the rubric in ops/RESEARCH.md; the evidence they rest on is OBSERVED.
 
 ## Stage One (pass/fail viability)
@@ -29,7 +29,7 @@ Every listed requirement is met at this commit: PayPal sandbox on the critical p
 | # | Gap | Fix | Hours | Moves | Expected gain | Decision |
 |---|---|---|---|---|---|---|
 | 1 | Only our own clients have used the shop's tools (C-016) | A mainstream AI app connects to /mcp/corner-stall and buys; record it and add one README line | 0.5 (needs the human's account) | Innovation, Tech, Agentic Commerce mention | +0.5 Innovation, +0.25 Tech | human to decide |
-| 2 | Judges may ask how a buyer's assistant finds a shop | One line in README "What is real": found through its link or MCP address today; no directory yet | 0.1 | Impact (credibility) | small, prevents a misread | fix |
+| 2 | Judges may ask how a buyer's assistant finds a shop | One line in README "What is real": found through its link or MCP address today; no directory yet | 0.1 | Impact (credibility) | small, prevents a misread | done (README, C-029) |
 | 3 | Assistant invented "handmade" once (E-026) | Tighten the prompt; rerun 10 + 5 reliability runs; deploy | 0.4 | Tech | small | fix if time allows |
 | 4 | "Buy 50" reply does not state stock | Same prompt pass: state stock and offer the most it can prepare | (with 3) | Tech | small | with 3 |
 | 5 | Cold start not measured | Measure the first request after 20 minutes idle | 0.4 (mostly waiting) | Resilience | small | optional |
