@@ -9,7 +9,7 @@ Role: critical (the demo path breaks without it) | optional
 |---|---|---|---|---|---|---|
 | Node.js | 22.20.0 | critical | 2026-11-11 | E-001 | verified | Local machine; Render must run 22 too (`engines`) |
 | PayPal sandbox REST: OAuth, Orders v2 create and capture | v2 | critical | 2026-11-11 | E-006, E-008 | verified | Needs a developer account (I-002). Buyer approval needs the sandbox personal account login |
-| PayPal sandbox REST: Catalog Products | v1 | critical | | | unverified | Product IDs only; prices live on our side and in order items |
+| PayPal sandbox REST: Catalog Products | v1 | critical | 2026-11-11 | E-011 | verified | Product IDs only; prices live on our side and in order items |
 | PayPal sandbox webhooks | v1 | optional | | | unverified | Needs the public Render URL and a webhook ID for signature verification |
 | Anthropic Messages API (vision, tool use) | @anthropic-ai/sdk 1.8.0 | optional | | | dropped | D-005: no API credit; code removed after abc0f8e |
 | Groq chat completions: openai/gpt-oss-120b (agent, tool use), openai/gpt-oss-20b (fallback) | API v1 (OpenAI-compatible) | critical | 2026-11-11 | E-009, E-010 | verified | Free plan; docs disagree on limits (8K vs 250K TPM). Needs GROQ_API_KEY |

@@ -104,3 +104,21 @@ Method: `node scripts/agent-check.mjs http://localhost:3000`
 Result: tool calls through WebMCP: search_products ("tea lover gift", max $40) then create_checkout (1 x prd_strn01); handoff card "Total $24.00, Review and pay in PayPal" with a sandbox PayPal link; 3.7 s to handoff.
 Label: OBSERVED
 Limits: One passing run. The first attempt stalled after search_products and the check then recorded no transcript; reliability over repeated runs not measured yet.
+
+## E-011: Photos to listings to PayPal catalog products (seller onboarding pipeline)
+Date (UTC): 2026-11-11T09:41Z
+Commit: e987b26
+Environment: local server; Groq qwen/qwen3.8-27b; PayPal sandbox app "Original Stallfront"
+Method: `node scripts/build-demo-shop.mjs http://localhost:3000 <out> "Corner Stall" x public/img/samples/{mug,duffel-bag,glass,phone-stand}.jpg`, then POST /api/shops with the drafts
+Result: 4 drafts in json_schema mode (1.2 to 1.8 s each; two 19 s waits on the free-plan rate limit): "White Ceramic Mug with Red Leaf Design and Blue Rim" $12, "Blue Fabric Utility Bag with White Webbing Handles" $12.50, "Faceted Clear Glass Tumbler" $15, "Adjustable Black Metal Pedal Stand..." $15 (wrong: it is a phone stand; corrected by hand before publishing). Publish returned 4 PayPal catalog products: PROD-39929499C8406084A, PROD-8AT00409M59283218, PROD-76N25752G8965680S, PROD-3B651817VT425422A; no warnings.
+Label: OBSERVED
+Limits: One earlier draft attempt on the same server failed with "Failed to generate JSON" before the fallback chain existed; the fallback paths themselves have not been exercised yet.
+
+## E-012: Buyer assistant on Corner Stall, two items under budget
+Date (UTC): 2026-11-11T09:41Z
+Commit: e987b26
+Environment: headless Chrome, local server from the new seed, openai/gpt-oss-120b
+Method: `node scripts/agent-check.mjs http://localhost:3000` (prompt "Travelling next week: get me a bag and a phone stand, under $30 for both"); also smoke and mcp-check on corner-stall
+Result: WebMCP calls search_products("bag", max $30), search_products("phone stand", max $30), create_checkout(bag + stand); handoff total $33.50 ($27.50 items + $6 shipping) in 4.1 s. Smoke: 6/6 passed, PayPal order 3T120472BF085773K. MCP: tools/list and search over /mcp/corner-stall.
+Label: OBSERVED
+Limits: Single run of the agent prompt; repeat-run reliability still unmeasured.
