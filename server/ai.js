@@ -20,7 +20,7 @@ async function chat(body) {
   if (!res.ok) {
     const retryAfter = Number(res.headers.get('retry-after')) || null;
     const msg = json.error?.message || `Groq request failed (${res.status})`;
-    throw httpError(res.status === 429 ? 429 : res.status >= 500 ? 502 : res.status, msg, { retryAfter, upstream: true });
+    throw httpError(res.status === 429 ? 429 : res.status >= 500 ? 502 : res.status, msg, { retryAfter, upstream: true, failedGeneration: json.error?.failed_generation || null });
   }
   return { json, limits: { tokens: res.headers.get('x-ratelimit-limit-tokens'), requests: res.headers.get('x-ratelimit-limit-requests') } };
 }
@@ -119,42 +119,88 @@ const LISTING_SCHEMA = {
   },
 };
 
-/** photo: { mediaType, data(base64) }. Returns one listing object validated by the json_schema. */
+const FIELD_GUIDE =
+  'Return one JSON object with exactly these keys: title (3 to 8 words), summary (one sentence under 110 characters), ' +
+  'description (2 to 4 factual sentences), category (one of kitchen, home, bags, apparel, accessories, electronics, art, stationery, beauty, toys, other), ' +
+  'price_usd (number), price_reasoning (one sentence), attributes (object with material, color, size), tags (4 to 8 lowercase words), ' +
+  'gift_for (2 to 4 short phrases), needs_seller_check (list of facts the photo cannot confirm).';
+
+function parseLoose(text) {
+  if (!text) return null;
+  const s = String(text);
+  const start = s.indexOf('{');
+  const end = s.lastIndexOf('}');
+  if (start < 0 || end <= start) return null;
+  try {
+    return JSON.parse(s.slice(start, end + 1));
+  } catch {
+    return null;
+  }
+}
+
+const asList = (a) => (Array.isArray(a) ? a : typeof a === 'string' ? a.split(/[,;]/) : []);
+const uniq = (a, n) => [...new Set(asList(a).map((s) => String(s).trim().toLowerCase()).filter(Boolean))].slice(0, n);
+
+/** Fill defaults and bound every field; the seller reviews everything before publishing. */
+function normalize(l) {
+  const attrs = l.attributes && typeof l.attributes === 'object' ? l.attributes : {};
+  return {
+    title: String(l.title || 'Untitled product').slice(0, 80),
+    summary: String(l.summary || '').slice(0, 160),
+    description: String(l.description || '').slice(0, 800),
+    category: String(l.category || 'other').toLowerCase().slice(0, 30),
+    price_usd: Math.min(Math.max(Math.round(Number(l.price_usd || 10) * 2) / 2, 1), 1000),
+    price_reasoning: String(l.price_reasoning || '').slice(0, 200),
+    attributes: { material: String(attrs.material || 'unknown'), color: String(attrs.color || 'unknown'), size: String(attrs.size || 'unknown') },
+    tags: uniq(l.tags, 8),
+    gift_for: uniq(l.gift_for, 4),
+    needs_seller_check: asList(l.needs_seller_check).map(String).slice(0, 4),
+  };
+}
+
+/**
+ * photo: { mediaType, data(base64) }. Returns one listing. Strict json_schema first; the preview vision model
+ * sometimes fails constrained decoding ("Failed to generate JSON"), so fall back to its failed_generation text,
+ * then to JSON object mode with the schema described in the prompt.
+ */
 export async function draftListing(photo, hint) {
   const prompt =
     'This is a product photo from a small independent seller who is listing it in an online shop that AI shopping agents will search. ' +
     'Write the listing for the main object. Describe only what you can see or reasonably infer, ignore the background, and put anything you cannot confirm in needs_seller_check instead of stating it as fact. ' +
     'Use concrete titles and tags (material, object, use) because agents match on them. Return JSON only.' +
     (hint ? `\nSeller's note: ${String(hint).slice(0, 300)}` : '');
-  const { json, limits } = await chat({
+  const request = (text, response_format) => ({
     model: VISION_MODEL,
     temperature: 0.2,
     max_completion_tokens: 1500,
-    messages: [
-      {
-        role: 'user',
-        content: [
-          { type: 'text', text: prompt },
-          { type: 'image_url', image_url: { url: `data:${photo.mediaType};base64,${photo.data}` } },
-        ],
-      },
-    ],
-    response_format: { type: 'json_schema', json_schema: { name: 'listing', strict: true, schema: LISTING_SCHEMA } },
+    messages: [{ role: 'user', content: [{ type: 'text', text }, { type: 'image_url', image_url: { url: `data:${photo.mediaType};base64,${photo.data}` } }] }],
+    response_format,
   });
-  const text = json.choices?.[0]?.message?.content;
-  if (!text) throw httpError(502, 'No listing came back from the model.');
-  let listing;
+
+  let raw = null;
+  let meta = {};
+  let mode = 'json_schema';
   try {
-    listing = JSON.parse(text);
-  } catch {
-    throw httpError(502, 'The model returned a listing that was not valid JSON; try again.');
+    const { json, limits } = await chat(request(prompt, { type: 'json_schema', json_schema: { name: 'listing', strict: true, schema: LISTING_SCHEMA } }));
+    raw = parseLoose(json.choices?.[0]?.message?.content);
+    meta = { model: json.model, limits, usage: json.usage };
+  } catch (err) {
+    if (err.status === 429 || err.status === 503) throw err;
+    raw = parseLoose(err.failedGeneration);
+    mode = 'failed_generation';
   }
-  // Keep lists short and prices sane; the seller reviews everything before publishing.
-  const uniq = (a, n) => [...new Set((Array.isArray(a) ? a : []).map((s) => String(s).trim().toLowerCase()).filter(Boolean))].slice(0, n);
-  listing.tags = uniq(listing.tags, 8);
-  listing.gift_for = uniq(listing.gift_for, 4);
-  listing.needs_seller_check = (Array.isArray(listing.needs_seller_check) ? listing.needs_seller_check : []).slice(0, 4);
-  listing.category = String(listing.category || 'other').toLowerCase().slice(0, 30);
-  listing.price_usd = Math.min(Math.max(Math.round(Number(listing.price_usd || 10) * 2) / 2, 1), 1000);
-  return { listing, model: json.model || VISION_MODEL, limits, usage: json.usage ? { input: json.usage.prompt_tokens, output: json.usage.completion_tokens } : null };
+  if (!raw) {
+    mode = 'json_object';
+    const { json, limits } = await chat(request(`${prompt}\n${FIELD_GUIDE}`, { type: 'json_object' }));
+    raw = parseLoose(json.choices?.[0]?.message?.content);
+    meta = { model: json.model, limits, usage: json.usage };
+  }
+  if (!raw) throw httpError(502, 'The AI could not describe this photo; try again or use a clearer photo.');
+  return {
+    listing: normalize(raw),
+    mode,
+    model: meta.model || VISION_MODEL,
+    limits: meta.limits,
+    usage: meta.usage ? { input: meta.usage.prompt_tokens, output: meta.usage.completion_tokens } : null,
+  };
 }

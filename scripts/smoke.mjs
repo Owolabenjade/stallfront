@@ -2,7 +2,7 @@
 // Covers: health, shop API, tool list, search, create_checkout (real PayPal sandbox order), order status.
 // It cannot approve the payment: that step needs the sandbox buyer login in a browser.
 const BASE = (process.argv[2] || process.env.SMOKE_URL || process.env.BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
-const SHOP = process.env.SMOKE_SHOP || 'kiln-and-leaf';
+const SHOP = process.env.SMOKE_SHOP || 'corner-stall';
 let failed = 0;
 
 async function step(name, fn) {
@@ -51,10 +51,10 @@ await step('tool definitions', async () => {
   for (const n of ['search_products', 'get_product', 'create_checkout', 'get_order_status']) if (!names.includes(n)) throw new Error(`missing ${n}`);
   return names.join(', ');
 });
-await step('search_products under $40', async () => {
-  found = await tool('search_products', { query: 'tea lover', max_price_usd: 40 });
+await step('search_products under $30', async () => {
+  found = await tool('search_products', { query: 'bag', max_price_usd: 30 });
   if (!found.results.length) throw new Error('no results');
-  if (found.results.some((r) => r.price_usd > 40)) throw new Error('budget not respected');
+  if (found.results.some((r) => r.price_usd > 30)) throw new Error('budget not respected');
   return found.results.map((r) => `${r.title} ${r.price}`).join('; ');
 });
 await step('create_checkout makes a PayPal sandbox order', async () => {

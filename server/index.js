@@ -157,7 +157,7 @@ app.post('/api/listings/draft', limit('draft', 30, 10 * 60 * 1000), async (req, 
     fs.writeFileSync(path.join(dir, file), buf);
     const t0 = Date.now();
     const out = await draftListing({ mediaType: m[1], data: m[2] }, req.body.hint);
-    res.json({ draftId, index, ms: Date.now() - t0, model: out.model, listing: { ...out.listing, imageUrl: `/uploads/${draftId}/${file}` } });
+    res.json({ draftId, index, ms: Date.now() - t0, model: out.model, mode: out.mode, listing: { ...out.listing, imageUrl: `/uploads/${draftId}/${file}` } });
   } catch (err) {
     if (err.status === 429) res.set('Retry-After', String(err.retryAfter || 10));
     next(err);

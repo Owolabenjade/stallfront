@@ -1,181 +1,145 @@
 {
   "shops": [
     {
-      "slug": "kiln-and-leaf",
-      "name": "Kiln & Leaf",
-      "tagline": "Small-batch stoneware and loose-leaf tea from a two-person studio",
+      "slug": "corner-stall",
+      "name": "Corner Stall",
+      "tagline": "Everyday homeware, bags and gadgets from a small market stall",
       "shippingCents": 600,
       "currency": "USD",
-      "adminKey": "11de971c0b3accc4dc625bf4",
+      "adminKey": "c136ce50a44b7589a4e95e52019b8ec8",
       "demo": true,
-      "createdAt": "2026-11-11T06:00:00.000Z"
+      "createdAt": "2026-11-11T09:39:41.301Z"
     }
   ],
   "products": [
     {
-      "id": "prd_mug01",
-      "shopSlug": "kiln-and-leaf",
-      "title": "Speckled stoneware tea mug",
-      "priceCents": 2800,
-      "category": "kitchen",
-      "summary": "Wheel-thrown 12 oz mug with an oatmeal speckle glaze.",
-      "description": "Wheel-thrown stoneware mug, 12 oz, finished in a speckled oatmeal glaze with a raw clay foot. Each one is a little different. Dishwasher and microwave safe.",
+      "id": "prd_a7c434dda024",
+      "shopSlug": "corner-stall",
+      "title": "White Ceramic Mug with Red Leaf Design and Blue Rim",
+      "priceCents": 1200,
+      "category": "drinkware",
+      "summary": "White ceramic mug with a red leaf motif and blue rim.",
+      "description": "A white ceramic mug featuring a red, three-leaf plant design on the side and a blue rim. The mug has a standard curved handle and a glossy finish.",
       "attributes": {
-        "material": "stoneware",
-        "color": "oatmeal speckle",
-        "size": "12 oz"
+        "material": "ceramic",
+        "color": "white, red, blue",
+        "size": "standard"
       },
       "tags": [
+        "ceramic",
         "mug",
-        "ceramic",
-        "handmade",
-        "tea",
-        "coffee"
+        "drinkware",
+        "hand-painted",
+        "red",
+        "blue",
+        "white",
+        "coffee cup"
       ],
       "giftFor": [
-        "tea lovers",
-        "coffee drinkers",
-        "housewarming"
+        "coffee lover",
+        "tea drinker"
       ],
-      "stock": 8,
-      "imageUrl": null,
-      "paypalProductId": null,
+      "stock": 6,
+      "imageUrl": "/img/samples/mug.jpg",
+      "paypalProductId": "PROD-39929499C8406084A",
       "status": "live"
     },
     {
-      "id": "prd_chai01",
-      "shopSlug": "kiln-and-leaf",
-      "title": "House chai, loose leaf (100 g tin)",
-      "priceCents": 1400,
-      "category": "tea",
-      "summary": "Assam black tea with cardamom, ginger, cinnamon and clove.",
-      "description": "Our house chai: Assam black tea blended in small batches with green cardamom, ginger, cinnamon and clove. About 40 cups per 100 g tin.",
+      "id": "prd_4f3ea7f4cb5f",
+      "shopSlug": "corner-stall",
+      "title": "Blue Fabric Utility Bag with White Webbing Handles",
+      "priceCents": 1250,
+      "category": "bags",
+      "summary": "Blue fabric utility bag with white webbing handles.",
+      "description": "A medium-sized blue fabric bag featuring two white webbing handles. The bag has a soft, unstructured body with visible stitching along the seams and a slightly shiny, synthetic surface.",
       "attributes": {
-        "material": "loose-leaf tea",
-        "size": "100 g",
-        "origin": "Assam, India"
+        "material": "polyester",
+        "color": "blue",
+        "size": "medium"
       },
       "tags": [
-        "tea",
-        "chai",
-        "loose leaf",
-        "spiced"
+        "bag",
+        "tote",
+        "travel",
+        "storage",
+        "blue",
+        "polyester",
+        "webbing",
+        "utility"
       ],
       "giftFor": [
-        "tea lovers",
-        "chai fans"
+        "traveler",
+        "student",
+        "commuter"
       ],
-      "stock": 24,
-      "imageUrl": null,
-      "paypalProductId": null,
+      "stock": 4,
+      "imageUrl": "/img/samples/duffel-bag.jpg",
+      "paypalProductId": "PROD-8AT00409M59283218",
       "status": "live"
     },
     {
-      "id": "prd_strn01",
-      "shopSlug": "kiln-and-leaf",
-      "title": "Ceramic tea strainer",
-      "priceCents": 1800,
-      "category": "kitchen",
-      "summary": "Hand-pierced stoneware strainer that rests on any mug.",
-      "description": "Hand-pierced stoneware strainer with a wide rim that rests on most mugs, plus a small matching drip dish. Pairs with any loose-leaf tea.",
+      "id": "prd_a28798087ae7",
+      "shopSlug": "corner-stall",
+      "title": "Faceted Clear Glass Tumbler",
+      "priceCents": 1500,
+      "category": "glassware",
+      "summary": "A tall, faceted clear glass tumbler with a geometric design.",
+      "description": "A tall, clear glass tumbler featuring a faceted, geometric design with vertical ridges and a distinct angular base. The glass is transparent with a smooth rim and a sturdy, multi-sided profile.",
       "attributes": {
-        "material": "stoneware",
-        "color": "celadon",
-        "size": "9 cm"
+        "material": "glass",
+        "color": "clear",
+        "size": "tall"
       },
       "tags": [
-        "tea",
-        "strainer",
-        "ceramic",
-        "loose leaf"
+        "glass",
+        "tumbler",
+        "faceted",
+        "clear",
+        "drinking glass",
+        "tableware",
+        "geometric",
+        "water glass"
       ],
       "giftFor": [
-        "tea lovers"
+        "homeowner",
+        "entertainer"
       ],
       "stock": 12,
-      "imageUrl": null,
-      "paypalProductId": null,
+      "imageUrl": "/img/samples/glass.jpg",
+      "paypalProductId": "PROD-76N25752G8965680S",
       "status": "live"
     },
     {
-      "id": "prd_cndl01",
-      "shopSlug": "kiln-and-leaf",
-      "title": "Beeswax pillar candle",
-      "priceCents": 2200,
-      "category": "home",
-      "summary": "Hand-poured pure beeswax, about 40 hours of burn.",
-      "description": "Hand-poured pillar of pure beeswax with a cotton wick. Smells faintly of honey; about 40 hours of burn time.",
+      "id": "prd_d2e1ca95a7b1",
+      "shopSlug": "corner-stall",
+      "title": "Foldable Desk Stand for Phone or Tablet",
+      "priceCents": 1500,
+      "category": "electronics",
+      "summary": "Black adjustable stand that props up a phone or small tablet, with a ribbed grip pad.",
+      "description": "A black foldable desk stand with a flat base, a hinged arm and a ribbed rubber pad that holds a phone or small tablet at an adjustable angle. Pre-owned, with light wear on the base.",
       "attributes": {
-        "material": "beeswax",
-        "size": "7.5 x 10 cm"
+        "material": "plastic and rubber",
+        "color": "black",
+        "size": "folds flat, about 15 cm base"
       },
       "tags": [
-        "candle",
-        "beeswax",
-        "home"
+        "phone stand",
+        "tablet stand",
+        "desk",
+        "foldable",
+        "adjustable",
+        "travel",
+        "video calls",
+        "black"
       ],
       "giftFor": [
-        "hosts",
-        "housewarming"
+        "remote workers",
+        "students",
+        "travelers"
       ],
-      "stock": 10,
-      "imageUrl": null,
-      "paypalProductId": null,
-      "status": "live"
-    },
-    {
-      "id": "prd_tpot01",
-      "shopSlug": "kiln-and-leaf",
-      "title": "Large stoneware teapot",
-      "priceCents": 6400,
-      "category": "kitchen",
-      "summary": "Six-cup teapot with a built-in strainer.",
-      "description": "Six-cup stoneware teapot with a built-in ceramic strainer and a speckled oatmeal glaze to match our mugs.",
-      "attributes": {
-        "material": "stoneware",
-        "color": "oatmeal speckle",
-        "size": "1.2 L"
-      },
-      "tags": [
-        "teapot",
-        "tea",
-        "ceramic",
-        "handmade"
-      ],
-      "giftFor": [
-        "tea lovers",
-        "families"
-      ],
-      "stock": 3,
-      "imageUrl": null,
-      "paypalProductId": null,
-      "status": "live"
-    },
-    {
-      "id": "prd_towl01",
-      "shopSlug": "kiln-and-leaf",
-      "title": "Linen tea towel, botanical print",
-      "priceCents": 1600,
-      "category": "kitchen",
-      "summary": "Stonewashed linen with a screen-printed tea-plant print.",
-      "description": "Stonewashed European linen tea towel, screen-printed by hand with a camellia (tea plant) botanical. 50 x 70 cm.",
-      "attributes": {
-        "material": "linen",
-        "color": "natural with green print",
-        "size": "50 x 70 cm"
-      },
-      "tags": [
-        "linen",
-        "tea towel",
-        "kitchen"
-      ],
-      "giftFor": [
-        "tea lovers",
-        "cooks"
-      ],
-      "stock": 15,
-      "imageUrl": null,
-      "paypalProductId": null,
+      "stock": 5,
+      "imageUrl": "/img/samples/phone-stand.jpg",
+      "paypalProductId": "PROD-3B651817VT425422A",
       "status": "live"
     }
   ],

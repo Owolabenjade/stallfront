@@ -15,7 +15,7 @@ export const TOOL_DEFS = [
     inputSchema: {
       type: 'object',
       properties: {
-        query: { type: 'string', description: 'Free-text need, e.g. "gift for a tea lover"' },
+        query: { type: 'string', description: 'Free-text need, e.g. "gift for a coffee lover"' },
         max_price_usd: { type: 'number', description: 'Upper bound on the item price in USD' },
         limit: { type: 'integer', description: 'Maximum results (default 5)', minimum: 1, maximum: 20 },
       },

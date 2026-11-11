@@ -8,7 +8,7 @@ const args = process.argv.slice(2);
 const BASE = (args.find((a) => a.startsWith('http')) || process.env.BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
 const shotIdx = args.indexOf('--screenshot');
 const SHOT = shotIdx >= 0 ? args[shotIdx + 1] : null;
-const SHOP = process.env.SMOKE_SHOP || 'kiln-and-leaf';
+const SHOP = process.env.SMOKE_SHOP || 'corner-stall';
 const BROWSERS = [
   process.env.BROWSER_PATH,
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
