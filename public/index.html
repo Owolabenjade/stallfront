@@ -4,13 +4,71 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Stallfront</title>
+  <meta name="description" content="Turn product photos into a PayPal shop AI agents can buy from.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/app.css">
+  <style>
+    .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; padding: 64px 0 48px; }
+    @media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding-top: 40px; gap: 32px; } }
+    .hero h1 { font-size: clamp(36px, 5.2vw, 60px); line-height: 1.05; }
+    .hero p.lede { font-size: 18px; color: var(--ink-2); max-width: 54ch; margin: 18px 0 28px; }
+    .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+    .transcript { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+    .transcript .label { font-size: 12px; color: var(--ink-3); margin: 0; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; padding: 40px 0 80px; border-top: 1px solid var(--line); }
+    @media (max-width: 900px) { .steps { grid-template-columns: 1fr; } }
+    .steps h2 { font-size: 21px; margin-bottom: 8px; }
+    .steps p { margin: 0; color: var(--ink-2); font-size: 15px; }
+    .steps code { font-family: var(--mono); font-size: 13px; background: var(--paper-2); padding: 1px 5px; border-radius: 5px; }
+  </style>
 </head>
 <body>
-  <main class="wrap" style="padding:64px 20px">
-    <h1>Stallfront</h1>
-    <p class="muted">Turn product photos into a PayPal shop AI agents can buy from.</p>
-    <p><a class="btn btn-primary" href="/s/kiln-and-leaf">Open the demo shop</a></p>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18l-1.5-5h-15z"/><path d="M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/></svg>
+        Stallfront
+      </a>
+      <nav><a href="/s/kiln-and-leaf">Demo shop</a><a href="/s/kiln-and-leaf/dashboard">Demo seller view</a></nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <h1>Turn product photos into a PayPal shop AI agents can buy from.</h1>
+        <p class="lede">AI assistants are starting to shop for people, but they can only buy where a shop gives them tools to use. PayPal's agent-ready checkout covers its Store Sync merchants today. Stallfront gives a maker with a few products the same thing: listings drafted from photos, shop tools agents can call, and PayPal checkout that the buyer approves.</p>
+        <div class="cta">
+          <a class="btn btn-clay" href="/new">Open a shop from photos</a>
+          <a class="btn btn-ghost" href="/s/kiln-and-leaf">Try the demo shop</a>
+        </div>
+      </div>
+      <div class="transcript" aria-label="Sample agent conversation">
+        <p class="label">Sample: a buyer's assistant on the demo shop</p>
+        <div class="msg user">Find me a gift under $40 for a tea lover</div>
+        <div class="call"><span class="via">WebMCP</span><span class="tool">search_products</span><span class="args">"tea lover", max $40</span><span class="res">mug $28, strainer $18, chai $14, towel $16</span></div>
+        <div class="msg assistant"><p>The ceramic tea strainer with a tin of house chai makes a good pair: $32 for the items, $38 with shipping. Preparing the PayPal checkout now.</p></div>
+        <div class="call"><span class="via">WebMCP</span><span class="tool">create_checkout</span><span class="args">strainer, chai</span><span class="res">PayPal order created, total $38.00</span></div>
+        <a class="btn btn-paypal" href="/s/kiln-and-leaf">Review and pay in PayPal</a>
+      </div>
+    </section>
+
+    <section class="steps" aria-label="How it works">
+      <div>
+        <h2>Photos become listings</h2>
+        <p>Claude reads each photo and drafts a title, description, price, materials and the words shoppers and agents search for. It flags what a photo can't confirm, so the seller checks it. Publishing registers every product in the PayPal catalog.</p>
+      </div>
+      <div>
+        <h2>The shop speaks to agents</h2>
+        <p>Every shop page registers WebMCP tools (<code>search_products</code>, <code>get_product</code>, <code>create_checkout</code>, <code>get_order_status</code>), and the same tools are served over MCP, so a browser agent or any MCP client can shop without scraping the page.</p>
+      </div>
+      <div>
+        <h2>The buyer approves in PayPal</h2>
+        <p>An agent can prepare an order but never pay. <code>create_checkout</code> creates a PayPal order and hands back the approval link; the buyer signs in to PayPal and approves. The seller sees which agent placed each order and the tool calls behind it.</p>
+      </div>
+    </section>
   </main>
 </body>
 </html>
