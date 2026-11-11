@@ -16,8 +16,8 @@ Role: critical (the demo path breaks without it) | optional
 | Groq vision: qwen/qwen3.8-27b (json_schema strict) | API v1 | critical | 2026-11-11 | E-009 | verified | No enum in the schema (fails). Preview model; max 3 images per request; each image counts 2048 input tokens |
 | @mcp-b/global (WebMCP polyfill) | 6.2.0 | critical | 2026-11-11 | E-003 | verified | Exposes `document.modelContext`/`navigator.modelContext`; check the registration API before building on it |
 | @modelcontextprotocol/sdk | 1.32.2 | critical | 2026-11-11 | E-005 | verified | Streamable HTTP, stateful sessions held in memory (lost on restart; clients reconnect) |
-| Render web service | free tier | critical | | | unverified | Cold starts after idle; ephemeral disk. Human needs an account |
-| GitHub | n/a | critical | | | unverified | `gh` CLI not installed; repo created in the web UI |
+| Render web service | free tier, Blueprint `render.yaml` | critical | 2026-11-11 | E-013 | verified | https://stallfront.onrender.com. Cold starts after idle (about 50 s, per Render's banner); ephemeral disk wipes orders on every deploy, so record the video after the last push. Auto-deploys on push to main |
+| GitHub | n/a | critical | 2026-11-11 | E-013 | verified | github.com/Owolabenjade/stallfront, public, MIT detected. `gh` CLI not installed |
 
 ## How to verify a dependency
 1. Read the current official docs; note the URL and the date you read them.

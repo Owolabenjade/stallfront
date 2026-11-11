@@ -1,34 +1,40 @@
 # STATE
 
-Updated (UTC): 2026-11-11T05:33Z
-Verified at commit: 9743551
-Phase: tracer bullet (gate 2026-11-11T13:00+01:00)
+Updated (UTC): 2026-11-11T11:10Z
+Verified at commit: e643512 (live on Render)
+Phase: core build (tracer gate met; next gate feature freeze 2026-11-12T02:00+01:00)
 
 Overwrite this file at every handoff and keep it under 60 lines. It describes the present only; history lives in git, DECISIONS and EVIDENCE. Every line under "Works now" cites an evidence ID.
 
 ## Works now
-- Shop page registers 4 WebMCP tools; getTools/executeTool work in headless Chrome; calls are traced on the page (E-003).
-- search_products respects the budget; shop and tool APIs answer (E-004).
-- MCP endpoint /mcp/<slug>: tools/list and tools/call from a real MCP client (E-005).
+- Public URL https://stallfront.onrender.com: health, shop, tools, smoke 6/6 (E-013).
+- Buyer assistant on the public demo shop: 3 WebMCP tool calls to a $33.50 PayPal handoff (E-012 local, E-013 public).
+- Sandbox payment captured from the public URL; order shows paid with capture ID, channel and tool trace in the seller view API (E-013).
+- PayPal Orders v2 create and capture, Catalog Products (E-008, E-011).
+- Photos to listings with Groq vision, then publish to the PayPal catalog (E-011).
+- MCP /mcp/<slug>: tools/list and search_products from a real MCP client, local and public (E-005, E-013).
+- Repo public on GitHub with MIT license (E-013).
 
-## Written, not yet verified (needs keys)
-- PayPal: OAuth, Orders v2 create, return-URL capture, Catalog product creation (server/paypal.js).
-- Claude: buyer-agent turn with server-side tool list, photo-to-listing drafts with JSON schema output (server/claude.js), model claude-opus-5-5 with server-side refusal fallback.
-- Pages: /new (onboarding), /s/<slug>/dashboard (seller view), landing, order page.
-- render.yaml (not deployed).
+## Written, not yet verified
+- MCP create_checkout from an MCP client (I-008).
+- Seller dashboard page rendering of a paid order (API verified only) (I-009).
+- Vision fallback paths (failed_generation, json_object) (E-011 limits).
+- /new onboarding on the public URL.
 
 ## Broken or known issues
-- Demo shop products have no photos (placeholder icon). Sample photos for /new missing (public/img/samples/*.jpg).
-- No README yet.
+- Render free disk is ephemeral: shops and orders made on the server vanish on each deploy or restart; seed shop reloads.
+- Assistant sometimes ends with no text reply (handoff card only) (E-013).
+- Trace shows raw product IDs in create_checkout args (I-015).
+- No README, video script or submission text yet (I-011).
 
 ## Next action
-1. Human: fill PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, ANTHROPIC_API_KEY in .env (I-002).
-2. Claude: `npm run smoke`, then one browser purchase with the sandbox buyer to verify capture (I-004).
-3. Human: empty public GitHub repo + Render signup (I-003); Claude pushes and deploys.
+1. Claude: MCP create_checkout check (I-008), product names in the trace (I-015), 10 reliability runs (I-016).
+2. Claude: README as proof, DEMO.md, SUBMISSION.md (I-011).
+3. Human: record the video after the last deploy (I-012).
 
 ## Blockers and waiting on
-- PayPal sandbox credentials and Anthropic key (human).
-- Product photos: real photos from the human, or generated samples (decision pending).
+- None.
 
 ## Open unknowns
-- Whether `fallbacks: "default"` and `output_config.format` are accepted together by @anthropic-ai/sdk 1.8.0 beta messages (first real call will show).
+- Cold-start time on Render after idle (Render says 50 s or more).
+- Agent pass rate over repeated runs.

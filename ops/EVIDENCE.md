@@ -122,3 +122,12 @@ Method: `node scripts/agent-check.mjs http://localhost:3000` (prompt "Travelling
 Result: WebMCP calls search_products("bag", max $30), search_products("phone stand", max $30), create_checkout(bag + stand); handoff total $33.50 ($27.50 items + $6 shipping) in 4.1 s. Smoke: 6/6 passed, PayPal order 3T120472BF085773K. MCP: tools/list and search over /mcp/corner-stall.
 Label: OBSERVED
 Limits: Single run of the agent prompt; repeat-run reliability still unmeasured.
+
+## E-013: Full demo path on the public Render URL, through to a captured sandbox payment
+Date (UTC): 2026-11-11T11:07Z
+Commit: e643512 (deployed by Render Blueprint, service srv-dbq4mbrrjlhs73b85hv0, free plan)
+Environment: https://stallfront.onrender.com; checks run from the builder's machine with headless Chrome; PayPal sandbox; Groq openai/gpt-oss-120b
+Method: `curl /healthz`; `node scripts/smoke.mjs <url>`; `node scripts/mcp-check.mjs <url>`; `node scripts/browser-check.mjs <url>`; `node scripts/agent-check.mjs <url>`; `node --env-file=.env scripts/approve-sandbox.mjs <approve_url>`; then GET /api/orders/<id> and /api/shops/corner-stall/dashboard
+Result: healthz ok (paypal=true, ai=true), 1.3 s on first hit (service was warm after deploy). Smoke 6/6 (PayPal order 3C557017B01558320). MCP tools/list returns 4 tools and search works. WebMCP badge "Agent-ready: 4 WebMCP tools"; getTools and executeTool work. Assistant: search_products("bag", max $30), search_products("phone stand", max $30), create_checkout(bag + stand), handoff $33.50 in 4.9 s. Sandbox buyer approved PayPal order 1T517544FV170642A; return URL captured it: order ord_75d87bd82ee3 status paid, capture 05368800VL640091W, channel webmcp. The seller view API lists the order as paid with 3 trace rows. GitHub API: repo public, license MIT, branch main.
+Label: OBSERVED
+Limits: One run. The assistant wrote no text reply before the handoff card (tool calls only). Render free disk is ephemeral: orders and shops created on the server are lost on redeploy or restart (the seed shop reloads). Cold start after idle was not measured in this run.

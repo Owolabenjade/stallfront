@@ -29,11 +29,13 @@ try {
     replies: [...document.querySelectorAll('#chat .msg.assistant')].map((m) => m.innerText.trim()),
     handoff: document.querySelector('.handoff')?.innerText.replace(/\s+/g, ' ').trim() || null,
     error: document.querySelector('#chat .notice.err')?.innerText || null,
+    approve: document.querySelector('.handoff a[href*="paypal.com"]')?.href || null,
   }));
   console.log(`prompt: ${PROMPT}`);
   console.log(`tool calls via WebMCP (${result.calls.length}): ${result.calls.join(' -> ')}`);
   result.replies.forEach((r) => console.log(`assistant: ${r}`));
   console.log(result.handoff ? `handoff: ${result.handoff}` : `ERROR: ${result.error}`);
+  if (result.approve) console.log(`approve_url: ${result.approve}`);
   console.log(`time to handoff: ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   ok = Boolean(result.handoff);
   if (SHOT) await page.screenshot({ path: SHOT });
