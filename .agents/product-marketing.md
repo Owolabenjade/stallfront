@@ -1,6 +1,6 @@
 # Product Marketing Context
 
-**Document version:** v1
+**Document version:** v2
 **Last updated:** 2026-11-11
 
 ## Product Overview
@@ -67,7 +67,7 @@
 
 ## Proof Points
 **Metrics (sandbox, measured):** assistant reached the right checkout in 20 of 20 runs, median 4.75 s (E-015); 4 photos to a published shop with 4 PayPal catalog products in 47 to 67 s (E-016).
-**Customers:** none yet [NEED: real sellers].
+**Customers:** none yet [NEED: real sellers]. Demo shop photos are from Unsplash.
 **Testimonials:** none [NEED: real quotes]. Do not invent.
 
 ## Goals
@@ -77,7 +77,9 @@
 ## Learnings
 | Date | Learning | Evidence | Applies to | Status |
 |------|----------|----------|------------|--------|
+| 2026-11-11 | No test statistics or hackathon notes on the site; proof belongs in the README and video | builder feedback ("such information does not serve a user") | site copy | active |
 | 2026-11-11 | The builder found the UI full of code words no user understands; user-facing copy must use plain words and keep technical names secondary | builder feedback | all pages | active |
 
 ## Changelog
+- v2 (2026-11-11) — Learnings: no test stats on the site; demo shop now uses Unsplash photos (leather goods, mugs, denim).
 - v1 (2026-11-11) — Initial context, drafted from the README, landing page and builder feedback.

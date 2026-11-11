@@ -22,7 +22,7 @@ javascript, node.js, express, html, css, paypal, paypal-orders-v2, paypal-catalo
 
 ## Image gallery (upload in this order)
 1. docs/img/cover.png (thumbnail)
-2. docs/img/shop-assistant.png: The assistant used the page's WebMCP tools and prepared a $33.50 PayPal checkout.
+2. docs/img/shop-assistant.png: The assistant used the page's WebMCP tools and prepared a $271.00 PayPal checkout.
 3. docs/img/receipt.png: Paid with PayPal, with the PayPal order and capture IDs.
 4. docs/img/seller-view.png: The seller sees the channel, the agent and each tool call behind every order.
 5. docs/img/review.png: Listings drafted from photos, with the points the seller should check.
@@ -56,16 +56,18 @@ AI assistants are starting to shop for people, but an assistant can only buy whe
 - Groq's strict JSON mode rejects `enum` in the schema and sometimes fails to decode, so listing drafts fall back to the model's partial output, then to JSON mode, and categories are mapped on the server.
 - The free AI plan allows about 8,000 tokens a minute, so drafting runs one photo per request and waits out 429s with a countdown.
 - Agent reliability. In early runs the assistant asked "should I add it to your cart?" instead of preparing the checkout, and once it said "I'll create a checkout" and stopped. We measured it, changed the instructions, and added a one-time server reminder when a reply promises an action without a tool call. The gift request went from 0/3 to 5/5.
+- Partial AI replies. Once, a cut-off reply from the vision model became a listing called "Untitled product" at $10. Drafts now need a title and a price, or the next fallback runs.
+- Plain language. The first version of the UI was full of tool names and model names. We rewrote every page in plain words and kept the technical names as small labels for developers.
 
 ### Accomplishments that we're proud of
-- On the live site, the assistant reached the right checkout in 20 out of 20 runs of the travel request, with a median of 4.75 seconds to the PayPal handoff.
+- On the live site, the assistant reached the right checkout in 10 out of 10 runs of the work-bag request (median 3.5 seconds to the PayPal handoff), and 5 out of 5 for the coffee-lover gift.
 - Real sandbox payments captured from the public URL, through both WebMCP and MCP, each showing in the seller view with its agent and tool trace.
-- Four phone photos became a live shop with four PayPal catalog products in 47 to 67 seconds on the free plan.
+- Four photos became a live shop with four PayPal catalog products in about a minute on the free plan.
 
 ### What we learned
 - The approval link is the right boundary for agentic checkout: the agent does the searching and the order building, and the buyer keeps the payment decision in PayPal.
-- Measuring agent runs beats trusting one good run. The travel request passed every time on every prompt version, while the gift request failed on the first two.
-- Vision models still misread odd objects. Ours called a phone stand a footrest, so the seller review step is necessary.
+- Measuring agent runs beats trusting one good run. One of our requests passed every time while the other failed on two prompt versions before we fixed it.
+- Vision models still misread things and guess prices differently each time (the same jacket came back at $65, $120 and $180), so the seller review step is necessary.
 
 ### What's next for Stallfront
 - Per-seller PayPal onboarding, so each shop is paid into its own PayPal account (today every shop pays into one sandbox merchant).
@@ -73,7 +75,7 @@ AI assistants are starting to shop for people, but an assistant can only buy whe
 - Using PayPal's own agent-ready checkout once it opens beyond Store Sync merchants.
 
 ## Testing instructions (if the form has the field)
-Open https://stallfront.onrender.com/s/corner-stall (the free hosting sleeps when idle; the first load can take about a minute). Click the suggestion "Travelling next week…", then "Review and pay in PayPal", and log in with the PayPal sandbox buyer listed in the README (no real money). The seller view is at /s/corner-stall/dashboard. MCP endpoint: https://stallfront.onrender.com/mcp/corner-stall.
+Open https://stallfront.onrender.com/s/corner-stall (the free hosting sleeps when idle; the first load can take about a minute). Click the suggestion "New job on Monday…", then "Review and pay in PayPal", and log in with the PayPal sandbox buyer listed in the README (no real money). The seller view is at /s/corner-stall/dashboard. MCP endpoint: https://stallfront.onrender.com/mcp/corner-stall.
 
 ## Disclosures
-Work started on 2026-11-11, and nothing existed before. The code was written with Claude Code (Anthropic) as the coding assistant. MIT license. Sandbox only.
+Work started on 2026-11-11, and nothing existed before. The code was written with Claude Code (Anthropic) as the coding assistant. Product photos are from Unsplash (credits in the README). MIT license. Sandbox only.

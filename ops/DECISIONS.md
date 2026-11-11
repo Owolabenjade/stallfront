@@ -42,3 +42,19 @@ Context: The human has no Anthropic API credit; Groq offers a free plan with an 
 Decision: Photo-to-listing uses qwen/qwen3.8-27b (vision, json_schema strict; preview model, max 3 images per request, so one request per photo). The buyer agent uses openai/gpt-oss-120b (production, tool use) with openai/gpt-oss-20b as the fallback on rate limits. Calls go through fetch to https://api.groq.com/openai/v1; the browser loop switches to the OpenAI chat format. The Claude implementation (server/claude.js at commit abc0f8e) is removed from the code path.
 Alternatives: Keep Claude (no credit); Gemini free tier (not requested).
 Consequences: Free-plan limits are tight (docs disagree: 30 RPM and 8K TPM on one page, higher on another), so photos are processed one at a time with retry on 429 and the agent keeps its prompt small. The vision model is a preview model and could change; verify on the live key before relying on it.
+
+## D-006: Bold magazine redesign with plain-English copy
+Date (UTC): 2026-11-11T12:10Z
+Status: accepted (human chose "Bold magazine" from three directions and approved the draft)
+Context: The human found the UI basic and full of code words no user understands (tool names, WebMCP, MCP, model names, test statistics). They asked for the web-design-engineer, copywriting and product-marketing skills to be used.
+Decision: A Businessweek-style display system (Archivo condensed caps at large sizes, one stall-orange accent, square corners, ruled lines, numbered product index) with Monocle-style text roles (small kicker, italic Newsreader dek, captions). User-facing copy is plain English. Technical names (tool names, WebMCP, MCP, PayPal IDs) stay only as small monospace labels or in "For developers" sections, so judges can still see the mechanism. No test statistics on the site (human: "such information does not serve a user"); proof stays in README and video.
+Alternatives: "Market stall" (warm, awning stripes) and "Clean modern store" (white, minimal), both offered and not chosen.
+Consequences: Element IDs and selectors were kept, so the scripts still run; the agent-ready check now waits for `#agent-ready[data-ready]`. Positioning notes are in `.agents/product-marketing.md`.
+
+## D-007: Replace the demo shop photos with the human's Unsplash set
+Date (UTC): 2026-11-11T12:20Z
+Status: accepted (human deleted the old photos and supplied six new ones)
+Context: The old demo shop used four of the builder's phone photos (mug, bag, glass, phone stand). The human supplied six Unsplash photos: a briefcase-style handbag, leather totes, slogan mugs, a gold-handle mug, loafers and a denim jacket.
+Decision: Rebuild Corner Stall from the six photos through the real pipeline (vision drafts, two logged hand edits, PayPal catalog), keep the `corner-stall` slug, and use four of the photos as the /new samples. New demo prompts fit the new stock: "New job on Monday: get me a leather work bag and a jacket, under $280 for both" (expect $271.00) and "A gift under $20 for a coffee lover" (expect $24.00).
+Alternatives: Keep the old shop alongside (the human asked for the old photos to go).
+Consequences: Evidence before E-019 refers to the old products. README, video script and submission text were updated, and the photo credits are in the README. Unsplash licence: free use, attribution appreciated.

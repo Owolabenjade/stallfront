@@ -181,3 +181,28 @@ Method: read `createOrder` in server/paypal.js; Render service page screenshot s
 Result: `createOrder` sends no `payee`, so every order pays the REST app's own sandbox merchant. Render shows "Your free instance will spin down with inactivity, which can delay requests by 50 seconds or more." First commit e17f1b1 at 2026-11-11T05:18Z ("chore(ops): foundation"). Secrets scan: none of the key values, the old key prefixes or a `gsk_` key appear anywhere in git history. The sandbox test buyer's email and password are in the README on purpose (PayPal sandbox test account, no real money).
 Label: DERIVED (code, dashboard text, git history); the scan is OBSERVED
 Limits: Cold-start delay is Render's statement, not our measurement.
+
+## E-019: Redesign, new demo shop from six new photos, and the full demo path on Render
+Date (UTC): 2026-11-11T12:53Z
+Commit: 2d64327 (deployed to https://stallfront.onrender.com)
+Environment: local server and Render; Groq qwen/qwen3.8-27b (vision) and openai/gpt-oss-120b (agent); PayPal sandbox; headless Chrome
+Method:
+- New demo shop: six Unsplash photos supplied by the builder, resized with `scripts/resize-photos.mjs`, drafted with `scripts/build-demo-shop.mjs` (local), published with POST /api/shops, exported with `scripts/export-seed.mjs` and renamed to the `corner-stall` slug.
+- Live checks: `smoke.mjs`, `browser-check.mjs`, `mcp-check.mjs --checkout`, `reliability.mjs --runs 10` (default prompt) and `--runs 5 --prompt "A gift under $20 for a coffee lover" --expect "Coffee,Total $24.00"`, `agent-check.mjs` plus `approve-sandbox.mjs`, `onboard-check.mjs`.
+- Unit tests: `npm test`.
+Result:
+- Drafts for the six photos: Tan Leather Briefcase with Buckles $145, Large Tan Leather Tote Bag $180, White Ceramic Mug "Fill Me Up With Coffee" $18, White Ceramic Mug with Gold Handle $25, Cognac Leather Horsebit Loafers $180, Indigo Denim Jacket with Mustard-Yellow Contrast Collar $120. One draft (photo 1) came through the json_object fallback. Hand edits before publishing, both logged: the loafers' category ("other" to "apparel") and the tote's description, which was trimmed to its last full sentence. Six PayPal catalog products, PROD-6NW038204H0135646, PROD-20686386HA768411R, PROD-7481219843132005T, PROD-1K043561UW460103W, PROD-74C409610U171360U and PROD-76964633HC8995200; no warnings.
+- Render: smoke 6/6; WebMCP browser check passed; MCP create_checkout made PayPal order 3HN04577SY5380117 ($126.00).
+- Assistant on Render, "New job on Monday: get me a leather work bag and a jacket, under $280 for both": 10/10 reached the briefcase and the jacket for $271.00. Every run made 2 calls (search, then create_checkout). Median 3.5 s to handoff, max 3.7 s. No reply pasted the PayPal link.
+- "A gift under $20 for a coffee lover": 5/5 reached the coffee mug for $24.00, median 4.1 s, max 5.5 s. One run used the fallback model for two turns.
+- Paid on Render: order ord_66d4bdfabdcc, PayPal order 31P99297WK614384W, capture 1XT10488423082226, $271.00, channel webmcp.
+- Onboarding on Render with the four sample photos: 4 drafts, published, 4 of 4 catalog products.
+- A local onboarding run before the fix produced "Untitled product, $10" from a partial failed_generation. Since 2d64327 a reply without a title and price is rejected and falls through to JSON mode; the next two local runs and the Render run gave 4 complete drafts each.
+- `npm test`: 13/13.
+- Redesign screenshots at 1366 px and 390 px for every page: docs/img/shop-assistant.png, seller-view.png, receipt.png, review.png and cover.png.
+Label: OBSERVED
+Limits:
+- Vision prices vary between runs of the same photo: the jacket came back at $65, $120 and $180, and the loafers at $120, $180 and $280.
+- The prompts are fixed to this demo shop.
+- Reliability is n=10 and n=5 from one client location.
+- Shops published on Render vanish on the next deploy.
