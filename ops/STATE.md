@@ -16,7 +16,6 @@ Overwrite this file at every handoff and keep it under 60 lines. It describes th
 - Repo public on GitHub with MIT license (E-013).
 
 ## Written, not yet verified
-
 - Vision fallback paths (failed_generation, json_object) (E-011 limits).
 - /new onboarding on the public URL.
 
