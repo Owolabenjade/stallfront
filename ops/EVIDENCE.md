@@ -270,3 +270,12 @@ Result:
 - Before the fix, the seller view redrew every order every 4 s, which closed an opened "What the assistant did" list and broke the first seller clip.
 Label: OBSERVED
 Limits: The narration is an AI voice cloned from the builder; nobody listened to it in this session. The PayPal review page stays in Arabic for this test buyer: PayPal ignored locale.x=en_US, locale.x=en_AE and experience_context.locale en-US, and the account's language setting (already en_US) did not change it. The browser recording has no address bar; the end card and narration give the URL.
+
+## E-025: Demo video public on YouTube
+Date (UTC): 2026-11-11T18:21Z
+Commit: c380e8a
+Environment: YouTube oEmbed and the public watch page, fetched without signing in
+Method: `curl "https://www.youtube.com/oembed?url=https://youtu.be/KDiFgml6RH0&format=json"`; the watch page's player data (isUnlisted, playabilityStatus, lengthSeconds)
+Result: title "Stallfront: turn product photos into a PayPal shop in minutes"; isUnlisted false; playability OK; length 158 s (the E-024 file is 157.8 s).
+Label: OBSERVED
+Limits: Checked from one network, signed out; playback on a phone was not checked.

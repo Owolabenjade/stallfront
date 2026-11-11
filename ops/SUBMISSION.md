@@ -18,7 +18,7 @@ Turn product photos into a PayPal shop in minutes. AI writes the listings. Shopp
 - Code: https://github.com/Owolabenjade/stallfront
 
 ## Video demo link
-VIDEO_LINK (YouTube, public, under 3:00)
+https://youtu.be/KDiFgml6RH0 (YouTube, public, 2:38)
 
 ## Built with
 javascript, node.js, express, html, css, paypal, paypal-orders-v2, paypal-catalog-products, groq, gpt-oss-120b, qwen, webmcp, model-context-protocol, render, puppeteer

@@ -1,6 +1,6 @@
 # Stallfront: turn product photos into a PayPal shop in minutes
 
-[Live demo](https://stallfront.onrender.com) · [Demo shop](https://stallfront.onrender.com/s/corner-stall) · [Seller view](https://stallfront.onrender.com/s/corner-stall/dashboard) · MCP endpoint: `https://stallfront.onrender.com/mcp/corner-stall` · Video: VIDEO_LINK
+[Live demo](https://stallfront.onrender.com) · [Demo shop](https://stallfront.onrender.com/s/corner-stall) · [Seller view](https://stallfront.onrender.com/s/corner-stall/dashboard) · MCP endpoint: `https://stallfront.onrender.com/mcp/corner-stall` · [Video (2:38)](https://youtu.be/KDiFgml6RH0)
 
 AI writes the listings. Shoppers pay with PayPal, or ask their AI assistant to shop for them. Only the buyer can approve a payment, in PayPal.
 
