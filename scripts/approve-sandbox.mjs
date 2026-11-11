@@ -33,11 +33,17 @@ async function clickByText(texts, timeout = 20000) {
 try {
   await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
   await shot(1);
-  await page.waitForSelector('#email', { visible: true, timeout: 30000 });
-  await page.type('#email', email, { delay: 20 });
-  const next = await page.$('#btnNext');
-  if (next && (await next.boundingBox())) await next.click();
+  // PayPal may ask for the email, or remember it and ask only for the password.
+  await page.waitForFunction(() => [...document.querySelectorAll('#email, #password')].some((e) => e.offsetParent !== null), { timeout: 30000 });
+  const emailBox = await page.$('#email');
+  if (emailBox && (await emailBox.boundingBox())) {
+    await page.$eval('#email', (e) => { e.value = ''; e.dispatchEvent(new Event('input', { bubbles: true })); });
+    await page.type('#email', email, { delay: 20 });
+    const next = await page.$('#btnNext');
+    if (next && (await next.boundingBox())) await next.click();
+  }
   await page.waitForSelector('#password', { visible: true, timeout: 30000 });
+  await page.$eval('#password', (e) => { e.value = ''; });
   await page.type('#password', password, { delay: 20 });
   await new Promise((r) => setTimeout(r, 500));
   await page.keyboard.press('Enter');
@@ -46,7 +52,17 @@ try {
   if (alert) console.log(`PayPal says: ${alert}`);
   await page.waitForNetworkIdle({ idleTime: 1500, timeout: 60000 }).catch(() => {});
   await shot(2);
-  const label = await clickByText(['Complete Purchase', 'Pay Now', 'Continue to Review Order', 'Continue', 'Agree & Pay', 'Pay']);
+  // The review page's primary button; matched by test id first so the buyer's language does not matter.
+  let label = null;
+  for (const sel of ['[data-testid="submit-button-initial"]', '#payment-submit-btn', 'button[data-id="payment-submit-btn"]']) {
+    const el = await page.$(sel);
+    if (el && (await el.boundingBox())) {
+      label = await page.evaluate((e) => e.innerText.trim(), el);
+      await el.click();
+      break;
+    }
+  }
+  if (!label) label = await clickByText(['Complete Purchase', 'Pay Now', 'Continue to Review Order', 'Continue', 'Agree & Pay', 'Pay']);
   console.log(`clicked "${label}"`);
   await page.waitForFunction(() => !location.hostname.endsWith('paypal.com'), { timeout: 90000 });
   await page.waitForNetworkIdle({ idleTime: 1000, timeout: 30000 }).catch(() => {});

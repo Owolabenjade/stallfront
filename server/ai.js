@@ -104,7 +104,7 @@ const LISTING_SCHEMA = {
     title: { type: 'string', description: 'Plain product title, 3 to 8 words, no hype' },
     summary: { type: 'string', description: 'One sentence for the product card, under 110 characters' },
     description: { type: 'string', description: 'Two to four factual sentences: what it is, what it is made of, how it is used, size and care if visible' },
-    category: { type: 'string', enum: ['kitchen', 'home', 'bags', 'apparel', 'accessories', 'electronics', 'art', 'stationery', 'beauty', 'toys', 'other'] },
+    category: { type: 'string', description: 'One of: kitchen, home, bags, apparel, accessories, electronics, art, stationery, beauty, toys, other' },
     price_usd: { type: 'number', description: 'Suggested price in USD for a small independent seller' },
     price_reasoning: { type: 'string', description: 'One short sentence on why this price' },
     attributes: {
@@ -149,5 +149,12 @@ export async function draftListing(photo, hint) {
   } catch {
     throw httpError(502, 'The model returned a listing that was not valid JSON; try again.');
   }
+  // Keep lists short and prices sane; the seller reviews everything before publishing.
+  const uniq = (a, n) => [...new Set((Array.isArray(a) ? a : []).map((s) => String(s).trim().toLowerCase()).filter(Boolean))].slice(0, n);
+  listing.tags = uniq(listing.tags, 8);
+  listing.gift_for = uniq(listing.gift_for, 4);
+  listing.needs_seller_check = (Array.isArray(listing.needs_seller_check) ? listing.needs_seller_check : []).slice(0, 4);
+  listing.category = String(listing.category || 'other').toLowerCase().slice(0, 30);
+  listing.price_usd = Math.min(Math.max(Math.round(Number(listing.price_usd || 10) * 2) / 2, 1), 1000);
   return { listing, model: json.model || VISION_MODEL, limits, usage: json.usage ? { input: json.usage.prompt_tokens, output: json.usage.completion_tokens } : null };
 }
