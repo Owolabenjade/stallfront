@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import * as store from './store.js';
 import { TOOL_DEFS, runTool, settleOrder } from './tools.js';
 import { paypalConfigured, createCatalogProduct } from './paypal.js';
-import { agentTurn, draftListings, claudeConfigured, MODEL } from './claude.js';
+import { agentTurn, draftListing, aiConfigured, AGENT_MODELS, VISION_MODEL } from './ai.js';
 import { mountMcp } from './mcp.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -70,7 +70,7 @@ const publicOrder = (o) => ({
 const canAdmin = (shop, req) => shop.demo || (req.query.key && crypto.timingSafeEqual(Buffer.from(String(req.query.key).padEnd(64).slice(0, 64)), Buffer.from(String(shop.adminKey).padEnd(64).slice(0, 64))));
 
 // ---------- health ----------
-app.get('/healthz', (req, res) => res.json({ ok: true, paypal: paypalConfigured(), anthropic: claudeConfigured(), model: MODEL }));
+app.get('/healthz', (req, res) => res.json({ ok: true, paypal: paypalConfigured(), ai: aiConfigured(), agentModel: AGENT_MODELS[0], visionModel: VISION_MODEL }));
 
 // ---------- static vendor and uploads ----------
 app.get('/vendor/webmcp.js', (req, res) => res.sendFile(path.join(ROOT, 'node_modules/@mcp-b/global/dist/index.iife.js')));
@@ -127,13 +127,14 @@ app.get('/api/orders/:id', async (req, res, next) => {
   }
 });
 
-// ---------- buyer agent: one Claude turn; the browser executes the tools through WebMCP ----------
+// ---------- buyer agent: one model turn; the browser executes the tools through WebMCP ----------
 app.post('/api/agent', limit('agent', 60, 10 * 60 * 1000), async (req, res, next) => {
   try {
     const shop = store.getShop(String(req.body?.shop || ''));
     if (!shop) throw httpError(404, 'Unknown shop');
     res.json(await agentTurn(shop, req.body.messages));
   } catch (err) {
+    if (err.status === 429) res.set('Retry-After', String(err.retryAfter || 8));
     next(err);
   }
 });
@@ -141,31 +142,24 @@ app.post('/api/agent', limit('agent', 60, 10 * 60 * 1000), async (req, res, next
 // ---------- seller onboarding: photos to draft listings, then publish ----------
 const MEDIA = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
 
-app.post('/api/listings/draft', limit('draft', 8, 10 * 60 * 1000), async (req, res, next) => {
+// One photo per request (the free vision model takes few images per call); the page loops and shows progress.
+app.post('/api/listings/draft', limit('draft', 30, 10 * 60 * 1000), async (req, res, next) => {
   try {
-    const photos = Array.isArray(req.body?.photos) ? req.body.photos : [];
-    if (photos.length < 1 || photos.length > 6) throw httpError(400, 'Send between 1 and 6 photos.');
-    const draftId = crypto.randomBytes(6).toString('hex');
+    const draftId = /^[a-f0-9]{12}$/.test(req.body?.draftId || '') ? req.body.draftId : crypto.randomBytes(6).toString('hex');
+    const index = Math.min(Math.max(parseInt(req.body?.index, 10) || 1, 1), 6);
+    const m = /^data:(image\/(?:jpeg|png|webp));base64,(.+)$/.exec(String(req.body?.photo || ''));
+    if (!m) throw httpError(400, `Photo ${index} is not a JPEG, PNG or WebP image.`);
+    const buf = Buffer.from(m[2], 'base64');
+    if (buf.length > 3 * 1024 * 1024) throw httpError(400, `Photo ${index} is larger than 3 MB.`);
     const dir = path.join(UPLOADS, draftId);
     fs.mkdirSync(dir, { recursive: true });
-    const decoded = photos.map((p, i) => {
-      const m = /^data:(image\/(?:jpeg|png|webp));base64,(.+)$/.exec(String(p));
-      if (!m) throw httpError(400, `Photo ${i + 1} is not a JPEG, PNG or WebP image.`);
-      const buf = Buffer.from(m[2], 'base64');
-      if (buf.length > 3 * 1024 * 1024) throw httpError(400, `Photo ${i + 1} is larger than 3 MB.`);
-      const file = `${i + 1}.${MEDIA[m[1]]}`;
-      fs.writeFileSync(path.join(dir, file), buf);
-      return { mediaType: m[1], data: m[2], url: `/uploads/${draftId}/${file}` };
-    });
+    const file = `${index}.${MEDIA[m[1]]}`;
+    fs.writeFileSync(path.join(dir, file), buf);
     const t0 = Date.now();
-    const out = await draftListings(decoded, req.body.hint);
-    res.json({
-      draftId,
-      ms: Date.now() - t0,
-      model: out.model,
-      listings: out.listings.map((l) => ({ ...l, imageUrl: decoded[l.photo_index - 1]?.url || null })),
-    });
+    const out = await draftListing({ mediaType: m[1], data: m[2] }, req.body.hint);
+    res.json({ draftId, index, ms: Date.now() - t0, model: out.model, listing: { ...out.listing, imageUrl: `/uploads/${draftId}/${file}` } });
   } catch (err) {
+    if (err.status === 429) res.set('Retry-After', String(err.retryAfter || 10));
     next(err);
   }
 });
@@ -287,5 +281,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Stallfront on ${process.env.BASE_URL} (PayPal ${paypalConfigured() ? 'configured' : 'NOT configured'}, Claude ${claudeConfigured() ? MODEL : 'NOT configured'})`);
+  console.log(`Stallfront on ${process.env.BASE_URL} (PayPal ${paypalConfigured() ? 'configured' : 'NOT configured'}, AI ${aiConfigured() ? `${AGENT_MODELS[0]} + ${VISION_MODEL}` : 'NOT configured'})`);
 });

@@ -1,11 +1,11 @@
-// Seller onboarding: photos -> Claude-drafted listings -> publish (PayPal catalog products) -> live shop.
+// Seller onboarding: photos -> AI-drafted listings -> publish (PayPal catalog products) -> live shop.
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-const SAMPLES = ['/img/samples/mug.jpg', '/img/samples/tea-tin.jpg', '/img/samples/candle.jpg', '/img/samples/tea-towel.jpg'];
+const SAMPLES = ['/img/samples/mug.jpg', '/img/samples/duffel-bag.jpg', '/img/samples/glass.jpg', '/img/samples/phone-stand.jpg'];
 const MAX = 6;
 
 let photos = []; // { dataUrl }
-let drafts = []; // listings from Claude
+let drafts = []; // listings drafted by the vision model
 
 function notice(kind, html) {
   $('#notice').innerHTML = html ? `<p class="notice ${kind}">${html}</p>` : '';
@@ -70,8 +70,8 @@ drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove
 $('#use-samples').addEventListener('click', async () => {
   photos = [];
   for (const src of SAMPLES) photos.push({ dataUrl: await resize(src) });
-  if (!$('#shop-name').value) $('#shop-name').value = 'Juniper Studio';
-  if (!$('#shop-tagline').value) $('#shop-tagline').value = 'Handmade homeware and tea from a small studio';
+  if (!$('#shop-name').value) $('#shop-name').value = 'Corner Stall';
+  if (!$('#shop-tagline').value) $('#shop-tagline').value = 'Everyday homeware, bags and gadgets from a small market stall';
   renderThumbs();
 });
 
@@ -87,13 +87,42 @@ $('#draft').addEventListener('click', async () => {
   const btn = $('#draft');
   btn.setAttribute('aria-busy', 'true');
   btn.disabled = true;
-  $('#draft-status').innerHTML = `<span class="progress"><span class="spinner"></span>Claude is looking at ${photos.length} photo${photos.length > 1 ? 's' : ''}…</span>`;
+  const status = (text) => ($('#draft-status').innerHTML = `<span class="progress"><span class="spinner"></span>${esc(text)}</span>`);
   try {
-    const out = await post('/api/listings/draft', { photos: photos.map((p) => p.dataUrl), hint: $('#hint').value.trim() });
-    drafts = out.listings;
+    const t0 = performance.now();
+    let draftId;
+    let model;
+    drafts = [];
+    for (let i = 0; i < photos.length; i++) {
+      for (let attempt = 0; ; attempt++) {
+        status(`Reading photo ${i + 1} of ${photos.length}…`);
+        const res = await fetch('/api/listings/draft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ photo: photos[i].dataUrl, index: i + 1, draftId, hint: $('#hint').value.trim() }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (res.ok) {
+          draftId = json.draftId;
+          model = json.model;
+          drafts.push(json.listing);
+          break;
+        }
+        // The free AI plan limits tokens per minute: wait as the server says, then retry (up to 4 times).
+        if (res.status === 429 && attempt < 4) {
+          const wait = Math.min(Number(res.headers.get('retry-after')) || 15, 60);
+          for (let s = wait; s > 0; s--) {
+            status(`The free AI plan needs a short pause; continuing with photo ${i + 1} in ${s} s…`);
+            await new Promise((r) => setTimeout(r, 1000));
+          }
+          continue;
+        }
+        throw new Error(`photo ${i + 1}: ${json.error || `request failed (${res.status})`}`);
+      }
+    }
     renderListings();
     $('#draft-status').textContent = '';
-    notice('ok', `Drafted ${drafts.length} listing${drafts.length > 1 ? 's' : ''} in ${(out.ms / 1000).toFixed(1)} s with ${esc(out.model)}.`);
+    notice('ok', `Drafted ${drafts.length} listing${drafts.length > 1 ? 's' : ''} in ${((performance.now() - t0) / 1000).toFixed(1)} s with ${esc(model)}.`);
     show('step-review');
   } catch (err) {
     $('#draft-status').textContent = '';

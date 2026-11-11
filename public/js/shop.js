@@ -155,7 +155,7 @@ document.addEventListener('click', async (e) => {
   }
 });
 
-// ---------- in-page buyer assistant (Claude via /api/agent, tools run through WebMCP) ----------
+// ---------- in-page buyer assistant (model via /api/agent, tools run through WebMCP) ----------
 const messages = [];
 
 function chatAppend(el) {
@@ -182,6 +182,7 @@ async function runAgent(userText) {
   chatAppend(u);
   messages.push({ role: 'user', content: userText });
 
+  // The model only names tools; every call is executed in this page through WebMCP (document.modelContext).
   const mc = document.modelContext || navigator.modelContext;
   const tools = await mc.getTools();
   const thinking = document.createElement('div');
@@ -190,45 +191,41 @@ async function runAgent(userText) {
     for (let step = 0; step < 8; step++) {
       thinking.textContent = step === 0 ? 'Assistant is reading the shop…' : 'Assistant is working…';
       chatAppend(thinking);
-      const turn = await api('/api/agent', {
-        method: 'POST',
-        headers: { 'x-stallfront-session': sessionId },
-        body: JSON.stringify({
-          shop: slug,
-          messages,
-          tools: tools.map((t) => ({ name: t.name, description: t.description, input_schema: typeof t.inputSchema === 'string' ? JSON.parse(t.inputSchema) : t.inputSchema })),
-        }),
-      });
-      thinking.remove();
-      messages.push({ role: 'assistant', content: turn.content });
-      for (const block of turn.content) {
-        if (block.type === 'text' && block.text.trim()) {
-          const a = document.createElement('div');
-          a.className = 'msg assistant arrive';
-          a.innerHTML = renderText(block.text);
-          chatAppend(a);
+      let turn;
+      for (let attempt = 0; ; attempt++) {
+        try {
+          turn = await api('/api/agent', { method: 'POST', headers: { 'x-stallfront-session': sessionId }, body: JSON.stringify({ shop: slug, messages }) });
+          break;
+        } catch (err) {
+          if (!/busy|429|Too many/i.test(err.message) || attempt >= 2) throw err;
+          thinking.textContent = 'The free AI plan is busy; trying again in a few seconds…';
+          await new Promise((r) => setTimeout(r, 6000));
         }
       }
-      const uses = turn.content.filter((b) => b.type === 'tool_use');
-      if (!uses.length) break;
-      const results = [];
-      for (const use of uses) {
-        const tool = tools.find((t) => t.name === use.name);
+      thinking.remove();
+      const msg = turn.message;
+      messages.push(msg);
+      if (msg.content?.trim()) {
+        const a = document.createElement('div');
+        a.className = 'msg assistant arrive';
+        a.innerHTML = renderText(msg.content);
+        chatAppend(a);
+      }
+      if (!msg.tool_calls?.length) break;
+      for (const call of msg.tool_calls) {
+        const tool = tools.find((t) => t.name === call.function.name);
         let out;
         try {
-          const raw = await mc.executeTool(tool, use.input || {});
+          if (!tool) throw new Error(`no WebMCP tool named ${call.function.name}`);
+          const args = call.function.arguments ? JSON.parse(call.function.arguments) : {};
+          const raw = await mc.executeTool(tool, args);
           out = typeof raw === 'string' ? JSON.parse(raw) : raw;
         } catch (err) {
           out = { content: [{ type: 'text', text: `Tool failed: ${err.message}` }], isError: true };
         }
-        results.push({
-          type: 'tool_result',
-          tool_use_id: use.id,
-          content: (out?.content || []).filter((c) => c.type === 'text').map((c) => ({ type: 'text', text: c.text })),
-          ...(out?.isError ? { is_error: true } : {}),
-        });
+        const text = (out?.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('\n');
+        messages.push({ role: 'tool', tool_call_id: call.id, content: out?.isError ? `ERROR: ${text}` : text });
       }
-      messages.push({ role: 'user', content: results });
     }
   } catch (err) {
     thinking.remove();

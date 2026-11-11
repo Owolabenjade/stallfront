@@ -38,7 +38,7 @@ let health, found, checkout;
 await step('health', async () => {
   health = await get('/healthz');
   if (!health.ok) throw new Error('not ok');
-  return `paypal=${health.paypal} anthropic=${health.anthropic}`;
+  return `paypal=${health.paypal} ai=${health.ai}`;
 });
 await step('shop API', async () => {
   const s = await get(`/api/shops/${SHOP}`);
