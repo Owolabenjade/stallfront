@@ -12,12 +12,11 @@ Overwrite this file at every handoff and keep it under 60 lines. It describes th
 - Sandbox payment captured from the public URL; order shows paid with capture ID, channel and tool trace in the seller view API (E-013).
 - PayPal Orders v2 create and capture, Catalog Products (E-008, E-011).
 - Photos to listings with Groq vision, then publish to the PayPal catalog (E-011).
-- MCP /mcp/<slug>: tools/list and search_products from a real MCP client, local and public (E-005, E-013).
+- MCP /mcp/<slug>: an MCP client searches, creates a checkout, and the buyer pays; seller view shows it with channel, client name, IDs and trace (E-014; list and search on Render E-013).
 - Repo public on GitHub with MIT license (E-013).
 
 ## Written, not yet verified
-- MCP create_checkout from an MCP client (I-008).
-- Seller dashboard page rendering of a paid order (API verified only) (I-009).
+
 - Vision fallback paths (failed_generation, json_object) (E-011 limits).
 - /new onboarding on the public URL.
 
@@ -28,7 +27,7 @@ Overwrite this file at every handoff and keep it under 60 lines. It describes th
 - No README, video script or submission text yet (I-011).
 
 ## Next action
-1. Claude: MCP create_checkout check (I-008), product names in the trace (I-015), 10 reliability runs (I-016).
+1. Claude: product names in the trace (I-015), 10 reliability runs (I-016), seller view polish (I-018).
 2. Claude: README as proof, DEMO.md, SUBMISSION.md (I-011).
 3. Human: record the video after the last deploy (I-012).
 

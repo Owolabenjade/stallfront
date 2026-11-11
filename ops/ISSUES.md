@@ -13,8 +13,8 @@ If the team also uses GitHub Issues, put the GitHub number in the Title cell and
 | I-005 | Smoke check script for the demo path | claude | done | M1 | `npm run smoke` exits 0 locally and against Render | E-012, E-013 |
 | I-006 | Photos to listings with the vision model; publish creates PayPal Catalog products | claude | done | M2 | Four sample photos become four listings and four PayPal product IDs | E-011 |
 | I-007 | In-page buyer agent: model tool loop over the page's WebMCP tools, with visible trace | claude | done | M2 | A shopping request ends with a PayPal approval link | E-010, E-012 |
-| I-008 | MCP endpoint `/mcp/<slug>` with the same tools | claude | todo | M2 | A real MCP client lists the tools and creates a checkout | E-005 (list and search only) |
-| I-009 | Seller dashboard with channel attribution, agent trace and PayPal IDs; capture webhook | claude | todo | M2 | Captured agent order appears with channel, trace and capture ID | |
+| I-008 | MCP endpoint `/mcp/<slug>` with the same tools | claude | done | M2 | A real MCP client lists the tools and creates a checkout | E-005, E-013, E-014 |
+| I-009 | Seller dashboard with channel attribution, agent trace and PayPal IDs | claude | done | M2 | Captured agent order appears with channel, trace and capture ID | E-013 (API, public), E-014 (page) |
 | I-010 | States and design floor on the demo path | claude | todo | M3 | Loading, empty and error states; design floor checklist passes | |
 | I-011 | README, video script, submission text | claude | todo | M4 | presubmit passes; video uploaded; form drafted | |
 | I-012 | Record and upload the video; submit on Devpost | human | todo | M4 | YouTube link public; Devpost shows submitted | |
@@ -22,6 +22,8 @@ If the team also uses GitHub Issues, put the GitHub number in the Title cell and
 | I-014 | Shipment tracking from the seller dashboard | claude | parked | | | |
 | I-015 | Trace shows product names instead of raw product IDs in create_checkout args | claude | todo | M3 | Trace reads "bag, phone stand" | |
 | I-016 | Measure agent reliability over repeated runs of the demo prompt | claude | todo | M3 | 10 runs recorded with pass rate | |
+| I-017 | PayPal capture webhook with signature verification (return URL already captures) | claude | parked | | | |
+| I-018 | Seller view: price wraps under long titles; clearer summary line | claude | todo | M3 | Price stays on the title row at 1366 px; summary reads "3 orders, all from AI agents; 1 paid" | |
 
 ## Notes
 Add a `### I-00N` section only when an issue needs more than its row.

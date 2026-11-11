@@ -131,3 +131,12 @@ Method: `curl /healthz`; `node scripts/smoke.mjs <url>`; `node scripts/mcp-check
 Result: healthz ok (paypal=true, ai=true), 1.3 s on first hit (service was warm after deploy). Smoke 6/6 (PayPal order 3C557017B01558320). MCP tools/list returns 4 tools and search works. WebMCP badge "Agent-ready: 4 WebMCP tools"; getTools and executeTool work. Assistant: search_products("bag", max $30), search_products("phone stand", max $30), create_checkout(bag + stand), handoff $33.50 in 4.9 s. Sandbox buyer approved PayPal order 1T517544FV170642A; return URL captured it: order ord_75d87bd82ee3 status paid, capture 05368800VL640091W, channel webmcp. The seller view API lists the order as paid with 3 trace rows. GitHub API: repo public, license MIT, branch main.
 Label: OBSERVED
 Limits: One run. The assistant wrote no text reply before the handoff card (tool calls only). Render free disk is ephemeral: orders and shops created on the server are lost on redeploy or restart (the seed shop reloads). Cold start after idle was not measured in this run.
+
+## E-014: MCP client buys through to a captured payment; seller view shows it
+Date (UTC): 2026-11-11T11:10Z
+Commit: 5f5addf plus the extended scripts/mcp-check.mjs (uncommitted at run time)
+Environment: local server (same code as Render), PayPal sandbox, headless Chrome
+Method: `node scripts/mcp-check.mjs http://localhost:3000 corner-stall --checkout`, then `node --env-file=.env scripts/approve-sandbox.mjs <approve_url>`, then `node scripts/shots.mjs http://localhost:3000 <dir> 1366` and a look at dashboard-1366.png
+Result: over MCP (Streamable HTTP, @modelcontextprotocol/sdk client): tools/list (4), search_products, get_product, create_checkout (order ord_d4b14175bf05, PayPal 7NT80161S5677705H, $21.00 with shipping), get_order_status awaiting_buyer_approval. Sandbox buyer approved; return URL captured it: status paid, channel mcp, agent "stallfront-mcp-check 0.1.0", capture 9DS38542FR532492N. Seller view lists it with the "AI agent · MCP" badge, client name, Paid, PayPal order and capture IDs, the agent's note and "Agent's 4 tool calls"; agent activity lists the 4 MCP calls.
+Label: OBSERVED
+Limits: MCP client was our scripted SDK client, not Claude Desktop or Claude Code. Run locally, not on Render (Render MCP list and search verified in E-013). Layout: a long two-item title pushes the price onto its own line; the summary line "1 of them placed by AI agents" is ambiguous.
