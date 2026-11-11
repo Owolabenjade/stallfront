@@ -8,6 +8,8 @@ Role: critical (the demo path breaks without it) | optional
 | Dependency | Pinned version | Role | Verified (UTC) | Evidence | Status | Limits, keys, gotchas |
 |---|---|---|---|---|---|---|
 | Node.js | 22.20.0 | critical | 2026-11-11 | E-001 | verified | Local machine; Render must run 22 too (`engines`) |
+| ElevenLabs text to speech | eleven_multilingual_v2, voice "Mine" (the builder's clone) | optional | 2026-11-11 | E-024 | verified | Video narration only, not part of the app. Key kept outside the repo; rotate it after judging |
+| ffmpeg (ffmpeg-static) | 5.2.0 (ffmpeg 6.0 essentials, libx264, libass) | optional | 2026-11-11 | E-024 | verified | Video assembly only; installed in a scratch folder, not a project dependency |
 | PayPal sandbox REST: OAuth, Orders v2 create and capture | v2 | critical | 2026-11-11 | E-006, E-008 | verified | Needs a developer account (I-002). Buyer approval needs the sandbox personal account login |
 | PayPal sandbox REST: Catalog Products | v1 | critical | 2026-11-11 | E-011 | verified | Product IDs only; prices live on our side and in order items |
 | PayPal sandbox webhooks | v1 | optional | | | unverified | Needs the public Render URL and a webhook ID for signature verification |

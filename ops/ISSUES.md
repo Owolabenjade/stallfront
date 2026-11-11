@@ -17,7 +17,7 @@ If the team also uses GitHub Issues, put the GitHub number in the Title cell and
 | I-009 | Seller dashboard with channel attribution, agent trace and PayPal IDs | claude | done | M2 | Captured agent order appears with channel, trace and capture ID | E-013 (API, public), E-014 (page) |
 | I-010 | States and design floor on the demo path | claude | done | M3 | Loading, empty and error states; design floor checklist passes | E-019 (redesign D-006: empty, loading, busy and error copy on every page; 1366 and 390 px screenshots) |
 | I-011 | README, video script, submission text | claude | doing | M4 | presubmit passes; video uploaded; form drafted | README drafted |
-| I-012 | Record and upload the video; submit on Devpost | human | todo | M4 | YouTube link public; Devpost shows submitted | |
+| I-012 | Video produced (E-024); human uploads it to YouTube and submits on Devpost | human | doing | M4 | YouTube link public; Devpost shows submitted | E-024 (video file) |
 | I-013 | Human checkout with PayPal JS SDK v6 buttons on the shop page | claude | parked | | | |
 | I-014 | Shipment tracking from the seller dashboard | claude | parked | | | |
 | I-015 | Trace shows product names instead of raw product IDs in create_checkout args | claude | done | M3 | Trace reads "bag, phone stand" | E-015, E-017 |
@@ -28,6 +28,7 @@ If the team also uses GitHub Issues, put the GitHub number in the Title cell and
 | I-020 | Redesign (bold magazine) and plain-English copy on every page | claude | done | M3 | No code words in user-facing copy; screenshots at 1366 and 390 px | E-019, D-006 |
 | I-021 | Rebuild the demo shop from the human's six new photos | claude | done | M3 | New seed through the real pipeline; demo prompts pass on Render | E-019, D-007 |
 | I-022 | Seller-first headline everywhere: site hero and page title, README title and intro, cover image, video title card and narration, package.json description, GitHub About | claude (human approved the line) | done | M4 | New headline live on Render, always followed by the AI-assistant line (E-021); cover retaken; ops/DEMO.md and README updated; presubmit clean | E-022 |
+| I-023 | Seller view: an opened "What the assistant did" list closed on every 4 s refresh | claude | done | M4 | List stays open across refreshes | E-024 |
 
 ## Notes
 Add a `### I-00N` section only when an issue needs more than its row.

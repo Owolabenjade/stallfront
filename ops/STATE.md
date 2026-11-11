@@ -1,8 +1,8 @@
 # STATE
 
-Updated (UTC): 2026-11-11T16:16Z
-Verified at commit: 8d81b88 on Render (E-022)
-Phase: video prep (feature freeze 2026-11-12T02:00+01:00; video gate 2026-11-12T15:30+01:00)
+Updated (UTC): 2026-11-11T18:07Z
+Verified at commit: b0ac244 on Render (E-022, E-024)
+Phase: submission (video made; upload and Devpost submit by the human)
 
 Overwrite this file at every handoff and keep it under 60 lines. It describes the present only; history lives in git, DECISIONS and EVIDENCE. Every line under "Works now" cites an evidence ID.
 
@@ -11,7 +11,7 @@ Overwrite this file at every handoff and keep it under 60 lines. It describes th
 - Demo shop Corner Stall: six products from the human's Unsplash photos, six PayPal catalog products (E-019, D-007).
 - Shopper path: a product's "Buy with PayPal" button opens PayPal checkout, and the payment is captured on Render (E-020, E-022).
 - Assistant on Render: work-bag prompt 10/10 ($271.00, median 3.5 s), coffee-lover gift 5/5 ($24.00) (E-019); one run after the latest deploy, 3.4 s (E-022).
-- Seller view labels each order's channel; a shopper's own order shows no assistant steps (E-022).
+- Seller view labels each order's channel; a shopper's own order shows no assistant steps; an opened step list stays open across refreshes (E-022, E-024).
 - MCP: our SDK test client bought through to a captured payment on Render (E-023).
 - Onboarding on Render: four sample photos to a published shop, 4 of 4 catalog products (E-019).
 - `npm test` 13/13; smoke and WebMCP browser checks pass on Render; presubmit online 0 errors (E-022).
@@ -19,28 +19,26 @@ Overwrite this file at every handoff and keep it under 60 lines. It describes th
 - Devpost text: ops/SUBMISSION.md and the human's doc "Stallfront Devpost description" (https://claude.ai/artifact/2UQb5M2ibCJ6vb3ZwHthFP), seller-first, no coding-tool credit.
 - Git history: Owolabenjade identity, no co-author lines (D-008).
 
-## Ready for recording
-- Live seller view seeded at 16:11 to 16:13Z: a paid shopper order ($24.00) and a paid AI-app order over MCP ($126.00) (E-023).
-- A keep-awake ping hits /healthz every 4 minutes until about 19:10Z, so the site does not sleep and wipe the orders.
-- No deploys until the video is done: every push carries [skip render].
+## Video
+- Demo video made from the live site: C:UsersPAB-NETWORKVideosStallfront demo.mp4, 2:38, captions burned in (E-024). Script and upload steps: ops/DEMO.md.
 
 ## Written, not yet verified
-- ops/DEMO.md: the reordered video script (seller's problem, pitch, photos to shop, shopper and assistant, seller view) has not been read aloud against a timer.
+- Nothing on the demo path.
 
 ## Broken or known issues
 - Vision prices vary between runs of the same photo (jacket $65 to $180); the seller sets prices on review.
 - Render free disk is ephemeral: shops and orders made on the server vanish on restart, sleep or deploy.
-- The sandbox buyer's PayPal pages are in Arabic; the human uses Google Translate while recording (I-019 cut).
+- The sandbox buyer's PayPal review page is in Arabic; PayPal ignores every English setting we tried (E-024). The video explains it on screen.
 - Video link is a placeholder in README.md and ops/SUBMISSION.md.
 
 ## Next action
-1. Human: set the GitHub repo About: description = the Devpost pitch, website https://stallfront.onrender.com, topics.
-2. Done: live site seeded and kept awake for recording (see above).
-3. Human: record and upload the video by 2026-11-12T15:30+01:00, then submit on Devpost by 18:00+01:00 (I-012).
-4. Claude: add the video link, sync the doc into ops/SUBMISSION.md, run presubmit --online, tag the submission.
+1. Human: upload the video to YouTube as Public (ops/DEMO.md) and send the link.
+2. Claude: add the link to README.md, ops/SUBMISSION.md and the Devpost doc; run presubmit --online.
+3. Human: set the GitHub About box; submit on Devpost by 2026-11-12T18:00+01:00 (I-012).
+4. Claude: tag the submitted commit; record the submission as evidence.
 
 ## Blockers and waiting on
-- Human: video recording.
+- Human: YouTube upload and the Devpost submit.
 
 ## Open unknowns
 - Measured cold-start time on Render (Render says 50 s or more).

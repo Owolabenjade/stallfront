@@ -257,3 +257,16 @@ Result:
 - Live seller view: 2 orders, both Paid. "AI app · connected to your shop" (client stallfront-mcp-check 0.1.0, note "MCP check", "What the assistant did (4 steps)") and "Shopper · on your website" (no assistant steps). Stats: 2 orders, $150 paid, 1 from AI assistants. No page errors.
 Label: OBSERVED
 Limits: The MCP client is our own SDK test script, not a third-party AI app. The orders vanish on the next deploy or sleep; a keep-awake ping ran during the recording window.
+
+## E-024: Demo video produced from the live site; seller view keeps an opened step list open
+Date (UTC): 2026-11-11T18:06Z
+Commit: b0ac244 (seller view fix, deployed); app code otherwise as 8d81b88
+Environment: Render (https://stallfront.onrender.com), PayPal sandbox, Groq; headless Chrome 1536x864 at 1.25x (GitHub clip 1280x720 at 1.5x, light theme) driven by puppeteer-core 25.17.0, frames captured over the DevTools screencast; ElevenLabs eleven_multilingual_v2 with the builder's cloned voice "Mine"; ffmpeg 6.0 (ffmpeg-static 5.2.0)
+Method: tools in ops/private/video-tools (recording, narration, cards, assembly). Clips recorded on the live site between 17:33Z and 18:02Z: home page, opening a shop from the four sample photos (published as corner-stall-6d11, 4 of 4 PayPal catalog products), Corner Stall with the assistant and a sandbox payment, the seller view, the GitHub README, the home page again. Narration lines placed on logged events; waits cut (listing drafts about 57 s, PayPal page loads); captions burned in from the voice's character timings. Seller view fix checked locally (an opened list stays open through two refreshes, same element, no page errors) and on Render in the recorded clip.
+Result:
+- File: C:\Users\PAB-NETWORK\Videos\Stallfront demo.mp4, 2:37.8, 1920x1080, 30 fps, H.264 + AAC 48 kHz; mean volume -19.2 dB, peak -3.5 dB; 43 caption cues (copy in Stallfront demo.srt).
+- 16 sampled frames show: title card; the hook and pitch over the home page; photos to listings with "About a minute later: four listings drafted"; "Registered with PayPal"; the assistant's $271.00 checkout; PayPal login (English) and the review page (Arabic, with the note "The blue button says “Complete purchase”"); the receipt; the seller view; the GitHub README sections and Proof table; the end card with the URL.
+- Seller view at recording time: 5 orders, $421 paid, 4 from AI assistants. Two of the orders were unpaid assistant checkouts made by a visitor at 17:44Z and 17:45Z, not by these scripts.
+- Before the fix, the seller view redrew every order every 4 s, which closed an opened "What the assistant did" list and broke the first seller clip.
+Label: OBSERVED
+Limits: The narration is an AI voice cloned from the builder; nobody listened to it in this session. The PayPal review page stays in Arabic for this test buyer: PayPal ignored locale.x=en_US, locale.x=en_AE and experience_context.locale en-US, and the account's language setting (already en_US) did not change it. The browser recording has no address bar; the end card and narration give the URL.
