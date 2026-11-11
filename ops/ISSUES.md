@@ -16,14 +16,15 @@ If the team also uses GitHub Issues, put the GitHub number in the Title cell and
 | I-008 | MCP endpoint `/mcp/<slug>` with the same tools | claude | done | M2 | A real MCP client lists the tools and creates a checkout | E-005, E-013, E-014 |
 | I-009 | Seller dashboard with channel attribution, agent trace and PayPal IDs | claude | done | M2 | Captured agent order appears with channel, trace and capture ID | E-013 (API, public), E-014 (page) |
 | I-010 | States and design floor on the demo path | claude | todo | M3 | Loading, empty and error states; design floor checklist passes | |
-| I-011 | README, video script, submission text | claude | todo | M4 | presubmit passes; video uploaded; form drafted | |
+| I-011 | README, video script, submission text | claude | doing | M4 | presubmit passes; video uploaded; form drafted | README drafted |
 | I-012 | Record and upload the video; submit on Devpost | human | todo | M4 | YouTube link public; Devpost shows submitted | |
 | I-013 | Human checkout with PayPal JS SDK v6 buttons on the shop page | claude | parked | | | |
 | I-014 | Shipment tracking from the seller dashboard | claude | parked | | | |
-| I-015 | Trace shows product names instead of raw product IDs in create_checkout args | claude | todo | M3 | Trace reads "bag, phone stand" | |
-| I-016 | Measure agent reliability over repeated runs of the demo prompt | claude | todo | M3 | 10 runs recorded with pass rate | |
+| I-015 | Trace shows product names instead of raw product IDs in create_checkout args | claude | done | M3 | Trace reads "bag, phone stand" | E-015, E-017 |
+| I-016 | Measure agent reliability over repeated runs of the demo prompt | claude | done | M3 | 10 runs recorded with pass rate | E-015 |
 | I-017 | PayPal capture webhook with signature verification (return URL already captures) | claude | parked | | | |
-| I-018 | Seller view: price wraps under long titles; clearer summary line | claude | todo | M3 | Price stays on the title row at 1366 px; summary reads "3 orders, all from AI agents; 1 paid" | |
+| I-018 | Seller view: price wraps under long titles; clearer summary line | claude | done | M3 | Price stays on the title row at 1366 px; summary reads "3 orders, all from AI agents; 1 paid" | E-017 |
+| I-019 | English-language sandbox buyer for the video (current one shows PayPal in Arabic) | human | todo | M4 | New sandbox personal account, US, English; README updated | |
 
 ## Notes
 Add a `### I-00N` section only when an issue needs more than its row.

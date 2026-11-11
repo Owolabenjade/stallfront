@@ -163,3 +163,12 @@ Method: `git clone`, `npm ci`, copy `.env`, `npm start` (port 3100), `npm run sm
 Result: fresh clone: npm ci 15 s (128 packages), smoke 6/6. `npm test`: 11/11 pass (test/ai.test.mjs, test/tools.test.mjs). MCP on Render: create_checkout made PayPal order 48J305159T455150G ($21.00), get_order_status awaiting approval. Onboarding on Render, run 1 (11:40Z): 4 sample photos drafted in 66.8 s (three 429 waits on the free vision plan, 8K TPM), published, 4 of 4 PayPal catalog products (PROD-4SU98311EC186893L, PROD-0UA98401623119409, PROD-79S85400W6898905H, PROD-16X64504G8819264Y). Run 2 after the prompt fix (11:49Z): 47.0 s, 4 of 4 catalog products (PROD-5R400635ET427064F, PROD-0FL36287M2210402W, PROD-05Y651466P071745F, PROD-1WT37195TY257973H); category mapped to "kitchen"; no mention of the hand in the mug description; the 429 text shown to the browser no longer contains the Groq organization ID (run 1 did: fixed in aad798d).
 Label: OBSERVED
 Limits: The vision model named the phone stand a "footrest" in both runs (and "pedal stand" in E-011): 0 of 3 correct for that photo. Drafting speed is bound by the free plan's tokens per minute (about 3 photos a minute). Shops published on Render vanish on the next deploy.
+
+## E-017: Trace names and seller view layout (screenshots)
+Date (UTC): 2026-11-11T11:36Z
+Commit: a1e022c and later
+Environment: local server, headless Chrome at 1366 px and 390 px
+Method: `node scripts/shots.mjs http://localhost:3000 <dir> 1366` and `... 390`; `node scripts/agent-check.mjs http://localhost:3000 --height 1380 --screenshot docs/img/shop-assistant.png`; `node scripts/docs-shots.mjs http://localhost:3000 ord_8b74b6e67c36`
+Result: the shop trace reads `create_checkout (Blue Fabric Utility Bag, Foldable Desk Stand)` with no product IDs (also in every E-015 run). Seller view: the price stays on the title row at 1366 px and 390 px; summary reads "3 orders, all from AI agents; 2 paid ($54.50)". Screenshots in docs/img (shop-assistant, seller-view, receipt; review from E-016).
+Label: OBSERVED
+Limits: Chrome only; no screen-reader pass.
