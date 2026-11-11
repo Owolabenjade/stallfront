@@ -10,7 +10,7 @@ Change this plan only through a DECISION entry. Keep it to one screen.
 
 ## Demo path
 The single flow that must work every time. Everything else is optional.
-1. Seller opens `/new`, drops 3 to 6 product photos (or one-click sample photos). Claude vision drafts structured listings (title, description, price, attributes, gift tags). Seller edits one price and publishes: PayPal Catalog products are created and the shop goes live at `/s/<slug>`.
+1. Seller opens `/new`, drops 3 to 6 product photos (or one-click sample photos). A vision model on Groq (qwen/qwen3.8-27b, D-005) drafts structured listings (title, description, price, attributes, gift tags). Seller edits one price and publishes: PayPal Catalog products are created and the shop goes live at `/s/<slug>`.
 2. The shop page registers WebMCP tools (`search_products`, `get_product`, `create_checkout`, `get_order_status`). The same tools are served over MCP at `/mcp/<slug>`.
 3. A buyer's AI assistant (the in-page agent panel, or any MCP client) is asked "find me a gift under $40 for a tea lover". It calls the tools; a visible trace shows each call.
 4. `create_checkout` creates a PayPal Orders v2 order with line items and returns the approval link. The agent never sees payment credentials; the buyer clicks "Review and pay in PayPal" and approves with the sandbox buyer account.
@@ -20,7 +20,7 @@ The single flow that must work every time. Everything else is optional.
 | ID | Milestone | Done when (observable) | Gate | Status |
 |---|---|---|---|---|
 | M1 | Tracer bullet | One seeded product, `create_checkout` tool, PayPal sandbox order created, approved and captured, on a public Render URL; smoke check passes | Tracer bullet | todo |
-| M2 | Core | Steps 1 to 5 with real Claude and PayPal sandbox calls; MCP endpoint answers a real MCP client | Feature freeze | todo |
+| M2 | Core | Steps 1 to 5 with real Groq and PayPal sandbox calls; MCP endpoint answers a real MCP client | Feature freeze | todo |
 | M3 | Hardened | Loading, empty and error states on the demo path; design floor passes; benchmark gaps fixed or disclosed | Video recorded | todo |
 | M4 | Shipped | README, video and submission done; pre-submission checks pass; platform shows submitted | Submitted | todo |
 
@@ -29,7 +29,7 @@ Status: todo | doing | done | cut
 ## Targeted tracks and prizes
 | Track or prize | Requirement (verbatim, with source) | Where we meet it | Status |
 |---|---|---|---|
-| Grand prizes (1st to 3rd) | "your project must meaningfully use both PayPal and AI" (Devpost overview, pasted 2026-11-10) | PayPal Orders v2 and Catalog on steps 1 and 4 to 5; Claude on steps 1 and 3 | todo |
+| Grand prizes (1st to 3rd) | "your project must meaningfully use both PayPal and AI" (Devpost overview, pasted 2026-11-10) | PayPal Orders v2 and Catalog on steps 1 and 4 to 5; Groq models on steps 1 and 3 | todo |
 | Best Use of Agentic Commerce | "All Eligible Submissions" (Official Rules s.8) | Steps 2 to 5: an agent shops and prepares a PayPal checkout the buyer approves | todo |
 | Best Use of PayPal + AI | "All Eligible Submissions" (Official Rules s.8) | Same build | todo |
 | Best Use of Render | "All Eligible Submissions that use any Render tools" (Official Rules s.8) | Hosted on Render from `render.yaml` | todo |

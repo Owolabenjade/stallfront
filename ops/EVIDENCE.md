@@ -228,3 +228,20 @@ Result:
 - B pitch, B plus "AI writes the listings. Shoppers pay with PayPal, or ask their AI assistant to shop for them.": both read it as for small sellers and creators, named AI for the listings and for ordering through an assistant, and named that combination as the difference (qwen read the assistants as buying autonomously).
 Label: OBSERVED
 Limits: Two models, one run each. A model with no context stands in for a skimming reader; it is not a judge and says nothing about win chances.
+
+## E-022: Seller-first headline live on Render; seller view keeps shopper orders apart
+Date (UTC): 2026-11-11T15:43Z
+Commit: 8d81b88 (deployed; Render served the new headline from 15:42:21Z)
+Environment: Render, PayPal sandbox, Groq, headless Chrome; local server for the pre-push checks
+Method: curl of the live landing page; `npm run smoke` and `node scripts/browser-check.mjs` against Render; `node scripts/buy-check.mjs https://stallfront.onrender.com --product "gold handle"`, then the live seller view read in headless Chrome; `node scripts/agent-check.mjs https://stallfront.onrender.com`; presubmit `--online`. Before the push: `node scripts/shots.mjs` at 1366 and 390 px, a local shopper order and the local seller view, `npm test`, `node scripts/cover.mjs`.
+Result:
+- Live landing page: title "Stallfront: turn product photos into a PayPal shop in minutes"; headline "Turn product photos into a PayPal shop in minutes."; the line under it "AI writes the listings. Shoppers pay with PayPal, or ask their AI assistant to shop for them. Only the buyer can approve a payment."; feature 03 names the Buy with PayPal button.
+- Smoke: all steps passed. WebMCP browser check passed.
+- Shopper path: Buy with PayPal opened PayPal checkout 2.8 s after the click (this order was left unpaid).
+- Seller view on Render: the shopper's order is labeled "Shopper · on your website" and has no assistant steps; the assistant's order keeps "What the assistant did"; the activity panel lists assistant steps only (4 items); no page errors. Before the fix, a local shopper order showed "What the assistant did (1 step)" and its click topped the activity panel.
+- Assistant: 2 calls (search_products, create_checkout), $271.00, handoff in 3.4 s.
+- Cover image rebuilt from docs/cover.html: the headline, the AI-assistant line and the tag "For small sellers".
+- Screenshots at 1366 and 390 px: the headline fits in four lines with the assistant line directly under it.
+- `npm test` 13/13. Presubmit online: 0 errors (warnings: no video link yet; npm pages answer 403 to scripts).
+Label: OBSERVED
+Limits: One assistant run after the deploy (the 10-run figure is E-019, same agent code). The shopper order here was not paid.

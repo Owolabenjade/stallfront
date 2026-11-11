@@ -27,7 +27,7 @@ If the team also uses GitHub Issues, put the GitHub number in the Title cell and
 | I-019 | English-language sandbox buyer for the video (current one shows PayPal in Arabic) | human | cut | M4 | New sandbox personal account, US, English; README updated | Human keeps the current buyer and uses Google Translate while recording |
 | I-020 | Redesign (bold magazine) and plain-English copy on every page | claude | done | M3 | No code words in user-facing copy; screenshots at 1366 and 390 px | E-019, D-006 |
 | I-021 | Rebuild the demo shop from the human's six new photos | claude | done | M3 | New seed through the real pipeline; demo prompts pass on Render | E-019, D-007 |
-| I-022 | Seller-first headline everywhere: site hero and page title, README title and intro, cover image, video title card and narration, package.json description, GitHub About | claude (human approves the line first) | todo | M4 | New headline live on Render, always followed by the AI-assistant line (E-021); cover retaken; ops/DEMO.md and README updated; presubmit clean | |
+| I-022 | Seller-first headline everywhere: site hero and page title, README title and intro, cover image, video title card and narration, package.json description, GitHub About | claude (human approved the line) | done | M4 | New headline live on Render, always followed by the AI-assistant line (E-021); cover retaken; ops/DEMO.md and README updated; presubmit clean | E-022 |
 
 ## Notes
 Add a `### I-00N` section only when an issue needs more than its row.
