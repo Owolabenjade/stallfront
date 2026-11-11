@@ -26,14 +26,14 @@ test('the four tools are defined once and shared by WebMCP and MCP', () => {
 });
 
 test('search_products keeps item prices within the budget', async () => {
-  const r = data(await tools.runTool(shop, 'search_products', { query: '', max_price_usd: 13 }, { channel: 'webmcp' }));
+  const r = data(await tools.runTool(shop, 'search_products', { query: '', max_price_usd: 20 }, { channel: 'webmcp' }));
   assert.ok(r.results.length > 0);
-  for (const p of r.results) assert.ok(p.price_usd <= 13, `${p.title} costs ${p.price}`);
+  for (const p of r.results) assert.ok(p.price_usd <= 20, `${p.title} costs ${p.price}`);
 });
 
 test('search_products ranks a title match first', async () => {
-  const r = data(await tools.runTool(shop, 'search_products', { query: 'phone stand' }, { channel: 'mcp' }));
-  assert.match(r.results[0].title, /Stand/);
+  const r = data(await tools.runTool(shop, 'search_products', { query: 'denim jacket' }, { channel: 'mcp' }));
+  assert.match(r.results[0].title, /Jacket/);
 });
 
 test('get_product rejects an unknown product as a tool error, not an exception', async () => {
@@ -44,8 +44,8 @@ test('get_product rejects an unknown product as a tool error, not an exception',
 test('create_checkout refuses unknown products and quantities above stock before calling PayPal', async () => {
   const unknown = await tools.runTool(shop, 'create_checkout', { items: [{ product_id: 'prd_nope' }] }, { channel: 'webmcp' });
   assert.equal(unknown.isError, true);
-  const stand = store.shopProducts('corner-stall').find((p) => /Stand/.test(p.title));
-  const tooMany = await tools.runTool(shop, 'create_checkout', { items: [{ product_id: stand.id, quantity: stand.stock + 1 }] }, { channel: 'webmcp' });
+  const jacket = store.shopProducts('corner-stall').find((p) => /Jacket/.test(p.title));
+  const tooMany = await tools.runTool(shop, 'create_checkout', { items: [{ product_id: jacket.id, quantity: jacket.stock + 1 }] }, { channel: 'webmcp' });
   assert.equal(tooMany.isError, true);
   assert.equal(store.shopOrders('corner-stall').length, 0);
 });

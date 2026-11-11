@@ -1,6 +1,6 @@
 // Runs the buyer-assistant check N times and reports a pass rate.
 // A run passes when the handoff card shows the expected items and total.
-// Usage: node scripts/reliability.mjs [baseUrl] [--runs 10] [--gap 20] [--prompt "..."] [--expect "Bag,Stand,Total $33.50"]
+// Usage: node scripts/reliability.mjs [baseUrl] [--runs 10] [--gap 20] [--prompt "..."] [--expect "Briefcase,Jacket,Total $271.00"]
 import { spawnSync } from 'node:child_process';
 
 const args = process.argv.slice(2);
@@ -9,7 +9,7 @@ const BASE = args.find((a) => a.startsWith('http')) || 'http://localhost:3000';
 const RUNS = Number(at('--runs', 10));
 const GAP_S = Number(at('--gap', 20)); // spacing between runs, to stay inside the free Groq plan's per-minute limits
 const PROMPT = at('--prompt', null);
-const EXPECT = at('--expect', 'Bag,Stand,Total $33.50').split(',').map((s) => s.trim());
+const EXPECT = at('--expect', 'Briefcase,Jacket,Total $271.00').split(',').map((s) => s.trim());
 
 const rows = [];
 for (let i = 1; i <= RUNS; i++) {

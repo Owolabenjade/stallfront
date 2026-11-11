@@ -20,7 +20,7 @@ try {
   await client.connect(new StreamableHTTPClientTransport(new URL(`${BASE}/mcp/${SHOP}`)));
   const { tools } = await client.listTools();
   console.log(`ok   tools/list: ${tools.map((t) => t.name).join(', ')}`);
-  const found = parse(await client.callTool({ name: 'search_products', arguments: { query: 'phone stand', max_price_usd: 100 } }));
+  const found = parse(await client.callTool({ name: 'search_products', arguments: { query: 'denim jacket', max_price_usd: 200 } }));
   console.log(`ok   tools/call search_products: ${found.results.map((r) => `${r.title} ${r.price}`).join('; ')}`);
   console.log(`     server instructions: ${(client.getInstructions() || '').slice(0, 90)}…`);
 

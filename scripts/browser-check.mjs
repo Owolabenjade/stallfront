@@ -30,8 +30,8 @@ try {
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto(`${BASE}/s/${SHOP}`, { waitUntil: 'networkidle0' });
-  await page.waitForFunction(() => document.querySelector('#agent-ready span')?.textContent.startsWith('Agent-ready'), { timeout: 15000 });
-  const badge = await page.$eval('#agent-ready span', (n) => n.textContent);
+  await page.waitForFunction(() => document.querySelector('#agent-ready')?.dataset.ready, { timeout: 15000 });
+  const badge = await page.$eval('#agent-ready', (n) => n.innerText.replace(/\s+/g, ' ').trim());
   console.log(`ok   badge: ${badge}`);
 
   const discovered = await page.evaluate(async () => (await document.modelContext.getTools()).map((t) => t.name));

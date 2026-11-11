@@ -3,143 +3,209 @@
     {
       "slug": "corner-stall",
       "name": "Corner Stall",
-      "tagline": "Everyday homeware, bags and gadgets from a small market stall",
+      "tagline": "Leather bags, shoes, mugs and denim from a small market stall",
       "shippingCents": 600,
       "currency": "USD",
-      "adminKey": "c136ce50a44b7589a4e95e52019b8ec8",
+      "adminKey": "987483a2740314959850aa6f8f4be03c",
       "demo": true,
-      "createdAt": "2026-11-11T09:39:41.301Z"
+      "createdAt": "2026-11-11T12:28:25.882Z"
     }
   ],
   "products": [
     {
-      "id": "prd_a7c434dda024",
+      "id": "prd_0f69aabe5031",
       "shopSlug": "corner-stall",
-      "title": "White Ceramic Mug with Red Leaf Design and Blue Rim",
-      "priceCents": 1200,
-      "category": "drinkware",
-      "summary": "White ceramic mug with a red leaf motif and blue rim.",
-      "description": "A white ceramic mug featuring a red, three-leaf plant design on the side and a blue rim. The mug has a standard curved handle and a glossy finish.",
-      "attributes": {
-        "material": "ceramic",
-        "color": "white, red, blue",
-        "size": "standard"
-      },
-      "tags": [
-        "ceramic",
-        "mug",
-        "drinkware",
-        "hand-painted",
-        "red",
-        "blue",
-        "white",
-        "coffee cup"
-      ],
-      "giftFor": [
-        "coffee lover",
-        "tea drinker"
-      ],
-      "stock": 6,
-      "imageUrl": "/img/samples/mug.jpg",
-      "paypalProductId": "PROD-39929499C8406084A",
-      "status": "live"
-    },
-    {
-      "id": "prd_4f3ea7f4cb5f",
-      "shopSlug": "corner-stall",
-      "title": "Blue Fabric Utility Bag with White Webbing Handles",
-      "priceCents": 1250,
+      "title": "Tan Leather Briefcase with Buckles",
+      "priceCents": 14500,
       "category": "bags",
-      "summary": "Blue fabric utility bag with white webbing handles.",
-      "description": "A medium-sized blue fabric bag featuring two white webbing handles. The bag has a soft, unstructured body with visible stitching along the seams and a slightly shiny, synthetic surface.",
+      "summary": "A structured tan leather briefcase featuring dual top handles, a detachable shoulder strap, and front buckle closures.",
+      "description": "This rectangular briefcase is crafted from smooth tan leather with visible contrast stitching along the seams. It features two rolled top handles and a detachable, adjustable shoulder strap attached via metal D-rings. The front is secured by a flap closure with two vertical leather straps and silver-tone metal buckles.",
       "attributes": {
-        "material": "polyester",
-        "color": "blue",
+        "material": "leather",
+        "color": "tan",
         "size": "medium"
       },
       "tags": [
-        "bag",
-        "tote",
-        "travel",
-        "storage",
-        "blue",
-        "polyester",
-        "webbing",
-        "utility"
+        "briefcase",
+        "leather",
+        "tan",
+        "buckle",
+        "business",
+        "handbag",
+        "strap"
       ],
       "giftFor": [
-        "traveler",
-        "student",
-        "commuter"
-      ],
-      "stock": 4,
-      "imageUrl": "/img/samples/duffel-bag.jpg",
-      "paypalProductId": "PROD-8AT00409M59283218",
-      "status": "live"
-    },
-    {
-      "id": "prd_a28798087ae7",
-      "shopSlug": "corner-stall",
-      "title": "Faceted Clear Glass Tumbler",
-      "priceCents": 1500,
-      "category": "glassware",
-      "summary": "A tall, faceted clear glass tumbler with a geometric design.",
-      "description": "A tall, clear glass tumbler featuring a faceted, geometric design with vertical ridges and a distinct angular base. The glass is transparent with a smooth rim and a sturdy, multi-sided profile.",
-      "attributes": {
-        "material": "glass",
-        "color": "clear",
-        "size": "tall"
-      },
-      "tags": [
-        "glass",
-        "tumbler",
-        "faceted",
-        "clear",
-        "drinking glass",
-        "tableware",
-        "geometric",
-        "water glass"
-      ],
-      "giftFor": [
-        "homeowner",
-        "entertainer"
-      ],
-      "stock": 12,
-      "imageUrl": "/img/samples/glass.jpg",
-      "paypalProductId": "PROD-76N25752G8965680S",
-      "status": "live"
-    },
-    {
-      "id": "prd_d2e1ca95a7b1",
-      "shopSlug": "corner-stall",
-      "title": "Foldable Desk Stand for Phone or Tablet",
-      "priceCents": 1500,
-      "category": "electronics",
-      "summary": "Black adjustable stand that props up a phone or small tablet, with a ribbed grip pad.",
-      "description": "A black foldable desk stand with a flat base, a hinged arm and a ribbed rubber pad that holds a phone or small tablet at an adjustable angle. Pre-owned, with light wear on the base.",
-      "attributes": {
-        "material": "plastic and rubber",
-        "color": "black",
-        "size": "folds flat, about 15 cm base"
-      },
-      "tags": [
-        "phone stand",
-        "tablet stand",
-        "desk",
-        "foldable",
-        "adjustable",
-        "travel",
-        "video calls",
-        "black"
-      ],
-      "giftFor": [
-        "remote workers",
-        "students",
-        "travelers"
+        "business professionals",
+        "commuters",
+        "leather enthusiasts"
       ],
       "stock": 5,
-      "imageUrl": "/img/samples/phone-stand.jpg",
-      "paypalProductId": "PROD-3B651817VT425422A",
+      "imageUrl": "/img/samples/leather-handbag.jpg",
+      "paypalProductId": "PROD-6NW038204H0135646",
+      "status": "live"
+    },
+    {
+      "id": "prd_e9c65e336c56",
+      "shopSlug": "corner-stall",
+      "title": "Large Tan Leather Tote Bag with Front Flap Pocket",
+      "priceCents": 18000,
+      "category": "bags",
+      "summary": "Large tan leather tote bag with a front flap pocket and top handles.",
+      "description": "A large, structured leather tote bag featuring a minimalist, slouchy silhouette. The bag is crafted from smooth, full-grain leather in a warm tan hue, showing natural texture and slight variations in tone. It features a prominent, rectangular external pocket on the front with a wide, folded-over flap. The bag has two sturdy top handles attached to the sides with metal hardware, allowing it to be carried by hand or on the shoulder.",
+      "attributes": {
+        "material": "leather",
+        "color": "tan",
+        "size": "large capacity"
+      },
+      "tags": [
+        "leather",
+        "tote bag",
+        "handbag",
+        "tan",
+        "full grain",
+        "minimalist",
+        "shoulder bag",
+        "women's bag"
+      ],
+      "giftFor": [
+        "women",
+        "men"
+      ],
+      "stock": 5,
+      "imageUrl": "/img/samples/leather-totes.jpg",
+      "paypalProductId": "PROD-20686386HA768411R",
+      "status": "live"
+    },
+    {
+      "id": "prd_066adfbc4480",
+      "shopSlug": "corner-stall",
+      "title": "White Ceramic Mug with Hand-Drawn 'Fill Me Up With Coffee' Text",
+      "priceCents": 1800,
+      "category": "kitchen",
+      "summary": "A white ceramic mug with a playful, hand-drawn 'Fill me up with coffee' text design.",
+      "description": "A white ceramic mug featuring a black, hand-drawn style typographic design. The text on the visible side reads 'FILL ME UP WITH COFFEE' in a stacked, casual font. The mug has a standard cylindrical shape with a smooth, glossy finish and a C-shaped handle.",
+      "attributes": {
+        "material": "ceramic",
+        "color": "white",
+        "size": "standard mug size (approx. 350ml-400ml inferred from proport"
+      },
+      "tags": [
+        "ceramic mug",
+        "coffee mug",
+        "white mug",
+        "typographic design",
+        "hand-drawn font",
+        "novelty drinkware",
+        "kitchenware",
+        "gift for coffee lovers"
+      ],
+      "giftFor": [
+        "coffee lovers",
+        "tea drinkers",
+        "office workers",
+        "morning people"
+      ],
+      "stock": 5,
+      "imageUrl": "/img/samples/slogan-mugs.jpg",
+      "paypalProductId": "PROD-7481219843132005T",
+      "status": "live"
+    },
+    {
+      "id": "prd_a61178e53f29",
+      "shopSlug": "corner-stall",
+      "title": "White Ceramic Mug with Gold Handle",
+      "priceCents": 2500,
+      "category": "kitchen",
+      "summary": "White ceramic mug with a gold handle",
+      "description": "A white ceramic mug with a smooth, glossy finish and a contrasting gold-colored handle. The mug has a classic cylindrical shape with a slightly tapered base, designed for everyday use with hot or cold beverages.",
+      "attributes": {
+        "material": "ceramic",
+        "color": "white",
+        "size": "standard mug size"
+      },
+      "tags": [
+        "ceramic mug",
+        "gold handle",
+        "white cup",
+        "coffee mug",
+        "tea cup",
+        "drinkware",
+        "kitchenware",
+        "household items"
+      ],
+      "giftFor": [
+        "coffee lovers",
+        "tea drinkers",
+        "home decor enthusiasts"
+      ],
+      "stock": 5,
+      "imageUrl": "/img/samples/gold-handle-mug.jpg",
+      "paypalProductId": "PROD-1K043561UW460103W",
+      "status": "live"
+    },
+    {
+      "id": "prd_f5f7b50723fa",
+      "shopSlug": "corner-stall",
+      "title": "Cognac Leather Horsebit Loafers - Men's Slip-On Dress Shoes",
+      "priceCents": 18000,
+      "category": "apparel",
+      "summary": "Cognac leather horsebit loafers with a moccasin toe and stacked heel.",
+      "description": "A pair of men's slip-on loafers crafted from smooth, cognac-colored leather. The shoes feature a classic penny loafer silhouette with a moccasin-stitched toe and a brass-tone metal horsebit accent across the vamp. The construction includes a visible welt and a stacked leather heel, finished with a dark interior lining.",
+      "attributes": {
+        "material": "leather",
+        "color": "cognac",
+        "size": "41"
+      },
+      "tags": [
+        "leather shoes",
+        "loafers",
+        "horsebit",
+        "moccasin toe",
+        "slip-on",
+        "dress shoes",
+        "cognac",
+        "men's footwear"
+      ],
+      "giftFor": [
+        "men",
+        "professionals"
+      ],
+      "stock": 5,
+      "imageUrl": "/img/samples/leather-loafers.jpg",
+      "paypalProductId": "PROD-74C409610U171360U",
+      "status": "live"
+    },
+    {
+      "id": "prd_a342f1bb5c48",
+      "shopSlug": "corner-stall",
+      "title": "Indigo Denim Jacket with Mustard-Yellow Contrast Collar",
+      "priceCents": 12000,
+      "category": "apparel",
+      "summary": "Indigo denim jacket with a contrasting mustard-yellow collar and plaid lining.",
+      "description": "A long-sleeved, button-front denim jacket in a dark indigo wash. It features a contrasting, textured mustard-yellow collar and a visible plaid lining at the neck and cuffs. The jacket includes two chest pockets with buttoned flaps, a front button closure, and a straight hem. The denim has a visible weave and is detailed with contrast stitching.",
+      "attributes": {
+        "material": "denim",
+        "color": "indigo",
+        "size": "M (per visible label, unverified)"
+      },
+      "tags": [
+        "denim jacket",
+        "indigo denim",
+        "mustard collar",
+        "plaid lining",
+        "button front",
+        "chest pockets",
+        "workwear style",
+        "contrast stitching"
+      ],
+      "giftFor": [
+        "men",
+        "women",
+        "unisex"
+      ],
+      "stock": 5,
+      "imageUrl": "/img/samples/denim-jacket.jpg",
+      "paypalProductId": "PROD-76964633HC8995200",
       "status": "live"
     }
   ],

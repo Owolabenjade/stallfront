@@ -164,12 +164,15 @@ function parseLoose(text) {
 }
 
 const asList = (a) => (Array.isArray(a) ? a : typeof a === 'string' ? a.split(/[,;]/) : []);
-const uniq = (a, n) => [...new Set(asList(a).map((s) => String(s).trim().toLowerCase()).filter(Boolean))].slice(0, n);
+const uniq = (a, n) => [...new Set(asList(a).map((s) => String(s).replace(/_/g, ' ').trim().toLowerCase()).filter(Boolean))].slice(0, n);
 
 /** Fill defaults and bound every field; the seller reviews everything before publishing. */
 // The schema can't use enum (Groq strict mode rejects it), so the category is mapped here.
 const CATEGORIES = ['kitchen', 'home', 'bags', 'apparel', 'accessories', 'electronics', 'art', 'stationery', 'beauty', 'toys', 'other'];
-const CATEGORY_ALIASES = { drinkware: 'kitchen', tableware: 'kitchen', glassware: 'kitchen', mug: 'kitchen', luggage: 'bags', bag: 'bags', clothing: 'apparel', jewelry: 'accessories', jewellery: 'accessories', gadgets: 'electronics', tech: 'electronics', office: 'stationery', decor: 'home', furniture: 'home' };
+const CATEGORY_ALIASES = { drinkware: 'kitchen', tableware: 'kitchen', glassware: 'kitchen', mug: 'kitchen', luggage: 'bags', bag: 'bags', clothing: 'apparel', jewelry: 'accessories', jewellery: 'accessories', shoes: 'apparel', footwear: 'apparel', gadgets: 'electronics', tech: 'electronics', office: 'stationery', decor: 'home', furniture: 'home' };
+
+/** A partial reply (a cut-off or malformed generation) is not a listing: it needs at least a title and a price. */
+export const usable = (l) => (l && typeof l === 'object' && String(l.title || '').trim() && Number(l.price_usd) > 0 ? l : null);
 
 export function normalize(l) {
   const attrs = l.attributes && typeof l.attributes === 'object' ? l.attributes : {};
@@ -183,7 +186,7 @@ export function normalize(l) {
     attributes: { material: String(attrs.material || 'unknown'), color: String(attrs.color || 'unknown'), size: String(attrs.size || 'unknown') },
     tags: uniq(l.tags, 8),
     gift_for: uniq(l.gift_for, 4),
-    needs_seller_check: asList(l.needs_seller_check).map(String).slice(0, 4),
+    needs_seller_check: asList(l.needs_seller_check).map((s) => String(s).replace(/_/g, ' ')).slice(0, 4),
   };
 }
 
@@ -216,16 +219,16 @@ export async function draftListing(photo, hint) {
     meta = { model: json.model, limits, usage: json.usage };
   } catch (err) {
     if (err.status === 429 || err.status === 503) throw err;
-    raw = parseLoose(err.failedGeneration);
+    raw = usable(parseLoose(err.failedGeneration));
     mode = 'failed_generation';
   }
-  if (!raw) {
+  if (!usable(raw)) {
     mode = 'json_object';
     const { json, limits } = await chat(request(`${prompt}\n${FIELD_GUIDE}`, { type: 'json_object' }));
-    raw = parseLoose(json.choices?.[0]?.message?.content);
+    raw = usable(parseLoose(json.choices?.[0]?.message?.content));
     meta = { model: json.model, limits, usage: json.usage };
   }
-  if (!raw) throw httpError(502, 'The AI could not describe this photo; try again or use a clearer photo.');
+  if (!raw) throw httpError(502, 'The AI could not describe this photo. Try again, or use a clearer photo.');
   return {
     listing: normalize(raw),
     mode,

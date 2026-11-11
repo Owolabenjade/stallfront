@@ -33,3 +33,16 @@ test('normalize caps tags, gift notes and seller checks', () => {
   assert.equal(l.gift_for.length, 4);
   assert.equal(l.needs_seller_check.length, 4);
 });
+
+test('normalize turns snake_case words from the model into plain words', () => {
+  const l = normalize({ tags: ['work_bag'], needs_seller_check: ['interior_compartments'] });
+  assert.deepEqual(l.tags, ['work bag']);
+  assert.deepEqual(l.needs_seller_check, ['interior compartments']);
+});
+
+test('a partial model reply without a title or price is not accepted as a listing', async () => {
+  const { usable } = await import('../server/ai.js');
+  assert.equal(usable({ description: 'cut off' }), null);
+  assert.equal(usable({ title: 'Loafers' }), null);
+  assert.deepEqual(usable({ title: 'Loafers', price_usd: 180 }), { title: 'Loafers', price_usd: 180 });
+});

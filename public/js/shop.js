@@ -39,26 +39,35 @@ function resultData(result) {
 }
 
 // The trace names products the way a person would ("Blue Fabric Utility Bag"), not by ID.
-const shortTitle = (t) => String(t || '').split(/\s+(?:with|for|in|and)\s+/i)[0];
+// When two products would shorten to the same name (two white mugs), keep the longer title.
+const cut = (t) => String(t || '').split(/\s+(?:with|for|in|and)\s+|\s+-\s+/i)[0];
+const shortTitle = (t) => {
+  const s = cut(t);
+  const clash = products.filter((p) => cut(p.title) === s).length > 1;
+  return clash ? String(t).split(/\s+-\s+/)[0] : s;
+};
 const productName = (id) => {
   const p = products.find((x) => x.id === id);
   return p ? shortTitle(p.title) : id;
 };
 
+// Each step reads as plain English; the action's technical name stays as a small label.
+const STEP = { search_products: 'Searched the shop', get_product: 'Looked closer', create_checkout: 'Got a PayPal checkout ready', get_order_status: 'Checked the order' };
+
 function summarizeArgs(name, a) {
-  if (name === 'search_products') return [a.query && `"${a.query}"`, a.max_price_usd != null && `max $${a.max_price_usd}`].filter(Boolean).join(', ') || 'all products';
+  if (name === 'search_products') return [a.query && `"${a.query}"`, a.max_price_usd != null && `up to $${a.max_price_usd}`].filter(Boolean).join(', ') || 'everything';
   if (name === 'get_product') return productName(a.product_id);
   if (name === 'create_checkout') return (a.items || []).map((i) => `${(i.quantity || 1) > 1 ? `${i.quantity} × ` : ''}${productName(i.product_id)}`).join(', ');
-  if (name === 'get_order_status') return a.order_id;
-  return JSON.stringify(a);
+  if (name === 'get_order_status') return 'Is it paid yet?';
+  return '';
 }
 
 function summarizeResult(name, r, isError) {
-  if (isError) return r.message || 'Tool error';
-  if (name === 'search_products') return r.results?.length ? `${r.results.length} found: ${r.results.map((x) => `${shortTitle(x.title)} ${x.price}`).join(', ')}` : 'nothing found';
-  if (name === 'get_product') return `${shortTitle(r.title)}, ${r.price}, ${r.stock} in stock`;
-  if (name === 'create_checkout') return `PayPal order ${r.paypal_order_id} created, total ${r.total}`;
-  if (name === 'get_order_status') return `${r.status}${r.paypal_capture_id ? `, capture ${r.paypal_capture_id}` : ''}`;
+  if (isError) return r.message || 'That step failed.';
+  if (name === 'search_products') return r.results?.length ? `Found: ${r.results.map((x) => `${shortTitle(x.title)}, ${x.price}`).join('; ')}` : 'Nothing matched';
+  if (name === 'get_product') return `${r.price}, ${r.stock} in stock`;
+  if (name === 'create_checkout') return `Total ${r.total}, waiting for you to approve in PayPal`;
+  if (name === 'get_order_status') return r.status === 'paid' ? 'Paid' : 'Not paid yet';
   return '';
 }
 
@@ -66,9 +75,10 @@ function traceCall(name, args, result) {
   const r = resultData(result);
   const el = document.createElement('div');
   el.className = `call arrive${result?.isError ? ' err' : ''}`;
-  el.innerHTML = `<span class="via">WebMCP</span><span class="tool">${esc(name)}</span>
+  el.innerHTML = `<span class="what">${esc(STEP[name] || name)}</span>
     <span class="args">${esc(summarizeArgs(name, args))}</span>
-    <span class="res">${esc(summarizeResult(name, r, result?.isError))}</span>`;
+    <span class="res">${esc(summarizeResult(name, r, result?.isError))}</span>
+    <span class="techline"><span class="tool">${esc(name)}</span> <span class="via">· WebMCP</span></span>`;
   chatAppend(el);
 
   // Show what the agent is looking at.
@@ -83,11 +93,12 @@ function showHandoff(r) {
   const el = document.createElement('div');
   el.className = 'handoff arrive';
   el.innerHTML = `
-    <div><strong>Checkout ready.</strong> Your assistant prepared this order; you approve the payment in PayPal.</div>
-    <div>${(r.items || []).map((i) => `${esc(i.quantity)} × ${esc(i.title)} <span class="num">${esc(i.unit_price)}</span>`).join('<br>')}
-      <br>Shipping <span class="num">${esc(r.shipping)}</span></div>
-    <div class="total">Total ${esc(r.total)}</div>
-    <a class="btn btn-paypal" href="${esc(r.approve_url)}">Review and pay in PayPal</a>`;
+    <div class="hand-top">Ready to pay</div>
+    <div class="hand-lines">${(r.items || []).map((i) => `<span>${esc(i.quantity)} × ${esc(i.title)}</span><span>${esc(i.unit_price)}</span>`).join('')}
+      <span>Shipping</span><span>${esc(r.shipping)}</span></div>
+    <div class="total"><span>Total</span><span>${esc(r.total)}</span></div>
+    <a class="btn btn-paypal" href="${esc(r.approve_url)}">Review and pay in PayPal</a>
+    <p class="caption">Nothing is charged until you approve it in PayPal.</p>`;
   chatAppend(el);
 }
 
@@ -95,7 +106,7 @@ async function registerWebMcpTools() {
   const badge = $('#agent-ready');
   const mc = document.modelContext || navigator.modelContext;
   if (!mc?.registerTool) {
-    badge.querySelector('span').textContent = 'WebMCP unavailable in this browser';
+    $('#agent-ready-text').textContent = 'AI assistants can’t connect in this browser';
     return;
   }
   for (const def of toolDefs) {
@@ -113,8 +124,11 @@ async function registerWebMcpTools() {
   }
   const tools = await mc.getTools();
   badge.classList.remove('off');
-  badge.querySelector('span').textContent = `Agent-ready: ${tools.length} WebMCP tools on this page`;
+  badge.dataset.ready = String(tools.length);
+  $('#agent-ready-text').textContent = 'Open to AI shopping assistants';
+  $('#agent-ready-tech').textContent = `${tools.length} WebMCP actions on this page · MCP too`;
   $('#tools').innerHTML = tools.map((t) => `<li><code>${esc(t.name)}</code><span class="muted">${esc(shortDesc(t.description))}</span></li>`).join('');
+  $('#mcp-line').textContent = `Other AI apps: MCP at ${location.origin}/mcp/${slug}`;
 }
 
 const shortDesc = (d) => (d || '').split('. ')[0].replace(/\.$/, '');
@@ -129,14 +143,14 @@ function renderProducts() {
   }
   grid.innerHTML = products
     .map(
-      (p) => `
+      (p, i) => `
     <article class="product" id="${esc(p.id)}">
-      <div class="ph">${p.imageUrl ? `<img src="${esc(p.imageUrl)}" alt="${esc(p.title)}" loading="lazy">` : ICON_PHOTO}</div>
+      <div class="idx"><span>No. ${String(i + 1).padStart(2, '0')}</span><span class="stock">${p.stock > 0 ? `${p.stock} left` : 'Sold out'}</span></div>
+      <div class="ph">${p.imageUrl ? `<img src="${esc(p.imageUrl)}" alt="${esc(p.title)}" loading="lazy">` : ICON_PHOTO}<span class="price-tag price">${money(p.priceCents).replace('.00', '')}</span></div>
       <div class="body">
         <h3>${esc(p.title)}</h3>
         <p class="summary">${esc(p.summary)}</p>
         <div class="row">
-          <span><span class="price">${money(p.priceCents)}</span> <span class="stock">${p.stock > 0 ? `${p.stock} left` : 'Sold out'}</span></span>
           <button class="btn btn-ghost btn-sm" data-buy="${esc(p.id)}" ${p.stock > 0 ? '' : 'disabled'}>Buy with PayPal</button>
         </div>
       </div>
@@ -182,6 +196,7 @@ function renderText(t) {
 async function runAgent(userText) {
   if (agentBusy) return;
   agentBusy = true;
+  document.querySelector('.empty-hint')?.remove();
   $('#send').setAttribute('aria-busy', 'true');
   const u = document.createElement('div');
   u.className = 'msg user arrive';
@@ -196,7 +211,7 @@ async function runAgent(userText) {
   thinking.className = 'thinking';
   try {
     for (let step = 0; step < 8; step++) {
-      thinking.textContent = step === 0 ? 'Assistant is reading the shop…' : 'Assistant is working…';
+      thinking.textContent = step === 0 ? 'Looking through the shop' : 'Working on it';
       chatAppend(thinking);
       let turn;
       for (let attempt = 0; ; attempt++) {
@@ -205,7 +220,7 @@ async function runAgent(userText) {
           break;
         } catch (err) {
           if (!/busy|429|Too many/i.test(err.message) || attempt >= 2) throw err;
-          thinking.textContent = 'The free AI plan is busy; trying again in a few seconds…';
+          thinking.textContent = 'The free AI plan is busy, trying again in a few seconds';
           await new Promise((r) => setTimeout(r, 6000));
         }
       }
@@ -261,7 +276,7 @@ $('#chips').addEventListener('click', (e) => {
 // ---------- boot ----------
 (async function boot() {
   const params = new URLSearchParams(location.search);
-  if (params.get('notice') === 'cancelled') notice('warn', 'Checkout cancelled in PayPal. Nothing was charged.');
+  if (params.get('notice') === 'cancelled') notice('warn', 'You cancelled in PayPal, so nothing was charged.');
   try {
     const [data, tools] = await Promise.all([api(`/api/shops/${encodeURIComponent(slug)}`), api(`/api/shops/${encodeURIComponent(slug)}/tools`)]);
     shop = data.shop;

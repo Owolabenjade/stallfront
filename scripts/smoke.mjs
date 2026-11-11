@@ -52,7 +52,7 @@ await step('tool definitions', async () => {
   return names.join(', ');
 });
 await step('search_products under $30', async () => {
-  found = await tool('search_products', { query: 'bag', max_price_usd: 30 });
+  found = await tool('search_products', { query: 'mug', max_price_usd: 30 });
   if (!found.results.length) throw new Error('no results');
   if (found.results.some((r) => r.price_usd > 30)) throw new Error('budget not respected');
   return found.results.map((r) => `${r.title} ${r.price}`).join('; ');

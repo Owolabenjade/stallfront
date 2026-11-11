@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Seller view · Stallfront</title>
+  <title>Your orders · Stallfront</title>
   <meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/app.css">
   <link rel="stylesheet" href="/css/dashboard.css">
 </head>
@@ -15,7 +15,7 @@
   <header class="topbar">
     <div class="wrap">
       <a class="brand" href="/">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18l-1.5-5h-15z"/><path d="M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M3 10h18l-1.5-5h-15z"/><path d="M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/></svg>
         Stallfront
       </a>
       <nav><a id="shop-link" href="#">Open the shop</a></nav>
@@ -28,31 +28,34 @@
       <div>
         <p class="kicker">Seller view</p>
         <h1 id="shop-name">Loading…</h1>
-        <p id="summary" class="muted"></p>
+        <p id="summary" class="caption"></p>
       </div>
-      <span class="live" id="live" aria-live="polite">Updates every few seconds</span>
+      <dl class="stats" id="stats" aria-live="polite"></dl>
     </section>
 
     <div class="dash-grid">
       <section aria-labelledby="orders-h">
-        <h2 id="orders-h">Orders</h2>
-        <div id="orders" class="orders"><p class="muted">Loading orders…</p></div>
+        <div class="sec-head"><h2 id="orders-h">Orders</h2><span class="caption" id="live">Updates every few seconds</span></div>
+        <div id="orders" class="orders"><p class="caption">Loading orders…</p></div>
       </section>
 
       <aside class="side">
         <section class="box" aria-labelledby="ready-h">
-          <h2 id="ready-h">How agents reach this shop</h2>
+          <h2 id="ready-h">How AI assistants reach your shop</h2>
           <dl class="facts">
-            <dt>Browser agents</dt><dd>WebMCP tools on the shop page</dd>
-            <dt>MCP clients</dt><dd><code id="mcp-url" class="mono"></code> <button class="btn btn-ghost btn-sm" id="copy-mcp" type="button">Copy</button></dd>
-            <dt>Payments</dt><dd>PayPal Orders v2, approved by the buyer</dd>
+            <dt>On your shop page</dt><dd>Assistants in the buyer's browser use the shop's built-in actions to search and order.<span class="tech">WebMCP</span></dd>
+            <dt>From other AI apps</dt><dd>They connect at this address:<span class="addr"><code id="mcp-url" class="mono"></code><button class="btn btn-ghost btn-sm" id="copy-mcp" type="button">Copy</button></span><span class="tech">MCP</span></dd>
+            <dt>Payments</dt><dd>The buyer approves every payment in PayPal.<span class="tech">PayPal Orders v2</span></dd>
           </dl>
-          <p class="muted small">Add to Claude Code: <code class="mono" id="claude-cmd"></code></p>
+          <details class="dev">
+            <summary>For developers</summary>
+            <p class="tech">Add to Claude Code: <span id="claude-cmd"></span></p>
+          </details>
         </section>
 
         <section class="box" aria-labelledby="act-h">
-          <h2 id="act-h">Agent activity</h2>
-          <ol id="activity" class="activity"><li class="muted">No tool calls yet.</li></ol>
+          <h2 id="act-h">What assistants did</h2>
+          <ol id="activity" class="activity"><li class="caption">Nothing yet. Steps appear here as assistants search and order.</li></ol>
         </section>
       </aside>
     </div>

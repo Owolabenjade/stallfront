@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Open a shop · Stallfront</title>
-  <meta name="description" content="Upload product photos; Stallfront drafts the listings and opens a PayPal shop AI agents can buy from.">
+  <title>Open your shop · Stallfront</title>
+  <meta name="description" content="Add photos of what you sell. Stallfront writes the listings and opens a PayPal shop that AI shopping assistants can order from.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/app.css">
   <link rel="stylesheet" href="/css/new.css">
 </head>
@@ -15,10 +15,10 @@
   <header class="topbar">
     <div class="wrap">
       <a class="brand" href="/">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18l-1.5-5h-15z"/><path d="M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M3 10h18l-1.5-5h-15z"/><path d="M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/></svg>
         Stallfront
       </a>
-      <nav><a href="/s/corner-stall">Demo shop</a></nav>
+      <nav><a href="/">How it works</a><a href="/s/corner-stall">Demo shop</a></nav>
     </div>
   </header>
 
@@ -27,58 +27,75 @@
 
     <!-- Step 1: photos -->
     <section id="step-photos" class="step">
-      <h1>Open a shop from your product photos</h1>
-      <p class="lede">Add up to six photos, one product each. AI drafts the listings; you check them and publish. Each product is registered in PayPal, and the shop goes live with tools AI shopping agents can use.</p>
+      <div class="step-head">
+        <span class="step-n" aria-hidden="true">01</span>
+        <div>
+          <p class="kicker">Step 1 of 3</p>
+          <h1>Open your shop from photos</h1>
+          <p class="dek">Add a photo of each thing you sell, up to six. The AI writes a first draft of every listing. You check them, press Publish, and your shop is open.</p>
+        </div>
+      </div>
 
       <div class="shop-fields">
         <label>Shop name <input id="shop-name" maxlength="60" placeholder="e.g. Riverside Ceramics" required></label>
-        <label>One line about what you make <input id="shop-tagline" maxlength="120" placeholder="e.g. Small-batch stoneware and loose-leaf tea"></label>
+        <label>What you sell, in one line <input id="shop-tagline" maxlength="120" placeholder="e.g. Small-batch stoneware and loose-leaf tea"></label>
       </div>
 
       <div id="drop" class="drop" tabindex="0" role="button" aria-describedby="drop-help">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/><path d="M12 4v12"/><path d="m7 9 5-5 5 5"/></svg>
-        <strong>Drop photos here or choose files</strong>
-        <span id="drop-help" class="muted">JPEG, PNG or WebP. Up to 6.</span>
+        <strong>Drop photos here</strong>
+        <span id="drop-help">or click to choose them. One product per photo, JPEG, PNG or WebP, up to six.</span>
         <input id="files" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
       </div>
       <div id="thumbs" class="thumbs"></div>
-      <p class="sample-line"><button id="use-samples" class="linklike" type="button">No photos to hand? Use four sample photos</button></p>
+      <p class="sample-line"><button id="use-samples" class="linklike" type="button">No photos to hand? Use our four sample photos</button></p>
 
       <label class="hint">Anything the AI should know? (optional)
         <input id="hint" maxlength="300" placeholder="e.g. All mugs are 12 oz and dishwasher safe; prices usually $15 to $60">
       </label>
 
       <div class="actions">
-        <button id="draft" class="btn btn-clay" type="button" disabled>Draft my listings</button>
-        <span id="draft-status" class="muted" role="status"></span>
+        <button id="draft" class="btn btn-clay" type="button" disabled>Write my listings</button>
+        <span id="draft-status" class="status-line" role="status"></span>
       </div>
     </section>
 
     <!-- Step 2: review -->
     <section id="step-review" class="step" hidden>
-      <h1>Check your listings</h1>
-      <p class="lede">The AI described what it could see. Fix anything it got wrong, especially prices and the points it flagged for you to check.</p>
+      <div class="step-head">
+        <span class="step-n" aria-hidden="true">02</span>
+        <div>
+          <p class="kicker">Step 2 of 3</p>
+          <h1>Check your listings</h1>
+          <p class="dek">The AI only knows what it can see in a photo. Fix anything it got wrong, and check the points it flagged, before your shop goes live.</p>
+        </div>
+      </div>
       <div id="listings" class="listings"></div>
       <div class="shop-fields compact">
-        <label>Flat shipping per order (USD) <input id="shipping" type="number" min="0" max="50" step="0.5" value="6"></label>
+        <label>Shipping per order (USD) <input id="shipping" type="number" min="0" max="50" step="0.5" value="6"></label>
       </div>
       <div class="actions">
-        <button id="publish" class="btn btn-clay" type="button">Publish shop</button>
+        <button id="publish" class="btn btn-clay" type="button">Publish my shop</button>
         <button id="back" class="btn btn-ghost" type="button">Back to photos</button>
-        <span id="publish-status" class="muted" role="status"></span>
+        <span id="publish-status" class="status-line" role="status"></span>
       </div>
     </section>
 
     <!-- Step 3: live -->
     <section id="step-live" class="step" hidden>
-      <h1>Your shop is live</h1>
-      <p class="lede">Shoppers can buy with PayPal, and AI agents can find and prepare orders through the shop's tools. Every payment is approved by the buyer in PayPal.</p>
+      <div class="step-head">
+        <span class="step-n" aria-hidden="true">03</span>
+        <div>
+          <p class="kicker">Step 3 of 3</p>
+          <h1>Your shop is open</h1>
+          <p class="dek">Buyers can pay with PayPal, and AI shopping assistants can find your products and get orders ready. Every payment is approved by the buyer in PayPal.</p>
+        </div>
+      </div>
       <dl class="facts live-facts" id="live-facts"></dl>
       <div class="actions">
-        <a id="open-shop" class="btn btn-clay" href="#">Open the shop</a>
-        <a id="open-dash" class="btn btn-ghost" href="#">Seller view</a>
+        <a id="open-shop" class="btn btn-clay" href="#">Open my shop</a>
+        <a id="open-dash" class="btn btn-ghost" href="#">See my orders</a>
       </div>
-      <p class="muted small">Keep the seller view link private: it is the only key to your orders.</p>
+      <p class="caption" style="margin-top:14px">Bookmark your orders page and keep its link to yourself. It's the only key to your orders.</p>
     </section>
   </main>
 

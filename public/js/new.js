@@ -1,7 +1,7 @@
 // Seller onboarding: photos -> AI-drafted listings -> publish (PayPal catalog products) -> live shop.
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-const SAMPLES = ['/img/samples/mug.jpg', '/img/samples/duffel-bag.jpg', '/img/samples/glass.jpg', '/img/samples/phone-stand.jpg'];
+const SAMPLES = ['/img/samples/leather-handbag.jpg', '/img/samples/slogan-mugs.jpg', '/img/samples/leather-loafers.jpg', '/img/samples/denim-jacket.jpg'];
 const MAX = 6;
 
 let photos = []; // { dataUrl }
@@ -71,7 +71,7 @@ $('#use-samples').addEventListener('click', async () => {
   photos = [];
   for (const src of SAMPLES) photos.push({ dataUrl: await resize(src) });
   if (!$('#shop-name').value) $('#shop-name').value = 'Corner Stall';
-  if (!$('#shop-tagline').value) $('#shop-tagline').value = 'Everyday homeware, bags and gadgets from a small market stall';
+  if (!$('#shop-tagline').value) $('#shop-tagline').value = 'Leather bags, shoes, mugs and denim from a small market stall';
   renderThumbs();
 });
 
@@ -95,7 +95,7 @@ $('#draft').addEventListener('click', async () => {
     drafts = [];
     for (let i = 0; i < photos.length; i++) {
       for (let attempt = 0; ; attempt++) {
-        status(`Reading photo ${i + 1} of ${photos.length}…`);
+        status(`Writing listing ${i + 1} of ${photos.length}`);
         const res = await fetch('/api/listings/draft', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -112,21 +112,21 @@ $('#draft').addEventListener('click', async () => {
         if (res.status === 429 && attempt < 4) {
           const wait = Math.min(Number(res.headers.get('retry-after')) || 15, 60);
           for (let s = wait; s > 0; s--) {
-            status(`The free AI plan needs a short pause; continuing with photo ${i + 1} in ${s} s…`);
+            status(`Short pause (the free AI plan has a speed limit). Listing ${i + 1} starts in ${s} s`);
             await new Promise((r) => setTimeout(r, 1000));
           }
           continue;
         }
-        throw new Error(`photo ${i + 1}: ${json.error || `request failed (${res.status})`}`);
+        throw new Error(`Photo ${i + 1}: ${json.error || `the request failed (${res.status})`}`);
       }
     }
     renderListings();
     $('#draft-status').textContent = '';
-    notice('ok', `Drafted ${drafts.length} listing${drafts.length > 1 ? 's' : ''} in ${((performance.now() - t0) / 1000).toFixed(1)} s with ${esc(model)}.`);
+    notice('ok', `Your ${drafts.length === 1 ? 'listing is' : `${drafts.length} listings are`} ready to check.`);
     show('step-review');
   } catch (err) {
     $('#draft-status').textContent = '';
-    notice('err', `Drafting failed: ${esc(err.message)}`);
+    notice('err', `We couldn't write the listings. ${esc(err.message)} Try again in a minute.`);
   } finally {
     btn.removeAttribute('aria-busy');
     btn.disabled = !photos.length;
@@ -138,17 +138,18 @@ function renderListings() {
     .map(
       (l, i) => `
     <article class="listing" data-i="${i}">
-      <img src="${esc(l.imageUrl)}" alt="">
+      <div class="pic"><img src="${esc(l.imageUrl)}" alt=""><span class="n">${String(i + 1).padStart(2, '0')}</span></div>
       <div class="fields">
         <label class="wide">Title <input name="title" value="${esc(l.title)}" maxlength="80"></label>
-        <label class="wide">Card line <input name="summary" value="${esc(l.summary)}" maxlength="160"></label>
-        <label class="wide">Description <textarea name="description" maxlength="800">${esc(l.description)}</textarea></label>
+        <label class="wide">Short description (on the product card) <input name="summary" value="${esc(l.summary)}" maxlength="160"></label>
+        <label class="wide">Full description <textarea name="description" maxlength="800">${esc(l.description)}</textarea></label>
         <label>Category <input name="category" value="${esc(l.category)}" maxlength="30"></label>
         <label>Price (USD) <input name="priceUsd" type="number" min="1" max="1000" step="0.5" value="${esc(l.price_usd)}"></label>
-        <label>In stock <input name="stock" type="number" min="0" max="999" value="5"></label>
-        ${l.price_reasoning ? `<p class="why wide"><strong>Why this price:</strong> ${esc(l.price_reasoning)}</p>` : ''}
-        <div class="tagline-row">${(l.tags || []).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}${(l.gift_for || []).map((t) => `<span class="tag">gift: ${esc(t)}</span>`).join('')}</div>
-        ${l.needs_seller_check?.length ? `<div class="checks"><strong>Check before publishing:</strong> ${l.needs_seller_check.map(esc).join('; ')}</div>` : ''}
+        <label>How many <input name="stock" type="number" min="0" max="999" value="5"></label>
+        ${l.price_reasoning ? `<p class="why wide"><strong>Why this price</strong> ${esc(l.price_reasoning)}</p>` : ''}
+        ${l.needs_seller_check?.length ? `<div class="checks"><strong>Check before you publish</strong>${l.needs_seller_check.map(esc).join('; ')}</div>` : ''}
+        <div class="tagline-row"><span class="lbl">Shoppers can find it by</span>${(l.tags || []).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+        ${l.gift_for?.length ? `<div class="tagline-row"><span class="lbl">A good gift for</span>${l.gift_for.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>` : ''}
       </div>
     </article>`,
     )
@@ -170,24 +171,25 @@ $('#publish').addEventListener('click', async () => {
   });
   btn.setAttribute('aria-busy', 'true');
   btn.disabled = true;
-  $('#publish-status').innerHTML = '<span class="progress"><span class="spinner"></span>Registering products with PayPal…</span>';
+  $('#publish-status').innerHTML = '<span class="progress"><span class="spinner"></span>Registering your products with PayPal</span>';
   try {
     const out = await post('/api/shops', {
       name: $('#shop-name').value.trim(), tagline: $('#shop-tagline').value.trim(),
       shippingUsd: Number($('#shipping').value), products,
     });
     const registered = out.products.filter((p) => p.paypalProductId).length;
+    const ids = out.products.filter((p) => p.paypalProductId).map((p) => esc(p.paypalProductId)).join(' · ');
     $('#live-facts').innerHTML = `
-      <dt>Shop</dt><dd><a href="${esc(out.shopUrl)}">${esc(location.origin + out.shopUrl)}</a></dd>
-      <dt>PayPal catalog</dt><dd>${registered} of ${out.products.length} products registered${registered ? ` (${out.products.filter((p) => p.paypalProductId).map((p) => `<span class="mono">${esc(p.paypalProductId)}</span>`).join(', ')})` : ''}</dd>
-      <dt>Agent tools</dt><dd>WebMCP on the shop page, and MCP at <span class="mono">${esc(out.mcpUrl)}</span></dd>`;
-    if (out.warnings?.length) notice('warn', `Some products were not registered with PayPal: ${out.warnings.map(esc).join('; ')}`);
+      <dt>Your shop</dt><dd><a href="${esc(out.shopUrl)}">${esc(location.origin + out.shopUrl)}</a></dd>
+      <dt>Registered with PayPal</dt><dd>${registered} of ${out.products.length} products${ids ? `<span class="tech">PayPal product IDs: ${ids}</span>` : ''}</dd>
+      <dt>AI shopping assistants</dt><dd>Assistants can shop right on your shop page. Other AI apps can connect at this address:<span class="tech">${esc(out.mcpUrl)} (MCP) · shop page actions via WebMCP</span></dd>`;
+    if (out.warnings?.length) notice('warn', `Some products weren't registered with PayPal: ${out.warnings.map(esc).join('; ')}`);
     else notice('', '');
     $('#open-shop').href = out.shopUrl;
     $('#open-dash').href = out.dashboardUrl;
     show('step-live');
   } catch (err) {
-    notice('err', `Publishing failed: ${esc(err.message)}`);
+    notice('err', `We couldn't publish your shop. ${esc(err.message)}`);
   } finally {
     btn.removeAttribute('aria-busy');
     btn.disabled = false;

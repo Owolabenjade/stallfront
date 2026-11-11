@@ -8,7 +8,7 @@ const args = process.argv.slice(2);
 const BASE = (args.find((a) => a.startsWith('http')) || 'http://localhost:3000').replace(/\/$/, '');
 const at = (flag) => (args.includes(flag) ? args[args.indexOf(flag) + 1] : null);
 const SHOT = at('--screenshot');
-const PROMPT = at('--prompt') || 'Travelling next week: get me a bag and a phone stand, under $30 for both';
+const PROMPT = at('--prompt') || 'New job on Monday: get me a leather work bag and a jacket, under $280 for both';
 const SHOP = process.env.SMOKE_SHOP || 'corner-stall';
 const exe = [process.env.BROWSER_PATH, 'C:/Program Files/Google/Chrome/Application/chrome.exe', 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'].find((p) => p && fs.existsSync(p));
 
@@ -24,7 +24,7 @@ try {
     turns.push(res.ok() ? body.model || '?' : `HTTP ${res.status()}`);
   });
   await page.goto(`${BASE}/s/${SHOP}`, { waitUntil: 'networkidle0' });
-  await page.waitForFunction(() => document.querySelector('#agent-ready span')?.textContent.startsWith('Agent-ready'), { timeout: 20000 });
+  await page.waitForFunction(() => document.querySelector('#agent-ready')?.dataset.ready, { timeout: 20000 });
   const t0 = Date.now();
   await page.type('#ask', PROMPT);
   await page.click('#send');

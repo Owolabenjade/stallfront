@@ -271,13 +271,13 @@ export async function runTool(shop, name, args = {}, ctx = {}) {
 function summarize(name, s) {
   switch (name) {
     case 'search_products':
-      return `${s.results?.length ?? 0} result(s): ${(s.results || []).map((r) => `${r.title} ${r.price}`).join('; ')}`;
+      return s.results?.length ? `Found ${s.results.length}: ${s.results.map((r) => `${r.title}, ${r.price}`).join('; ')}` : 'Nothing matched';
     case 'get_product':
-      return `${s.title} ${s.price}`;
+      return `${s.title}, ${s.price}`;
     case 'create_checkout':
-      return `PayPal order ${s.paypal_order_id} for ${s.total}`;
+      return `${s.total} checkout ready in PayPal (order ${s.paypal_order_id})`;
     case 'get_order_status':
-      return `${s.status}${s.paypal_capture_id ? `, capture ${s.paypal_capture_id}` : ''}`;
+      return s.status === 'paid' ? `Paid${s.paypal_capture_id ? ` (payment ${s.paypal_capture_id})` : ''}` : 'Not paid yet';
     default:
       return '';
   }

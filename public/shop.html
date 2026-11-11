@@ -4,19 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shop on Stallfront</title>
-  <meta name="description" content="A PayPal shop that AI agents can browse and buy from through WebMCP tools.">
+  <meta name="description" content="A small shop with PayPal checkout that AI shopping assistants can search and order from.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/app.css">
-  <!-- WebMCP: exposes this page's tools to AI agents through document.modelContext -->
+  <!-- WebMCP: exposes this page's actions to AI agents through document.modelContext -->
   <script src="/vendor/webmcp.js"></script>
 </head>
 <body>
   <header class="topbar">
     <div class="wrap">
       <a class="brand" href="/">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18l-1.5-5h-15z"/><path d="M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M3 10h18l-1.5-5h-15z"/><path d="M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/></svg>
         Stallfront
       </a>
       <nav><a href="/">How it works</a><a id="dash-link" href="#">Seller view</a></nav>
@@ -24,17 +24,25 @@
   </header>
 
   <main class="wrap">
-    <div id="notice"></div>
     <section class="shop-head">
-      <div>
-        <h1 id="shop-name">Loading shop…</h1>
-        <p id="shop-tagline"></p>
-      </div>
-      <div id="agent-ready" class="agent-ready off" role="status">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg>
-        <span>Registering agent tools…</span>
+      <div class="banner">
+        <div class="banner-in">
+          <div>
+            <p class="kicker">A Stallfront shop</p>
+            <h1 id="shop-name">Loading shop…</h1>
+            <p id="shop-tagline"></p>
+          </div>
+          <div id="agent-ready" class="agent-ready off" role="status">
+            <span class="label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>
+              <span id="agent-ready-text">Getting the shop ready for AI assistants…</span>
+            </span>
+            <span class="tech" id="agent-ready-tech">WebMCP</span>
+          </div>
+        </div>
       </div>
     </section>
+    <div id="notice"></div>
 
     <div class="shop-layout">
       <section aria-labelledby="products-h">
@@ -44,23 +52,25 @@
 
       <aside class="panel" aria-labelledby="agent-h">
         <div class="panel-head">
-          <h2 id="agent-h">Shop with an AI assistant</h2>
-          <p>The assistant uses this page's WebMCP tools. It can prepare a PayPal checkout, but only you can approve the payment.</p>
+          <h2 id="agent-h">Ask an AI assistant to shop</h2>
+          <p>Say what you need. It finds it in this shop and gets a PayPal checkout ready. You approve the payment in PayPal.</p>
         </div>
         <div id="chat" class="panel-body" aria-live="polite">
-          <div>
-            <p class="muted" style="margin:0 0 8px;font-size:14px">Tools this page exposes to agents:</p>
+          <details class="dev">
+            <summary>For developers: the actions this page offers AI agents</summary>
             <ul id="tools" class="tools-list"></ul>
-          </div>
+            <p class="tech" id="mcp-line" style="margin:8px 0 0"></p>
+          </details>
+          <p class="caption empty-hint">Pick a suggestion below or ask in your own words. Each step the assistant takes shows up here.</p>
         </div>
         <div class="panel-foot">
           <div class="chips" id="chips">
-            <button class="chip" type="button">Travelling next week: get me a bag and a phone stand, under $30 for both</button>
+            <button class="chip" type="button">New job on Monday: get me a leather work bag and a jacket, under $280 for both</button>
             <button class="chip" type="button">A gift under $20 for a coffee lover</button>
           </div>
           <form id="composer" class="composer" autocomplete="off">
             <label for="ask" class="sr-only">Ask the assistant</label>
-            <input id="ask" name="ask" placeholder="Ask for what you need…" maxlength="300">
+            <input id="ask" name="ask" placeholder="What are you looking for?" maxlength="300">
             <button class="btn btn-primary" type="submit" id="send">Ask</button>
           </form>
         </div>
