@@ -24,9 +24,5 @@ if (orderId) {
   console.log('saved docs/img/receipt.png');
 }
 
-await page.setViewport({ width: 1366, height: 900 });
-await page.goto(`${base}/new`, { waitUntil: 'networkidle0' });
-await settle();
-await page.screenshot({ path: 'docs/img/new-shop.png' });
-console.log('saved docs/img/new-shop.png');
+// The review-step screenshot (docs/img/review.png) comes from scripts/onboard-check.mjs --shots.
 await browser.close();

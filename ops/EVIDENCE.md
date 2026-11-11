@@ -140,3 +140,26 @@ Method: `node scripts/mcp-check.mjs http://localhost:3000 corner-stall --checkou
 Result: over MCP (Streamable HTTP, @modelcontextprotocol/sdk client): tools/list (4), search_products, get_product, create_checkout (order ord_d4b14175bf05, PayPal 7NT80161S5677705H, $21.00 with shipping), get_order_status awaiting_buyer_approval. Sandbox buyer approved; return URL captured it: status paid, channel mcp, agent "stallfront-mcp-check 0.1.0", capture 9DS38542FR532492N. Seller view lists it with the "AI agent · MCP" badge, client name, Paid, PayPal order and capture IDs, the agent's note and "Agent's 4 tool calls"; agent activity lists the 4 MCP calls.
 Label: OBSERVED
 Limits: MCP client was our scripted SDK client, not Claude Desktop or Claude Code. Run locally, not on Render (Render MCP list and search verified in E-013). Layout: a long two-item title pushes the price onto its own line; the summary line "1 of them placed by AI agents" is ambiguous.
+
+## E-015: Buyer assistant reliability on Render, before and after prompt fixes
+Date (UTC): 2026-11-11T11:48Z
+Commits: a1e022c (v1), 82ab68e (v2: prepare the checkout instead of asking), a715af2 + aad798d (v3: reminder when a reply announces an action without a tool call)
+Environment: https://stallfront.onrender.com, headless Chrome from the builder's machine, Groq free plan (openai/gpt-oss-120b, fallback openai/gpt-oss-20b on 429)
+Method: `node scripts/reliability.mjs https://stallfront.onrender.com --runs N --gap 20 [--prompt ... --expect ...]`. A run passes when the handoff card shows the expected items and total. Model per turn is read from the /api/agent responses.
+Result:
+- "Travelling next week: get me a bag and a phone stand, under $30 for both" (expect bag + stand, $33.50): v1 10/10, median handoff 4.7 s, max 6.1 s, fallback model on at least one turn in 3 runs; v2 5/5, median 5.0 s; v3 5/5, median 4.7 s, max 5.8 s. Total 20/20. Every run: search_products, search_products, create_checkout.
+- "A gift under $20 for a coffee lover" (expect mug, $18.00): v1 0/3 (assistant recommended the mug and asked "let me know if you'd like to add it to your cart"); v2 2/3 (one run said "I'll create a checkout" and stopped); v3 5/5, median 4.1 s, max 6.2 s.
+- Off-catalog request "I need a laptop charger under $20" (local, v2): one search, reply "we don't have any laptop chargers", no checkout created.
+- v3 reminder path: `node --env-file=.env scripts/nudge-check.mjs` 7/7 (detector cases, and 3/3 model calls with the reminder return create_checkout).
+- No run pasted the PayPal link into the reply after a1e022c.
+Label: OBSERVED
+Limits: Two prompts on one seeded shop; small n (5 per prompt on the final version). Timings are from one client location. Whether the v3 reminder fired in the 5/5 gift runs is not recorded.
+
+## E-016: Fresh clone, unit tests, MCP checkout and seller onboarding on Render
+Date (UTC): 2026-11-11T11:49Z
+Commit: aad798d (clone and Render); tests at the next commit
+Environment: Windows 11, Node 22.20.0; fresh `git clone` of the public repo into a temp folder; https://stallfront.onrender.com
+Method: `git clone`, `npm ci`, copy `.env`, `npm start` (port 3100), `npm run smoke -- http://localhost:3100`; `npm test`; `node scripts/mcp-check.mjs https://stallfront.onrender.com corner-stall --checkout`; `node scripts/onboard-check.mjs https://stallfront.onrender.com --shots <dir>` (twice)
+Result: fresh clone: npm ci 15 s (128 packages), smoke 6/6. `npm test`: 11/11 pass (test/ai.test.mjs, test/tools.test.mjs). MCP on Render: create_checkout made PayPal order 48J305159T455150G ($21.00), get_order_status awaiting approval. Onboarding on Render, run 1 (11:40Z): 4 sample photos drafted in 66.8 s (three 429 waits on the free vision plan, 8K TPM), published, 4 of 4 PayPal catalog products (PROD-4SU98311EC186893L, PROD-0UA98401623119409, PROD-79S85400W6898905H, PROD-16X64504G8819264Y). Run 2 after the prompt fix (11:49Z): 47.0 s, 4 of 4 catalog products (PROD-5R400635ET427064F, PROD-0FL36287M2210402W, PROD-05Y651466P071745F, PROD-1WT37195TY257973H); category mapped to "kitchen"; no mention of the hand in the mug description; the 429 text shown to the browser no longer contains the Groq organization ID (run 1 did: fixed in aad798d).
+Label: OBSERVED
+Limits: The vision model named the phone stand a "footrest" in both runs (and "pedal stand" in E-011): 0 of 3 correct for that photo. Drafting speed is bound by the free plan's tokens per minute (about 3 photos a minute). Shops published on Render vanish on the next deploy.

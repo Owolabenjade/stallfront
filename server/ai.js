@@ -171,7 +171,7 @@ const uniq = (a, n) => [...new Set(asList(a).map((s) => String(s).trim().toLower
 const CATEGORIES = ['kitchen', 'home', 'bags', 'apparel', 'accessories', 'electronics', 'art', 'stationery', 'beauty', 'toys', 'other'];
 const CATEGORY_ALIASES = { drinkware: 'kitchen', tableware: 'kitchen', glassware: 'kitchen', mug: 'kitchen', luggage: 'bags', bag: 'bags', clothing: 'apparel', jewelry: 'accessories', jewellery: 'accessories', gadgets: 'electronics', tech: 'electronics', office: 'stationery', decor: 'home', furniture: 'home' };
 
-function normalize(l) {
+export function normalize(l) {
   const attrs = l.attributes && typeof l.attributes === 'object' ? l.attributes : {};
   return {
     title: String(l.title || 'Untitled product').slice(0, 80),
