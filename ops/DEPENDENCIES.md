@@ -8,7 +8,7 @@ Role: critical (the demo path breaks without it) | optional
 | Dependency | Pinned version | Role | Verified (UTC) | Evidence | Status | Limits, keys, gotchas |
 |---|---|---|---|---|---|---|
 | Node.js | 22.20.0 | critical | 2026-11-11 | E-001 | verified | Local machine; Render must run 22 too (`engines`) |
-| PayPal sandbox REST: OAuth, Orders v2 create and capture | v2 | critical | | | unverified | Needs a developer account (I-002). Buyer approval needs the sandbox personal account login |
+| PayPal sandbox REST: OAuth, Orders v2 create and capture | v2 | critical | 2026-11-11 | E-006, E-007 | unverified | Needs a developer account (I-002). Buyer approval needs the sandbox personal account login |
 | PayPal sandbox REST: Catalog Products | v1 | critical | | | unverified | Product IDs only; prices live on our side and in order items |
 | PayPal sandbox webhooks | v1 | optional | | | unverified | Needs the public Render URL and a webhook ID for signature verification |
 | Anthropic Messages API (vision, tool use) | SDK @anthropic-ai/sdk 1.8.0 (npm, 2026-11-11) | critical | | | unverified | Human's key; set a spending cap before the demo goes public. Model chosen when the claude-api reference is read |

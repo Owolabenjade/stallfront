@@ -34,3 +34,11 @@ Context: Solo, about 30 working hours, judges need a public URL with no setup.
 Decision: One Node 22 service (Express) serving plain HTML, CSS and browser modules, with no frontend build step. PayPal REST is called directly with fetch (OAuth client credentials, Orders v2, Catalog Products, webhooks). Claude through the Anthropic SDK. WebMCP through the @mcp-b/global polyfill; MCP through @modelcontextprotocol/sdk over Streamable HTTP. Data in a JSON file store with a seed script. Hosted on Render.
 Alternatives: Next.js or React with Vite (adds a build step); @paypal/paypal-server-sdk or @paypal/agent-toolkit for the PayPal calls (an extra layer over a handful of endpoints); SQLite (Render's free disk is ephemeral either way).
 Consequences: Shop data resets on redeploy; the seed script restores the demo shop. The README says so.
+
+## D-005: Use Groq instead of Claude for the AI features
+Date (UTC): 2026-11-11T08:54Z
+Status: accepted (human: no funds for the Claude API)
+Context: The human has no Anthropic API credit; Groq offers a free plan with an OpenAI-compatible API. Groq docs read 2026-11-11 (console.groq.com/docs models, vision, tool-use, structured-outputs, rate-limits, deprecations).
+Decision: Photo-to-listing uses qwen/qwen3.8-27b (vision, json_schema strict; preview model, max 3 images per request, so one request per photo). The buyer agent uses openai/gpt-oss-120b (production, tool use) with openai/gpt-oss-20b as the fallback on rate limits. Calls go through fetch to https://api.groq.com/openai/v1; the browser loop switches to the OpenAI chat format. The Claude implementation (server/claude.js at commit abc0f8e) is removed from the code path.
+Alternatives: Keep Claude (no credit); Gemini free tier (not requested).
+Consequences: Free-plan limits are tight (docs disagree: 30 RPM and 8K TPM on one page, higher on another), so photos are processed one at a time with retry on 429 and the agent keeps its prompt small. The vision model is a preview model and could change; verify on the live key before relying on it.

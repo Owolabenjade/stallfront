@@ -59,3 +59,21 @@ Method: `node scripts/mcp-check.mjs http://localhost:3111`
 Result: tools/list returned search_products, get_product, create_checkout, get_order_status; tools/call search_products {query:"teapot strainer", max_price_usd:100} returned "Large stoneware teapot $64.00; Ceramic tea strainer $18.00"; server instructions delivered.
 Label: OBSERVED
 Limits: Local only; create_checkout over MCP not run yet (no PayPal credentials).
+
+## E-006: PayPal sandbox OAuth and Orders v2 create
+Date (UTC): 2026-11-11T08:54Z
+Commit: b7ccaa4
+Environment: local server, PayPal sandbox app "Stallfront" (first app, developer account's default sandbox business account)
+Method: `node --env-file=.env scripts/smoke.mjs http://localhost:3000`; plus a create_checkout for strainer + chai
+Result: all 6 smoke steps passed; PayPal orders 7M623080F81914803 ($22.00) and 3GK14662EH504750K ($38.00) created with status awaiting buyer approval; approve URLs on www.sandbox.paypal.com
+Label: OBSERVED
+Limits: Creation only; capture not reached (see E-007).
+
+## E-007: Sandbox approval blocked by the payee account
+Date (UTC): 2026-11-11T08:54Z
+Commit: b7ccaa4
+Environment: headless Chrome via scripts/approve-sandbox.mjs, sandbox personal buyer from the same developer account
+Method: `node --env-file=.env scripts/approve-sandbox.mjs https://www.sandbox.paypal.com/checkoutnow?token=3GK14662EH504750K`
+Result: buyer login succeeded; PayPal redirected to genericError?code=UEFZRUVfQUNDT1VOVF9MT0NLRURfT1JfQ0xPU0VE (base64 for PAYEE_ACCOUNT_LOCKED_OR_CLOSED), page text "The merchant isn't able to accept PayPal payments at this time."
+Label: OBSERVED
+Limits: Cause INFERRED: the app's sandbox business account cannot receive payments (likely its country). Fix in progress: a US sandbox business account and a new app (I-002).
