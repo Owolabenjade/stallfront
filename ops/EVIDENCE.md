@@ -52,7 +52,7 @@ Label: OBSERVED
 Limits: No PayPal call has run yet.
 
 ## E-005: MCP endpoint answers a real MCP client
-Date (UTC): 2026-11-11T05:44Z
+Date (UTC): 2026-11-11T05:28Z
 Commit: working tree after 2c5e43c (server/mcp.js, scripts/mcp-check.mjs)
 Environment: local, Node 22.20.0, @modelcontextprotocol/sdk 1.32.2 client and server, Streamable HTTP, stateful sessions
 Method: `node scripts/mcp-check.mjs http://localhost:3111`
