@@ -19,8 +19,15 @@ const STEP = { search_products: 'Searched the shop', get_product: 'Looked closer
 const agentName = (a) => (a === 'in-page or browser agent' ? 'Shop page assistant' : a);
 
 let seenPaid = null;
+let lastOrders = null;
 
 function renderOrders(orders) {
+  // The page refreshes every few seconds. Redraw only when an order changed, and keep any
+  // "What the assistant did" list the seller opened open across the redraw.
+  const sig = JSON.stringify(orders.map((o) => [o.id, o.status, o.captureId || '', o.trace?.length || 0]));
+  if (sig === lastOrders) return;
+  lastOrders = sig;
+  const open = new Set([...document.querySelectorAll('#orders details.trace[open]')].map((d) => d.dataset.order));
   if (!orders.length) {
     $('#orders').innerHTML = `<div class="empty">No orders yet. Open your shop and ask its assistant for something, or connect an AI app to the address on the right.</div>`;
     return;
@@ -45,7 +52,7 @@ function renderOrders(orders) {
         </div>
         <div class="order-meta ids">PayPal order ${esc(o.paypalOrderId)}${o.captureId ? ` · payment ${esc(o.captureId)}` : ''}${ch.tech ? ` · ${ch.tech}` : ''}</div>
         ${o.note ? `<p class="note">The assistant's note: "${esc(o.note)}"</p>` : ''}
-        ${o.trace?.length && o.channel !== 'web' ? `<details class="trace"><summary>What the assistant did (${o.trace.length} step${o.trace.length > 1 ? 's' : ''})</summary><ol>${o.trace.map((t) => `<li><span><span class="v">${esc(STEP[t.tool] || t.tool)}.</span> ${esc(t.summary)}</span><span class="tech">${esc(t.tool)}</span></li>`).join('')}</ol></details>` : ''}
+        ${o.trace?.length && o.channel !== 'web' ? `<details class="trace" data-order="${esc(o.id)}"${open.has(o.id) ? ' open' : ''}><summary>What the assistant did (${o.trace.length} step${o.trace.length > 1 ? 's' : ''})</summary><ol>${o.trace.map((t) => `<li><span><span class="v">${esc(STEP[t.tool] || t.tool)}.</span> ${esc(t.summary)}</span><span class="tech">${esc(t.tool)}</span></li>`).join('')}</ol></details>` : ''}
       </article>`;
     })
     .join('');
