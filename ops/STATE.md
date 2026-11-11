@@ -1,6 +1,6 @@
 # STATE
 
-Updated (UTC): 2026-11-11T15:15Z
+Updated (UTC): 2026-11-11T15:30Z
 Verified at commit: 5d2b342 app code on Render (every later commit is docs, ops or test scripts)
 Phase: submission text and video prep (feature freeze 2026-11-12T02:00+01:00; video gate 2026-11-12T15:30+01:00)
 
@@ -28,7 +28,7 @@ Overwrite this file at every handoff and keep it under 60 lines. It describes th
 - Video link is a placeholder in README.md and ops/SUBMISSION.md.
 
 ## Next action
-1. Human: approve or change the headline "Turn product photos into a PayPal shop in minutes."
+1. Human: approve or change the headline "Turn product photos into a PayPal shop in minutes.", always followed by the AI-assistant line (E-021).
 2. Claude: roll it out (I-022): site hero and title, README, cover image, ops/DEMO.md title card and narration, package.json; redeploy; retake screenshots; presubmit.
 3. Human: set the GitHub repo description, website and topics, using the new line.
 4. Claude, right before recording: warm the site and seed one paid order of each kind (ops/DEMO.md).

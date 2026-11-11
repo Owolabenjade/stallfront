@@ -215,3 +215,16 @@ Method: `node scripts/buy-check.mjs https://stallfront.onrender.com --product "g
 Result: Clicked "Buy with PayPal" on White Ceramic Mug with Gold Handle ($25); the PayPal sandbox checkout opened 3.4 s after the click (page load 2.9 s). The test buyer approved; the return URL captured it and the order page read "Paid with PayPal". Order ord_19f98700e5bd: status paid, channel web, no agent, $31.00 ($25 plus $6 shipping), PayPal order 74U52681SM570642S, capture 97D51285HA094451P. The seller view data lists it as the shop's one order (the paid E-019 order was gone; the free instance had restarted or redeployed since).
 Label: OBSERVED
 Limits: One run, one product, quantity 1 (the button always orders one). The PayPal pages were in Arabic for this test buyer.
+
+## E-021: Five-second test of three headlines and the seller-first pitch
+Date (UTC): 2026-11-11T15:27Z
+Commit: 6814d25
+Environment: Groq API, openai/gpt-oss-120b (reasoning effort low) and qwen/qwen3.8-27b, temperature 0.2, one run each, no context beyond the line
+Method: Prompt: 'Here is the one-line tagline from a project card in a hackathon gallery. You have no other context. Tagline: "<line>". Answer in four short lines: 1. Who is it for? 2. What does it do? 3. Where is AI involved, if anywhere? 4. What, if anything, sounds different from existing tools?' The same prompt with "short pitch" for the full Devpost pitch.
+Result:
+- A, "Turn product photos into a PayPal shop AI agents can buy from.": read as for "online merchants and brands" (gpt-oss) and "merchants and developers seeking automated, agent-ready commerce" (qwen, which added "machine-readable shopping for bots, not just human users"). Both read the agent as paying on its own.
+- B, "Turn product photos into a PayPal shop in minutes.": read as for "small-business owners, e-commerce sellers, and creators" (gpt-oss) and "small business owners and creators" (qwen). Both inferred AI reading the photos. Difference named: photo to PayPal shop, and speed. No agent angle.
+- C, "Turn product photos into a PayPal shop that people and their AI assistants can buy from.": gpt-oss misread it as buy links embedded in each image; qwen read it as for "merchants and consumers using AI agents".
+- B pitch, B plus "AI writes the listings. Shoppers pay with PayPal, or ask their AI assistant to shop for them.": both read it as for small sellers and creators, named AI for the listings and for ordering through an assistant, and named that combination as the difference (qwen read the assistants as buying autonomously).
+Label: OBSERVED
+Limits: Two models, one run each. A model with no context stands in for a skimming reader; it is not a judge and says nothing about win chances.

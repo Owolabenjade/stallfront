@@ -79,6 +79,7 @@
 | Date | Learning | Evidence | Applies to | Status |
 |------|----------|----------|------------|--------|
 | 2026-11-11 | Lead with the seller's job. AI shopping assistants are what sets the shop apart, not the headline; sell the MCP side to developers separately | builder feedback ("the developer who use mcp for ai agent can be sold some other way"), D-009 | headline, Devpost, README, video | active |
+| 2026-11-11 | Five-second test: "AI agents" in the headline reads as a product for merchants and developers ("shopping for bots"); the seller-first headline followed by the AI-assistant line reads as intended. Never use the headline alone: the assistant line goes right after it | E-021 | headline, Devpost pitch, hero, cover, video title card | active |
 | 2026-11-11 | No test statistics or hackathon notes on the site; proof belongs in the README and video | builder feedback ("such information does not serve a user") | site copy | active |
 | 2026-11-11 | The builder found the UI full of code words no user understands; user-facing copy must use plain words and keep technical names secondary | builder feedback | all pages | active |
 

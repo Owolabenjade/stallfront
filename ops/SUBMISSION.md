@@ -93,6 +93,3 @@ We wanted a seller with a phone full of product photos to get a real PayPal shop
 
 ## Testing instructions (if the form has the field)
 Open https://stallfront.onrender.com/s/corner-stall. The free hosting sleeps when idle, so the first load can take about a minute. Click "Buy with PayPal" on any product, or tap the suggestion "New job on Monday…" and then the PayPal button. Log in with the PayPal sandbox buyer listed in the README; it is test money only, and PayPal shows that test account's pages in Arabic. The seller view is at /s/corner-stall/dashboard, and the MCP endpoint is https://stallfront.onrender.com/mcp/corner-stall.
-
-## Disclosures
-Work started on 2026-11-11, and nothing existed before. The code was written with Claude Code (Anthropic) as the coding assistant. Product photos are from Unsplash, with credits in the README. MIT license. PayPal sandbox only.
