@@ -35,7 +35,7 @@ Limits: A blog post, not API documentation; says nothing about sandbox availabil
 
 ## E-003: WebMCP tools register and execute in a real browser
 Date (UTC): 2026-11-11T05:24Z
-Commit: 9cad810
+Commit: f877456
 Environment: Windows 11, headless Chrome via puppeteer-core 25.17.0, local server on port 3111, @mcp-b/global 6.2.0 IIFE served from node_modules
 Method: `node scripts/browser-check.mjs http://localhost:3111 --screenshot <scratchpad>/shop-tracer.png`
 Result: badge "Agent-ready: 4 WebMCP tools on this page"; document.modelContext.getTools() returned create_checkout, get_order_status, get_product, search_products; executeTool(search_products, {query:"tea", max_price_usd:40}) returned 4 results; one trace row rendered on the page; no page errors.
@@ -44,7 +44,7 @@ Limits: Polyfill path only (no native WebMCP browser). The checkout tool was not
 
 ## E-004: Smoke check without PayPal credentials
 Date (UTC): 2026-11-11T05:23Z
-Commit: 9cad810 (code as committed)
+Commit: f877456 (code as committed)
 Environment: local, Node 22.20.0, no .env
 Method: `node scripts/smoke.mjs http://localhost:3111`
 Result: health, shop API, tool definitions and search_products (budget respected) passed; create_checkout failed with "PayPal is not configured" as designed; get_order_status skipped as a consequence.
@@ -53,7 +53,7 @@ Limits: No PayPal call has run yet.
 
 ## E-005: MCP endpoint answers a real MCP client
 Date (UTC): 2026-11-11T05:28Z
-Commit: working tree after 2c5e43c (server/mcp.js, scripts/mcp-check.mjs)
+Commit: working tree after 346f6bf (server/mcp.js, scripts/mcp-check.mjs)
 Environment: local, Node 22.20.0, @modelcontextprotocol/sdk 1.32.2 client and server, Streamable HTTP, stateful sessions
 Method: `node scripts/mcp-check.mjs http://localhost:3111`
 Result: tools/list returned search_products, get_product, create_checkout, get_order_status; tools/call search_products {query:"teapot strainer", max_price_usd:100} returned "Large stoneware teapot $64.00; Ceramic tea strainer $18.00"; server instructions delivered.
@@ -62,7 +62,7 @@ Limits: Local only; create_checkout over MCP not run yet (no PayPal credentials)
 
 ## E-006: PayPal sandbox OAuth and Orders v2 create
 Date (UTC): 2026-11-11T08:54Z
-Commit: b7ccaa4
+Commit: ddf0c54
 Environment: local server, PayPal sandbox app "Stallfront" (first app, developer account's default sandbox business account)
 Method: `node --env-file=.env scripts/smoke.mjs http://localhost:3000`; plus a create_checkout for strainer + chai
 Result: all 6 smoke steps passed; PayPal orders 7M623080F81914803 ($22.00) and 3GK14662EH504750K ($38.00) created with status awaiting buyer approval; approve URLs on www.sandbox.paypal.com
@@ -71,7 +71,7 @@ Limits: Creation only; capture not reached (see E-007).
 
 ## E-007: Sandbox approval blocked by the payee account
 Date (UTC): 2026-11-11T08:54Z
-Commit: b7ccaa4
+Commit: ddf0c54
 Environment: headless Chrome via scripts/approve-sandbox.mjs, sandbox personal buyer from the same developer account
 Method: `node --env-file=.env scripts/approve-sandbox.mjs https://www.sandbox.paypal.com/checkoutnow?token=3GK14662EH504750K`
 Result: buyer login succeeded; PayPal redirected to genericError?code=UEFZRUVfQUNDT1VOVF9MT0NLRURfT1JfQ0xPU0VE (base64 for PAYEE_ACCOUNT_LOCKED_OR_CLOSED), page text "The merchant isn't able to accept PayPal payments at this time."
@@ -80,7 +80,7 @@ Limits: Cause INFERRED: the app's sandbox business account cannot receive paymen
 
 ## E-008: Full payment loop in the PayPal sandbox (create, buyer approval, capture)
 Date (UTC): 2026-11-11T09:35Z
-Commit: 8a92017
+Commit: 09a9c2c
 Environment: local server, PayPal sandbox app "Original Stallfront" (US sandbox business account), sandbox personal buyer sb-n1jy253844531 (account set to Arabic, Dubai address), headless Chrome
 Method: create_checkout via the WebMCP tool endpoint (strainer + chai), then `node --env-file=.env scripts/approve-sandbox.mjs <approve_url>`, then GET /api/orders/ord_f48eed84bb2d
 Result: buyer logged in, pressed the purchase button, PayPal redirected to /s/kiln-and-leaf/orders/ord_f48eed84bb2d; order page "Paid with PayPal"; status paid, PayPal order 9SU8772198274373F, capture 99K72367WP461105U, total $38.00
@@ -89,7 +89,7 @@ Limits: Local server (return URL on localhost); not yet on the public URL. Earli
 
 ## E-009: Groq models, agent tool call and vision listing
 Date (UTC): 2026-11-11T09:35Z
-Commit: 8a92017
+Commit: 09a9c2c
 Environment: Groq API with the human's free key; local server
 Method: GET https://api.groq.com/openai/v1/models; POST /api/agent with "Find me a gift under $40 for a tea lover"; direct chat completions on qwen/qwen3.8-27b with json_schema variants; server draftListing() on public/img/samples/mug.jpg
 Result: 11 models on the key, including openai/gpt-oss-120b, openai/gpt-oss-20b and qwen/qwen3.8-27b. Agent turn returned a search_products tool call (669 input, 51 output tokens). Vision: a simple strict json_schema worked (HTTP 200, about 1.8K prompt tokens per image); the full schema with an enum failed ("Failed to generate JSON"); without the enum it worked in 2.5 s and produced "White Ceramic Mug with Red Leaf Design and Blue Rim", $12, needs_seller_check capacity/dimensions. Rate limit headers: 8000 tokens per minute; a 429 reported ITPM limit 7000 for qwen/qwen3.8-27b.
@@ -98,7 +98,7 @@ Limits: One photo; listing quality on the other photos not yet seen. The free pl
 
 ## E-010: In-page buyer assistant end to end (Groq + WebMCP)
 Date (UTC): 2026-11-11T09:35Z
-Commit: 8a92017
+Commit: 09a9c2c
 Environment: headless Chrome, local server, openai/gpt-oss-120b
 Method: `node scripts/agent-check.mjs http://localhost:3000`
 Result: tool calls through WebMCP: search_products ("tea lover gift", max $40) then create_checkout (1 x prd_strn01); handoff card "Total $24.00, Review and pay in PayPal" with a sandbox PayPal link; 3.7 s to handoff.
@@ -107,7 +107,7 @@ Limits: One passing run. The first attempt stalled after search_products and the
 
 ## E-011: Photos to listings to PayPal catalog products (seller onboarding pipeline)
 Date (UTC): 2026-11-11T09:41Z
-Commit: e987b26
+Commit: a84f940
 Environment: local server; Groq qwen/qwen3.8-27b; PayPal sandbox app "Original Stallfront"
 Method: `node scripts/build-demo-shop.mjs http://localhost:3000 <out> "Corner Stall" x public/img/samples/{mug,duffel-bag,glass,phone-stand}.jpg`, then POST /api/shops with the drafts
 Result: 4 drafts in json_schema mode (1.2 to 1.8 s each; two 19 s waits on the free-plan rate limit): "White Ceramic Mug with Red Leaf Design and Blue Rim" $12, "Blue Fabric Utility Bag with White Webbing Handles" $12.50, "Faceted Clear Glass Tumbler" $15, "Adjustable Black Metal Pedal Stand..." $15 (wrong: it is a phone stand; corrected by hand before publishing). Publish returned 4 PayPal catalog products: PROD-39929499C8406084A, PROD-8AT00409M59283218, PROD-76N25752G8965680S, PROD-3B651817VT425422A; no warnings.
@@ -116,7 +116,7 @@ Limits: One earlier draft attempt on the same server failed with "Failed to gene
 
 ## E-012: Buyer assistant on Corner Stall, two items under budget
 Date (UTC): 2026-11-11T09:41Z
-Commit: e987b26
+Commit: a84f940
 Environment: headless Chrome, local server from the new seed, openai/gpt-oss-120b
 Method: `node scripts/agent-check.mjs http://localhost:3000` (prompt "Travelling next week: get me a bag and a phone stand, under $30 for both"); also smoke and mcp-check on corner-stall
 Result: WebMCP calls search_products("bag", max $30), search_products("phone stand", max $30), create_checkout(bag + stand); handoff total $33.50 ($27.50 items + $6 shipping) in 4.1 s. Smoke: 6/6 passed, PayPal order 3T120472BF085773K. MCP: tools/list and search over /mcp/corner-stall.
@@ -125,7 +125,7 @@ Limits: Single run of the agent prompt; repeat-run reliability still unmeasured.
 
 ## E-013: Full demo path on the public Render URL, through to a captured sandbox payment
 Date (UTC): 2026-11-11T11:07Z
-Commit: e643512 (deployed by Render Blueprint, service srv-dbq4mbrrjlhs73b85hv0, free plan)
+Commit: a6cdacc (deployed by Render Blueprint, service srv-dbq4mbrrjlhs73b85hv0, free plan)
 Environment: https://stallfront.onrender.com; checks run from the builder's machine with headless Chrome; PayPal sandbox; Groq openai/gpt-oss-120b
 Method: `curl /healthz`; `node scripts/smoke.mjs <url>`; `node scripts/mcp-check.mjs <url>`; `node scripts/browser-check.mjs <url>`; `node scripts/agent-check.mjs <url>`; `node --env-file=.env scripts/approve-sandbox.mjs <approve_url>`; then GET /api/orders/<id> and /api/shops/corner-stall/dashboard
 Result: healthz ok (paypal=true, ai=true), 1.3 s on first hit (service was warm after deploy). Smoke 6/6 (PayPal order 3C557017B01558320). MCP tools/list returns 4 tools and search works. WebMCP badge "Agent-ready: 4 WebMCP tools"; getTools and executeTool work. Assistant: search_products("bag", max $30), search_products("phone stand", max $30), create_checkout(bag + stand), handoff $33.50 in 4.9 s. Sandbox buyer approved PayPal order 1T517544FV170642A; return URL captured it: order ord_75d87bd82ee3 status paid, capture 05368800VL640091W, channel webmcp. The seller view API lists the order as paid with 3 trace rows. GitHub API: repo public, license MIT, branch main.
@@ -134,7 +134,7 @@ Limits: One run. The assistant wrote no text reply before the handoff card (tool
 
 ## E-014: MCP client buys through to a captured payment; seller view shows it
 Date (UTC): 2026-11-11T11:10Z
-Commit: 5f5addf plus the extended scripts/mcp-check.mjs (uncommitted at run time)
+Commit: c820f11 plus the extended scripts/mcp-check.mjs (uncommitted at run time)
 Environment: local server (same code as Render), PayPal sandbox, headless Chrome
 Method: `node scripts/mcp-check.mjs http://localhost:3000 corner-stall --checkout`, then `node --env-file=.env scripts/approve-sandbox.mjs <approve_url>`, then `node scripts/shots.mjs http://localhost:3000 <dir> 1366` and a look at dashboard-1366.png
 Result: over MCP (Streamable HTTP, @modelcontextprotocol/sdk client): tools/list (4), search_products, get_product, create_checkout (order ord_d4b14175bf05, PayPal 7NT80161S5677705H, $21.00 with shipping), get_order_status awaiting_buyer_approval. Sandbox buyer approved; return URL captured it: status paid, channel mcp, agent "stallfront-mcp-check 0.1.0", capture 9DS38542FR532492N. Seller view lists it with the "AI agent · MCP" badge, client name, Paid, PayPal order and capture IDs, the agent's note and "Agent's 4 tool calls"; agent activity lists the 4 MCP calls.
@@ -143,7 +143,7 @@ Limits: MCP client was our scripted SDK client, not Claude Desktop or Claude Cod
 
 ## E-015: Buyer assistant reliability on Render, before and after prompt fixes
 Date (UTC): 2026-11-11T11:48Z
-Commits: a1e022c (v1), 82ab68e (v2: prepare the checkout instead of asking), a715af2 + aad798d (v3: reminder when a reply announces an action without a tool call)
+Commits: ed74762 (v1), 1c8f100 (v2: prepare the checkout instead of asking), bd5894c + bd23847 (v3: reminder when a reply announces an action without a tool call)
 Environment: https://stallfront.onrender.com, headless Chrome from the builder's machine, Groq free plan (openai/gpt-oss-120b, fallback openai/gpt-oss-20b on 429)
 Method: `node scripts/reliability.mjs https://stallfront.onrender.com --runs N --gap 20 [--prompt ... --expect ...]`. A run passes when the handoff card shows the expected items and total. Model per turn is read from the /api/agent responses.
 Result:
@@ -151,22 +151,22 @@ Result:
 - "A gift under $20 for a coffee lover" (expect mug, $18.00): v1 0/3 (assistant recommended the mug and asked "let me know if you'd like to add it to your cart"); v2 2/3 (one run said "I'll create a checkout" and stopped); v3 5/5, median 4.1 s, max 6.2 s.
 - Off-catalog request "I need a laptop charger under $20" (local, v2): one search, reply "we don't have any laptop chargers", no checkout created.
 - v3 reminder path: `node --env-file=.env scripts/nudge-check.mjs` 7/7 (detector cases, and 3/3 model calls with the reminder return create_checkout).
-- No run pasted the PayPal link into the reply after a1e022c.
+- No run pasted the PayPal link into the reply after ed74762.
 Label: OBSERVED
 Limits: Two prompts on one seeded shop; small n (5 per prompt on the final version). Timings are from one client location. Whether the v3 reminder fired in the 5/5 gift runs is not recorded.
 
 ## E-016: Fresh clone, unit tests, MCP checkout and seller onboarding on Render
 Date (UTC): 2026-11-11T11:49Z
-Commit: aad798d (clone and Render); tests at the next commit
+Commit: bd23847 (clone and Render); tests at the next commit
 Environment: Windows 11, Node 22.20.0; fresh `git clone` of the public repo into a temp folder; https://stallfront.onrender.com
 Method: `git clone`, `npm ci`, copy `.env`, `npm start` (port 3100), `npm run smoke -- http://localhost:3100`; `npm test`; `node scripts/mcp-check.mjs https://stallfront.onrender.com corner-stall --checkout`; `node scripts/onboard-check.mjs https://stallfront.onrender.com --shots <dir>` (twice)
-Result: fresh clone: npm ci 15 s (128 packages), smoke 6/6. `npm test`: 11/11 pass (test/ai.test.mjs, test/tools.test.mjs). MCP on Render: create_checkout made PayPal order 48J305159T455150G ($21.00), get_order_status awaiting approval. Onboarding on Render, run 1 (11:40Z): 4 sample photos drafted in 66.8 s (three 429 waits on the free vision plan, 8K TPM), published, 4 of 4 PayPal catalog products (PROD-4SU98311EC186893L, PROD-0UA98401623119409, PROD-79S85400W6898905H, PROD-16X64504G8819264Y). Run 2 after the prompt fix (11:49Z): 47.0 s, 4 of 4 catalog products (PROD-5R400635ET427064F, PROD-0FL36287M2210402W, PROD-05Y651466P071745F, PROD-1WT37195TY257973H); category mapped to "kitchen"; no mention of the hand in the mug description; the 429 text shown to the browser no longer contains the Groq organization ID (run 1 did: fixed in aad798d).
+Result: fresh clone: npm ci 15 s (128 packages), smoke 6/6. `npm test`: 11/11 pass (test/ai.test.mjs, test/tools.test.mjs). MCP on Render: create_checkout made PayPal order 48J305159T455150G ($21.00), get_order_status awaiting approval. Onboarding on Render, run 1 (11:40Z): 4 sample photos drafted in 66.8 s (three 429 waits on the free vision plan, 8K TPM), published, 4 of 4 PayPal catalog products (PROD-4SU98311EC186893L, PROD-0UA98401623119409, PROD-79S85400W6898905H, PROD-16X64504G8819264Y). Run 2 after the prompt fix (11:49Z): 47.0 s, 4 of 4 catalog products (PROD-5R400635ET427064F, PROD-0FL36287M2210402W, PROD-05Y651466P071745F, PROD-1WT37195TY257973H); category mapped to "kitchen"; no mention of the hand in the mug description; the 429 text shown to the browser no longer contains the Groq organization ID (run 1 did: fixed in bd23847).
 Label: OBSERVED
 Limits: The vision model named the phone stand a "footrest" in both runs (and "pedal stand" in E-011): 0 of 3 correct for that photo. Drafting speed is bound by the free plan's tokens per minute (about 3 photos a minute). Shops published on Render vanish on the next deploy.
 
 ## E-017: Trace names and seller view layout (screenshots)
 Date (UTC): 2026-11-11T11:36Z
-Commit: a1e022c and later
+Commit: ed74762 and later
 Environment: local server, headless Chrome at 1366 px and 390 px
 Method: `node scripts/shots.mjs http://localhost:3000 <dir> 1366` and `... 390`; `node scripts/agent-check.mjs http://localhost:3000 --height 1380 --screenshot docs/img/shop-assistant.png`; `node scripts/docs-shots.mjs http://localhost:3000 ord_8b74b6e67c36`
 Result: the shop trace reads `create_checkout (Blue Fabric Utility Bag, Foldable Desk Stand)` with no product IDs (also in every E-015 run). Seller view: the price stays on the title row at 1366 px and 390 px; summary reads "3 orders, all from AI agents; 2 paid ($54.50)". Screenshots in docs/img (shop-assistant, seller-view, receipt; review from E-016).
@@ -175,16 +175,16 @@ Limits: Chrome only; no screen-reader pass.
 
 ## E-018: Facts read from code, the Render dashboard and git history; secrets scan
 Date (UTC): 2026-11-11T11:54Z
-Commit: 8b8ce08
+Commit: 7985852
 Environment: repository and Render dashboard
 Method: read `createOrder` in server/paypal.js; Render service page screenshot shared by the builder at 11:03Z; `git log --reverse`; a script that searches `git log -p --all` for the values of PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET and GROQ_API_KEY from `.env`, the first PayPal app's key prefixes, and any `gsk_` key pattern
-Result: `createOrder` sends no `payee`, so every order pays the REST app's own sandbox merchant. Render shows "Your free instance will spin down with inactivity, which can delay requests by 50 seconds or more." First commit e17f1b1 at 2026-11-11T05:18Z ("chore(ops): foundation"). Secrets scan: none of the key values, the old key prefixes or a `gsk_` key appear anywhere in git history. The sandbox test buyer's email and password are in the README on purpose (PayPal sandbox test account, no real money).
+Result: `createOrder` sends no `payee`, so every order pays the REST app's own sandbox merchant. Render shows "Your free instance will spin down with inactivity, which can delay requests by 50 seconds or more." First commit 16b2dae at 2026-11-11T05:18Z ("chore(ops): foundation"). Secrets scan: none of the key values, the old key prefixes or a `gsk_` key appear anywhere in git history. The sandbox test buyer's email and password are in the README on purpose (PayPal sandbox test account, no real money).
 Label: DERIVED (code, dashboard text, git history); the scan is OBSERVED
 Limits: Cold-start delay is Render's statement, not our measurement.
 
 ## E-019: Redesign, new demo shop from six new photos, and the full demo path on Render
 Date (UTC): 2026-11-11T12:53Z
-Commit: 2d64327 (deployed to https://stallfront.onrender.com)
+Commit: 5d2b342 (deployed to https://stallfront.onrender.com)
 Environment: local server and Render; Groq qwen/qwen3.8-27b (vision) and openai/gpt-oss-120b (agent); PayPal sandbox; headless Chrome
 Method:
 - New demo shop: six Unsplash photos supplied by the builder, resized with `scripts/resize-photos.mjs`, drafted with `scripts/build-demo-shop.mjs` (local), published with POST /api/shops, exported with `scripts/export-seed.mjs` and renamed to the `corner-stall` slug.
@@ -197,7 +197,7 @@ Result:
 - "A gift under $20 for a coffee lover": 5/5 reached the coffee mug for $24.00, median 4.1 s, max 5.5 s. One run used the fallback model for two turns.
 - Paid on Render: order ord_66d4bdfabdcc, PayPal order 31P99297WK614384W, capture 1XT10488423082226, $271.00, channel webmcp.
 - Onboarding on Render with the four sample photos: 4 drafts, published, 4 of 4 catalog products.
-- A local onboarding run before the fix produced "Untitled product, $10" from a partial failed_generation. Since 2d64327 a reply without a title and price is rejected and falls through to JSON mode; the next two local runs and the Render run gave 4 complete drafts each.
+- A local onboarding run before the fix produced "Untitled product, $10" from a partial failed_generation. Since 5d2b342 a reply without a title and price is rejected and falls through to JSON mode; the next two local runs and the Render run gave 4 complete drafts each.
 - `npm test`: 13/13.
 - Redesign screenshots at 1366 px and 390 px for every page: docs/img/shop-assistant.png, seller-view.png, receipt.png, review.png and cover.png.
 Label: OBSERVED

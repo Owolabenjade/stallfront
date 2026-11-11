@@ -1,7 +1,7 @@
 # STATE
 
 Updated (UTC): 2026-11-11T12:56Z
-Verified at commit: 2d64327 on Render (later commits are docs and ops only)
+Verified at commit: 5d2b342 on Render (later commits are docs and ops only)
 Phase: shipping docs and video prep (feature freeze 2026-11-12T02:00+01:00; video gate 2026-11-12T15:30+01:00)
 
 Overwrite this file at every handoff and keep it under 60 lines. It describes the present only; history lives in git, DECISIONS and EVIDENCE. Every line under "Works now" cites an evidence ID.

@@ -39,7 +39,7 @@ Consequences: Shop data resets on redeploy; the seed script restores the demo sh
 Date (UTC): 2026-11-11T08:54Z
 Status: accepted (human: no funds for the Claude API)
 Context: The human has no Anthropic API credit; Groq offers a free plan with an OpenAI-compatible API. Groq docs read 2026-11-11 (console.groq.com/docs models, vision, tool-use, structured-outputs, rate-limits, deprecations).
-Decision: Photo-to-listing uses qwen/qwen3.8-27b (vision, json_schema strict; preview model, max 3 images per request, so one request per photo). The buyer agent uses openai/gpt-oss-120b (production, tool use) with openai/gpt-oss-20b as the fallback on rate limits. Calls go through fetch to https://api.groq.com/openai/v1; the browser loop switches to the OpenAI chat format. The Claude implementation (server/claude.js at commit abc0f8e) is removed from the code path.
+Decision: Photo-to-listing uses qwen/qwen3.8-27b (vision, json_schema strict; preview model, max 3 images per request, so one request per photo). The buyer agent uses openai/gpt-oss-120b (production, tool use) with openai/gpt-oss-20b as the fallback on rate limits. Calls go through fetch to https://api.groq.com/openai/v1; the browser loop switches to the OpenAI chat format. The Claude implementation (server/claude.js at commit 8db8067) is removed from the code path.
 Alternatives: Keep Claude (no credit); Gemini free tier (not requested).
 Consequences: Free-plan limits are tight (docs disagree: 30 RPM and 8K TPM on one page, higher on another), so photos are processed one at a time with retry on 429 and the agent keeps its prompt small. The vision model is a preview model and could change; verify on the live key before relying on it.
 
@@ -58,3 +58,11 @@ Context: The old demo shop used four of the builder's phone photos (mug, bag, gl
 Decision: Rebuild Corner Stall from the six photos through the real pipeline (vision drafts, two logged hand edits, PayPal catalog), keep the `corner-stall` slug, and use four of the photos as the /new samples. New demo prompts fit the new stock: "New job on Monday: get me a leather work bag and a jacket, under $280 for both" (expect $271.00) and "A gift under $20 for a coffee lover" (expect $24.00).
 Alternatives: Keep the old shop alongside (the human asked for the old photos to go).
 Consequences: Evidence before E-019 refers to the old products. README, video script and submission text were updated, and the photo credits are in the README. Unsplash licence: free use, attribution appreciated.
+
+## D-008: Rewrite git history for authorship
+Date (UTC): 2026-11-11T14:10Z
+Status: accepted (requested by the human)
+Context: The human asked for every commit to be authored by their own GitHub identity, with no co-author lines, and for the history to be force-pushed.
+Decision: All 31 commits were rewritten with `git filter-branch`: author and committer set to Owolabenjade, co-author lines removed, four message lines reworded. Author and commit dates and every file tree are unchanged (checked commit by commit). The repo's local git identity is now Owolabenjade. New commits carry no co-author line.
+Alternatives: Leave history as it was.
+Consequences: Every commit ID changed (for example the first commit e17f1b1 is now 16b2dae, and the redesign 2d64327 is now 5d2b342). Commit IDs in EVIDENCE, DECISIONS, DEPENDENCIES and STATE were updated to the new IDs. Old IDs in chat logs or Render's deploy history no longer resolve on the branch.
