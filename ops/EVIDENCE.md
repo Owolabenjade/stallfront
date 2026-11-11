@@ -50,3 +50,12 @@ Method: `node scripts/smoke.mjs http://localhost:3111`
 Result: health, shop API, tool definitions and search_products (budget respected) passed; create_checkout failed with "PayPal is not configured" as designed; get_order_status skipped as a consequence.
 Label: OBSERVED
 Limits: No PayPal call has run yet.
+
+## E-005: MCP endpoint answers a real MCP client
+Date (UTC): 2026-11-11T05:44Z
+Commit: working tree after 2c5e43c (server/mcp.js, scripts/mcp-check.mjs)
+Environment: local, Node 22.20.0, @modelcontextprotocol/sdk 1.32.2 client and server, Streamable HTTP, stateful sessions
+Method: `node scripts/mcp-check.mjs http://localhost:3111`
+Result: tools/list returned search_products, get_product, create_checkout, get_order_status; tools/call search_products {query:"teapot strainer", max_price_usd:100} returned "Large stoneware teapot $64.00; Ceramic tea strainer $18.00"; server instructions delivered.
+Label: OBSERVED
+Limits: Local only; create_checkout over MCP not run yet (no PayPal credentials).
