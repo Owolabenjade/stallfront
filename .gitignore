@@ -7,3 +7,4 @@ data/*.json
 uploads/
 *.log
 .DS_Store
+photos-inbox/
