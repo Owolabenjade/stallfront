@@ -206,3 +206,12 @@ Limits:
 - The prompts are fixed to this demo shop.
 - Reliability is n=10 and n=5 from one client location.
 - Shops published on Render vanish on the next deploy.
+
+## E-020: A shopper buys with the "Buy with PayPal" button on the live site, no assistant
+Date (UTC): 2026-11-11T15:04Z
+Commit: 65f746d (app code unchanged since 5d2b342)
+Environment: Render (https://stallfront.onrender.com), PayPal sandbox, headless Chrome (puppeteer-core), sandbox test buyer
+Method: `node scripts/buy-check.mjs https://stallfront.onrender.com --product "gold handle"` (opens /s/corner-stall, clicks the product card's "Buy with PayPal" button, waits for the PayPal page), then `node --env-file=.env scripts/approve-sandbox.mjs <approve_url>`, then GET /api/orders/ord_19f98700e5bd and /api/shops/corner-stall/dashboard
+Result: Clicked "Buy with PayPal" on White Ceramic Mug with Gold Handle ($25); the PayPal sandbox checkout opened 3.4 s after the click (page load 2.9 s). The test buyer approved; the return URL captured it and the order page read "Paid with PayPal". Order ord_19f98700e5bd: status paid, channel web, no agent, $31.00 ($25 plus $6 shipping), PayPal order 74U52681SM570642S, capture 97D51285HA094451P. The seller view data lists it as the shop's one order (the paid E-019 order was gone; the free instance had restarted or redeployed since).
+Label: OBSERVED
+Limits: One run, one product, quantity 1 (the button always orders one). The PayPal pages were in Arabic for this test buyer.

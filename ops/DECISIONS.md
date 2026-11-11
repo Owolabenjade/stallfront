@@ -21,7 +21,7 @@ Consequences: WebMCP has few native browser agents, so the demo carries its own 
 
 ## D-003: Gate B, name Stallfront
 Date (UTC): 2026-11-11T05:15Z
-Status: accepted (human locked it)
+Status: accepted (human locked it); tagline superseded by D-009
 Context: Name shortlist checked on npm and web search (2026-11-11): no collisions for Stallfront or Agent Aisle.
 Decision: Stallfront. Tagline: "Turn product photos into a PayPal shop AI agents can buy from."
 Alternatives: Agent Aisle (reads as big retail), Open Counter (an existing company recalled with that name, so dropped), Shelfcast, AgentStall, Countertop.
@@ -66,3 +66,11 @@ Context: The human asked for every commit to be authored by their own GitHub ide
 Decision: All 31 commits were rewritten with `git filter-branch`: author and committer set to Owolabenjade, co-author lines removed, four message lines reworded. Author and commit dates and every file tree are unchanged (checked commit by commit). The repo's local git identity is now Owolabenjade. New commits carry no co-author line.
 Alternatives: Leave history as it was.
 Consequences: Every commit ID changed (for example the first commit e17f1b1 is now 16b2dae, and the redesign 2d64327 is now 5d2b342). Commit IDs in EVIDENCE, DECISIONS, DEPENDENCIES and STATE were updated to the new IDs. Old IDs in chat logs or Render's deploy history no longer resolve on the branch.
+
+## D-009: Lead with the seller, not with AI agents
+Date (UTC): 2026-11-11T15:10Z
+Status: accepted (the human's call); the exact headline is proposed and waits for the human's OK
+Context: The Gate B tagline "Turn product photos into a PayPal shop AI agents can buy from" put AI agents first, because the name does not say it (D-003) and the research pointed at agentic commerce: PayPal's agent-ready checkout is limited to Store Sync merchants (E-002), the Best Use of Agentic Commerce mention was the most direct prize fit, and the agent part is what separates Stallfront from store builders. The human does not want agents as the main selling point: sellers are the users, and the MCP and agent side is better sold to developers on its own. The rubric supports this for three of five criteria (Potential Impact asks for a real problem for a real audience; Design asks for a product, not a proof of concept; Presentation asks who it is for).
+Decision: Public copy leads with the seller's job: photos become a PayPal shop in minutes, AI writes the listings, shoppers pay with PayPal. AI shopping assistants come second, as what sets the shop apart, and the WebMCP and MCP detail sits in a developer part of "What it does" and in "How we built it". Proposed headline: "Turn product photos into a PayPal shop in minutes." Devpost pitch: "Turn product photos into a PayPal shop in minutes. AI writes the listings. Shoppers pay with PayPal, or ask their AI assistant to shop for them."
+Alternatives: Keep the agent-led tagline (strongest for the Agentic Commerce mention and the Innovation criterion); lead with agents only in the video.
+Consequences: The Devpost text is rewritten (ops/SUBMISSION.md and the "Stallfront Devpost description" doc). The site headline, README title and intro, cover image, video title card, package.json and the GitHub About text still carry the old line until the human approves the new one (I-022). The agent story must stay clear in the body and the video, or the Agentic Commerce mention and the Innovation score lose their hook. D-003's tagline is superseded by this entry.

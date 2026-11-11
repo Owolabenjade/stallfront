@@ -1,11 +1,12 @@
 # Product Marketing Context
 
-**Document version:** v2
+**Document version:** v3
 **Last updated:** 2026-11-11
 
 ## Product Overview
-**One-liner:** Turn product photos into a PayPal shop AI agents can buy from.
-**What it does:** A maker adds photos of what they sell. Stallfront drafts the listings, registers each product with PayPal and opens a shop page that AI shopping assistants can search and order from. The buyer always approves the payment in PayPal.
+**One-liner:** Turn product photos into a PayPal shop in minutes. (Proposed in D-009; it replaces "...a PayPal shop AI agents can buy from" once the builder approves it.)
+**Order of the story:** the seller first (photos, listings, PayPal shop, orders without DMs), then shoppers (pay with PayPal, or send an AI assistant), then developers and AI apps (WebMCP and MCP).
+**What it does:** A maker adds photos of what they sell. Stallfront drafts the listings, registers each product with PayPal and opens a shop page where people buy with PayPal, and where AI shopping assistants can search and prepare orders too. The buyer always approves the payment in PayPal.
 **Product category:** Online shop builder for small sellers (the shelf: "simple online store", "PayPal shop", "sell on Instagram").
 **Product type:** Web app (hackathon prototype, PayPal sandbox).
 **Business model:** None yet. Free during the hackathon.
@@ -66,7 +67,7 @@
 - Technical details: present but secondary, for judges and developers.
 
 ## Proof Points
-**Metrics (sandbox, measured):** assistant reached the right checkout in 20 of 20 runs, median 4.75 s (E-015); 4 photos to a published shop with 4 PayPal catalog products in 47 to 67 s (E-016).
+**Metrics (sandbox, measured):** assistant reached the right checkout in 10 of 10 runs, median 3.5 s, and 5 of 5 for the gift request (E-019); four photos to a published shop with four PayPal catalog products in about a minute (E-016, E-019); a shopper's "Buy with PayPal" click reached PayPal checkout in 3.4 s and was paid (E-020).
 **Customers:** none yet [NEED: real sellers]. Demo shop photos are from Unsplash.
 **Testimonials:** none [NEED: real quotes]. Do not invent.
 
@@ -77,9 +78,11 @@
 ## Learnings
 | Date | Learning | Evidence | Applies to | Status |
 |------|----------|----------|------------|--------|
+| 2026-11-11 | Lead with the seller's job. AI shopping assistants are what sets the shop apart, not the headline; sell the MCP side to developers separately | builder feedback ("the developer who use mcp for ai agent can be sold some other way"), D-009 | headline, Devpost, README, video | active |
 | 2026-11-11 | No test statistics or hackathon notes on the site; proof belongs in the README and video | builder feedback ("such information does not serve a user") | site copy | active |
 | 2026-11-11 | The builder found the UI full of code words no user understands; user-facing copy must use plain words and keep technical names secondary | builder feedback | all pages | active |
 
 ## Changelog
+- v3 (2026-11-11) — Seller-first one-liner and story order (D-009); current proof points (E-019, E-020).
 - v2 (2026-11-11) — Learnings: no test stats on the site; demo shop now uses Unsplash photos (leather goods, mugs, denim).
 - v1 (2026-11-11) — Initial context, drafted from the README, landing page and builder feedback.
