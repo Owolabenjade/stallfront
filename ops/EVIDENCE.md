@@ -174,7 +174,7 @@ Label: OBSERVED
 Limits: Chrome only; no screen-reader pass.
 
 ## E-018: Facts read from code, the Render dashboard and git history; secrets scan
-Date (UTC): 2026-11-11T12:05Z
+Date (UTC): 2026-11-11T11:54Z
 Commit: 8b8ce08
 Environment: repository and Render dashboard
 Method: read `createOrder` in server/paypal.js; Render service page screenshot shared by the builder at 11:03Z; `git log --reverse`; a script that searches `git log -p --all` for the values of PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET and GROQ_API_KEY from `.env`, the first PayPal app's key prefixes, and any `gsk_` key pattern

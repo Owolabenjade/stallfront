@@ -1,6 +1,6 @@
 # STATE
 
-Updated (UTC): 2026-11-11T12:08Z
+Updated (UTC): 2026-11-11T11:56Z
 Verified at commit: aad798d on Render (later commits are docs, tests and ops only)
 Phase: hardening and shipping docs (feature freeze 2026-11-12T02:00+01:00; video gate 2026-11-12T15:30+01:00)
 
