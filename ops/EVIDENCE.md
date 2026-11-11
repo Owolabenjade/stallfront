@@ -245,3 +245,15 @@ Result:
 - `npm test` 13/13. Presubmit online: 0 errors (warnings: no video link yet; npm pages answer 403 to scripts).
 Label: OBSERVED
 Limits: One assistant run after the deploy (the 10-run figure is E-019, same agent code). The shopper order here was not paid.
+
+## E-023: MCP client buys through to a captured payment on Render; seller view seeded for the video
+Date (UTC): 2026-11-11T16:14Z
+Commit: 8d81b88 app code on Render
+Environment: Render (https://stallfront.onrender.com), PayPal sandbox, headless Chrome, sandbox test buyer; @modelcontextprotocol/sdk client (scripts/mcp-check.mjs)
+Method: `node scripts/buy-check.mjs https://stallfront.onrender.com --product "coffee"` then `approve-sandbox.mjs`; `node scripts/mcp-check.mjs https://stallfront.onrender.com corner-stall --checkout` then `approve-sandbox.mjs`; the live seller view read in headless Chrome
+Result:
+- Over MCP on Render: tools/list (4 tools), search_products, get_product (stock 5), create_checkout made order ord_534e78962c81 (PayPal 99071419PF318441L, $126.00 with shipping), get_order_status awaiting_buyer_approval. The test buyer approved; the return URL captured it: paid, capture 6UY59471TP497654C.
+- Shopper on Render: "Buy with PayPal" on the "Fill Me Up With Coffee" mug opened PayPal checkout in 3.7 s; paid order ord_e52cf78262dc, PayPal 79G711282W392461L, capture 7WN57509GP223602U, $24.00.
+- Live seller view: 2 orders, both Paid. "AI app · connected to your shop" (client stallfront-mcp-check 0.1.0, note "MCP check", "What the assistant did (4 steps)") and "Shopper · on your website" (no assistant steps). Stats: 2 orders, $150 paid, 1 from AI assistants. No page errors.
+Label: OBSERVED
+Limits: The MCP client is our own SDK test script, not a third-party AI app. The orders vanish on the next deploy or sleep; a keep-awake ping ran during the recording window.
