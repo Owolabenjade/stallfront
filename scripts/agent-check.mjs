@@ -17,6 +17,12 @@ let ok = false;
 try {
   const page = await browser.newPage();
   await page.setViewport({ width: 1366, height: 900 });
+  const turns = []; // one entry per model turn: model name, or the HTTP status when it failed
+  page.on('response', async (res) => {
+    if (!res.url().endsWith('/api/agent')) return;
+    const body = await res.json().catch(() => ({}));
+    turns.push(res.ok() ? body.model || '?' : `HTTP ${res.status()}`);
+  });
   await page.goto(`${BASE}/s/${SHOP}`, { waitUntil: 'networkidle0' });
   await page.waitForFunction(() => document.querySelector('#agent-ready span')?.textContent.startsWith('Agent-ready'), { timeout: 20000 });
   const t0 = Date.now();
@@ -39,6 +45,7 @@ try {
   result.replies.forEach((r) => console.log(`assistant: ${r}`));
   console.log(result.handoff ? `handoff: ${result.handoff}` : `ERROR: ${result.error}`);
   if (result.approve) console.log(`approve_url: ${result.approve}`);
+  console.log(`model turns (${turns.length}): ${turns.join(', ')}`);
   console.log(`time to handoff: ${handoffAt.toFixed(1)} s; finished: ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   ok = Boolean(result.handoff);
   if (SHOT) await page.screenshot({ path: SHOT });
