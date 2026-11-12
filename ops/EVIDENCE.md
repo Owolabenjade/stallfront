@@ -324,3 +324,15 @@ Method: GET /.well-known/mcp, /.well-known/mcp.json, /llms.txt, /api/shops and /
 Result: all five return 404; server/index.js has no route that lists shops or describes them to agents.
 Label: OBSERVED (live requests) and DERIVED (code)
 Limits: Covers the common discovery paths only.
+
+## E-030: Demo video v2 with an outside AI agent segment
+Date (UTC): 2026-11-12T03:24Z
+Commit: c588d70 on Render (app code as ee1dca2)
+Environment: as E-024; outside agent as E-027 (Claude Code CLI 2.1.322 over MCP, only the shop's four tools)
+Method: after a redeploy cleared test orders, seeded a paid shopper order and a paid shop-assistant order; ran the outside agent with the work-bag request (03:19Z), approved its order as the test buyer, resumed the session to ask whether it went through; built a replay page from the run's logs (the request, each shop call and result, and verbatim quotes of the two replies, shortened with an ellipsis), labelled "Replay of a real run · 12 Nov 2026"; recorded it with new narration, re-recorded the seller view and the GitHub clip, and reassembled
+Result:
+- Agent run: search_products "leather work bag", search_products "jacket", get_product (briefcase), get_product (jacket), create_checkout; order ord_a1ec528e1084, PayPal 9PV48551BE2048135, $271.00. Reply: "I've set up the PayPal checkout. The total is $271.00 including shipping, so it's under your $280 budget. Nothing has been paid yet." After approval: get_order_status, "Yes, your approval reached the shop. Corner Stall now lists the order as paid.", capture 2AS1182422746013G. No delivery-time claim; it said "The shop's tools don't give me shipping or delivery updates."
+- Seller view while recording: 3 orders, $566 paid, 2 from AI assistants; the agent's order on top as "AI app · connected to your shop", "claude-code 2.1.322", with its steps.
+- File: C:\Users\PAB-NETWORK\Videos\Stallfront demo v2.mp4, 2:44.8, 1920x1080; mean volume -19.2 dB, peak -3.6 dB. Sampled frames show the replay segment (106 to 120 s) with captions in sync, the seller view, the GitHub sections and the end card.
+Label: OBSERVED
+Limits: The agent segment is a replay of the logged run, not a screen recording of the agent's own interface; it is labelled as a replay on screen and in the narration ("a real run").
