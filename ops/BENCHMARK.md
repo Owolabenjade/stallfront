@@ -52,7 +52,7 @@ Every listed requirement is met at this commit: PayPal sandbox on the critical p
 - Other entries in this event's gallery (not visible on 2026-11-11, ops/RESEARCH.md).
 
 ## Rescore after the outside-agent proof and video v2
-Date (UTC): 2026-11-12T03:56Z    Commit: dbe84a6    Evaluated: ops/SUBMISSION.md, video v2 script (ops/DEMO.md), README "What is real", live URL
+Date (UTC): 2026-11-12T03:55Z    Commit: dbe84a6    Evaluated: ops/SUBMISSION.md, video v2 script (ops/DEMO.md), README "What is real", live URL
 | Criterion | Before (2026-11-11T19:23Z) | Now, own estimate | Fresh reviewer | What changed |
 |---|---|---|---|---|
 | Technological Implementation | 4 | 4 | 4 | AI side stronger: an outside agent bought over MCP and confirmed payment (E-027, E-030). PayPal side unchanged: Orders v2 and Catalog only, no JS SDK or webhooks |
