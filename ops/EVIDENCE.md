@@ -354,3 +354,12 @@ Method: the human's statement on 2026-11-12, checked against E-008 and E-009
 Result: the first sandbox business account was registered in Nigeria; PayPal restricts Nigerian accounts from receiving payments, which is why buyer approval failed with PAYEE_ACCOUNT_LOCKED_OR_CLOSED (E-008). The working sandbox business account is registered in Saudi Arabia, not the US as E-008 and E-009 had it. The test buyer's PayPal review page shows a Dubai shipping address (E-024). The human attributes the Arabic pages to the Saudi business account. In E-024 the login page was in English and the page switched to Arabic only after the test buyer signed in, so the buyer account may play a part too; the cause is not established.
 Label: DERIVED (the human's account of their own PayPal setup)
 Limits: Not checked through a PayPal API; the business account's country is not visible in the order data the app reads.
+
+## E-033: Submitted on Devpost
+Date (UTC): 2026-11-12T04:39Z
+Commit: 3615d0c (tag `submission`)
+Environment: Devpost, signed out
+Method: the human's statement that the project was submitted; GET https://devpost.com/software/stallfront and the event gallery
+Result: the project page answers 200 and names Stallfront and the PayPal AI Hackathon. The event gallery does not list it yet. Submitted about 15 hours before the deadline (2026-11-12T20:00Z) and before the Submitted gate (17:00Z).
+Label: OBSERVED (project page) and DERIVED (the submission itself, from the human)
+Limits: The submission form's contents were not viewed in this session.

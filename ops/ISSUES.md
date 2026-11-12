@@ -17,7 +17,7 @@ If the team also uses GitHub Issues, put the GitHub number in the Title cell and
 | I-009 | Seller dashboard with channel attribution, agent trace and PayPal IDs | claude | done | M2 | Captured agent order appears with channel, trace and capture ID | E-013 (API, public), E-014 (page) |
 | I-010 | States and design floor on the demo path | claude | done | M3 | Loading, empty and error states; design floor checklist passes | E-019 (redesign D-006: empty, loading, busy and error copy on every page; 1366 and 390 px screenshots) |
 | I-011 | README, video script, submission text | claude | done | M4 | presubmit passes; video uploaded; form drafted | E-024, E-025, presubmit 0 errors at 2026-11-11T18:22Z |
-| I-012 | Video produced (E-024); human uploads it to YouTube and submits on Devpost | human | doing | M4 | YouTube link public; Devpost shows submitted | E-024 (video file) |
+| I-012 | Video produced (E-024, E-030); human uploads it to YouTube and submits on Devpost | human | done | M4 | YouTube link public; Devpost shows submitted | E-031, E-033 |
 | I-013 | Human checkout with PayPal JS SDK v6 buttons on the shop page | claude | parked | | | |
 | I-014 | Shipment tracking from the seller dashboard | claude | parked | | | |
 | I-015 | Trace shows product names instead of raw product IDs in create_checkout args | claude | done | M3 | Trace reads "bag, phone stand" | E-015, E-017 |

@@ -1,8 +1,8 @@
 # STATE
 
-Updated (UTC): 2026-11-12T03:42Z
+Updated (UTC): 2026-11-12T04:39Z
 Verified at commit: ee1dca2 on Render (E-028)
-Phase: submission (video made; upload and Devpost submit by the human)
+Phase: submitted (tag `submission` at 3615d0c, E-033); judging 2026-12-01 to 2026-12-15
 
 Overwrite this file at every handoff and keep it under 60 lines. It describes the present only; history lives in git, DECISIONS and EVIDENCE. Every line under "Works now" cites an evidence ID.
 
@@ -33,11 +33,12 @@ Overwrite this file at every handoff and keep it under 60 lines. It describes th
 - The sandbox buyer's PayPal review page is in Arabic; PayPal ignores every English setting we tried (E-024). The video explains it on screen.
 
 ## Next action
-1. Human: submit on Devpost by 2026-11-12T18:00+01:00 (I-012), with the video link above and the text in ops/SUBMISSION.md.
-2. Claude: tag the submitted commit; record the submission as evidence.
+1. Keep the live site, PayPal sandbox app and Groq key working until 2026-12-15 (judging). Do not push app changes that could break the demo path.
+2. After 2026-12-15: rotate the PayPal and Groq keys; the ElevenLabs key should already be rotated.
+3. Winners are announced about 2026-12-21.
 
 ## Blockers and waiting on
-- Human: the Devpost submit.
+- None.
 
 ## Open unknowns
 - Whether Devpost's story editor renders `$...$` as math (check its preview before pasting).
