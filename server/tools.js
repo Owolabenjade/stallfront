@@ -91,7 +91,8 @@ function publicProduct(shop, p, { full = false } = {}) {
     attributes: p.attributes,
     gift_for: p.giftFor,
     stock: p.stock,
-    shipping: `${fmt(shop.shippingCents)} flat, ${shop.shipsFrom ? `ships from ${shop.shipsFrom}` : 'ships in 2 to 4 days'}`,
+    // Only what the seller set: a flat price, plus where it ships from if the shop says so (no invented delivery time).
+    shipping: `${fmt(shop.shippingCents)} flat${shop.shipsFrom ? `, ships from ${shop.shipsFrom}` : ''}`,
     image_url: p.imageUrl ? `${process.env.BASE_URL || ''}${p.imageUrl}` : null,
   };
 }
