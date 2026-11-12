@@ -77,7 +77,7 @@ We wanted a seller with a phone full of product photos to get a real PayPal shop
 ### Accomplishments that we're proud of
 - The whole journey works on the live site. Four photos became a published shop with four PayPal catalog products in about a minute. Sandbox payments went through from the "Buy with PayPal" button and from the assistant.
 - The assistant reached the right checkout in 10 of 10 runs of the work-bag request, with a median of 3.5 seconds to the PayPal handoff, and in 5 of 5 runs of the coffee-lover gift.
-- An outside MCP client (our own test client) searched the live shop, built a checkout, and the sandbox payment went through.
+- Outside AI agents can shop it. Our own MCP test client and Claude, connected from outside over MCP, each found the products on the live shop and prepared a PayPal checkout. After approval both payments went through, and Claude checked back and confirmed its order was paid.
 - Every order reaches the seller with its PayPal IDs, how it came in and, for assistant orders, each step the assistant took.
 
 ### What we learned

@@ -74,6 +74,7 @@ All checks below ran against the live Render URL unless marked local. The full m
 | Payment captured from the public URL | Order `ord_66d4bdfabdcc`: PayPal order `31P99297WK614384W`, capture `1XT10488423082226`, $271.00, channel WebMCP | [`scripts/approve-sandbox.mjs`](scripts/approve-sandbox.mjs) logs in as the sandbox buyer, E-019 |
 | Shopper's Buy button, no assistant | **Buy with PayPal** on the gold-handle mug opened PayPal checkout 3.4 s after the click. Paid: order `ord_19f98700e5bd`, PayPal order `74U52681SM570642S`, capture `97D51285HA094451P`, $31.00, channel website | [`scripts/buy-check.mjs`](scripts/buy-check.mjs), then `approve-sandbox.mjs`, E-020 |
 | MCP client buys | Our SDK test client on Render: search, get, `create_checkout`, buyer approves, capture. Order `ord_534e78962c81`: PayPal order `99071419PF318441L`, capture `6UY59471TP497654C`, $126.00, channel MCP | [`scripts/mcp-check.mjs`](scripts/mcp-check.mjs) `--checkout`, then `approve-sandbox.mjs`, E-014 (local), E-023 |
+| Outside AI agent buys | Claude, connected from outside over MCP with only the shop's four actions, was asked for "a leather work bag and a jacket, under $280 for both". It searched, compared the two bags, prepared the $271.00 checkout and gave the PayPal link. After approval it checked back and confirmed the order paid: order `ord_9fd433ff3c19`, capture `9FW18031CS098121D` | E-027 |
 | Photos to a live shop | The four sample photos drafted, published, 4 of 4 PayPal catalog products; about a minute on the free AI plan | [`scripts/onboard-check.mjs`](scripts/onboard-check.mjs), E-016, E-019 |
 | Smoke check and unit tests | Smoke 6/6 on Render and on a fresh clone; `npm test` 13/13 | E-016, E-019 |
 
@@ -111,9 +112,9 @@ npm test               # unit tests, no network
 - **The demo shop is seeded.** Corner Stall's six listings were drafted by the vision model from six Unsplash photos, through the same pipeline as `/new` (E-019). Two things were edited by hand before publishing: the loafers' category ("other" to "apparel"), and one description that stopped mid-sentence.
   - Drafted prices vary between runs of the same photo: the jacket came back at $65, $120 and $180. That's why the seller sets the price on the review screen.
   - With older photos, the model also misnamed a phone stand as a "pedal stand" and a "footrest" (E-011, E-016).
-- **The in-page assistant is ours.** It's a Groq model loop whose tool calls run through the page's WebMCP tools via the `@mcp-b/global` polyfill. We have not tested a browser's built-in WebMCP agent. MCP checkout was tested with our own SDK client script, not with Claude Desktop.
+- **The in-page assistant is ours.** It's a Groq model loop whose tool calls run through the page's WebMCP tools via the `@mcp-b/global` polyfill. We have not tested a browser's built-in WebMCP agent. Outside agents were tested with our own SDK client script and with Claude connected over MCP (E-027), not yet with ChatGPT or Gemini.
 - **Free hosting and a free AI plan.**
-  - The Render service sleeps after idle (about 50 s to wake). Its disk is wiped on every deploy, so shops and orders made on the live site disappear while the seed shop stays.
+  - The Render service sleeps after idle. The first request after a night idle took 22 s (E-027); Render says waking can take 50 s or more. Its disk is wiped on every deploy, so shops and orders made on the live site disappear while the seed shop stays.
   - Groq's free plan limits tokens per minute. Photo drafting manages about three photos a minute, and the assistant falls back to a smaller model when the plan is busy.
 - **How assistants find a shop.** A buyer's AI assistant reaches a shop through its link (WebMCP on the page) or its MCP address. There is no directory of shops yet, so an assistant can't discover them on its own.
 - **No seller accounts.** A shop's private seller-view link is its only key. The demo shop's seller view is public on purpose.

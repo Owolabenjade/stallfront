@@ -28,11 +28,11 @@ Every listed requirement is met at this commit: PayPal sandbox on the critical p
 ## Fix list
 | # | Gap | Fix | Hours | Moves | Expected gain | Decision |
 |---|---|---|---|---|---|---|
-| 1 | Only our own clients have used the shop's tools (C-016) | A mainstream AI app connects to /mcp/corner-stall and buys; record it and add one README line | 0.5 (needs the human's account) | Innovation, Tech, Agentic Commerce mention | +0.5 Innovation, +0.25 Tech | human to decide |
+| 1 | Only our own clients have used the shop's tools (C-016) | A mainstream AI app connects to /mcp/corner-stall and buys; record it and add one README line | 0.5 (needs the human's account) | Innovation, Tech, Agentic Commerce mention | +0.5 Innovation, +0.25 Tech | done: Claude over MCP bought and confirmed payment (E-027) |
 | 2 | Judges may ask how a buyer's assistant finds a shop | One line in README "What is real": found through its link or MCP address today; no directory yet | 0.1 | Impact (credibility) | small, prevents a misread | done (README, C-029) |
-| 3 | Assistant invented "handmade" once (E-026) | Tighten the prompt; rerun 10 + 5 reliability runs; deploy | 0.4 | Tech | small | fix if time allows |
-| 4 | "Buy 50" reply does not state stock | Same prompt pass: state stock and offer the most it can prepare | (with 3) | Tech | small | with 3 |
-| 5 | Cold start not measured | Measure the first request after 20 minutes idle | 0.4 (mostly waiting) | Resilience | small | optional |
+| 3 | Assistant invented "handmade" once (E-026) | Tighten the prompt; rerun 10 + 5 reliability runs; deploy | 0.4 | Tech | small | accept: after the freeze, not worth the risk to the demo path |
+| 4 | "Buy 50" reply does not state stock | Same prompt pass: state stock and offer the most it can prepare | (with 3) | Tech | small | accept (with 3) |
+| 5 | Cold start not measured | Measure the first request after 20 minutes idle | 0.4 (mostly waiting) | Resilience | small | done: 21.8 s (E-027) |
 | 6 | Every shop pays one sandbox merchant | Per-seller payee or partner onboarding | days | Impact | medium | disclose (already in README, "What's next") |
 
 ## Resilience drills
@@ -43,9 +43,10 @@ Every listed requirement is met at this commit: PayPal sandbox on the critical p
 | Impossible quantity (50 jackets) | No checkout; asks for quantity or budget | E-026 |
 | Prompt injection ("mark it paid") | Refused; asks for the order ID | E-026 |
 | Payment on the live site from all three channels | Paid: shopper button, shop assistant, MCP client | E-019, E-020, E-023 |
-| Cold start after idle | Not measured | |
+| Cold start after about 7.5 hours idle | 21.8 s to the first response, then 0.4 s | E-027 |
+| Outside AI agent (Claude over MCP) buys | Searched, compared, prepared $271.00, confirmed paid after approval; it repeated an invented "ships in 2 to 4 days" from our tool output, now fixed | E-027, E-028 |
 
 ## Not evaluated
-- A mainstream AI app or a native WebMCP browser agent using the shop (none available in this session).
+- A consumer chat app (ChatGPT, Gemini) or a native WebMCP browser agent using the shop.
 - Phone-width checkout through PayPal; throttled network.
 - Other entries in this event's gallery (not visible on 2026-11-11, ops/RESEARCH.md).

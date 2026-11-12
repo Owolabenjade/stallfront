@@ -292,3 +292,35 @@ Result:
 - Three shoppers at once: 3 of 3 reached the briefcase and jacket for $271.00 in 3.8 to 3.9 s; two runs used the fallback model for their last turn.
 Label: OBSERVED
 Limits: One run per request; three concurrent shoppers, not more; cold start after idle not measured.
+
+## E-027: An outside AI agent buys over MCP on Render; cold start measured
+Date (UTC): 2026-11-12T03:06Z
+Commit: 14b9aec app code on Render (before the shipping fix in ee1dca2)
+Environment: Render after about 7.5 hours idle; Claude Code CLI 2.1.322 (the VS Code extension's binary, model claude-opus-5-5) run headless as the MCP client, with only the shop's four tools allowed and every other tool disabled; PayPal sandbox; test buyer
+Method: `curl https://stallfront.onrender.com/healthz` twice; then `claude -p "<request>" --mcp-config mcp.json --strict-mcp-config --allowedTools mcp__cornerstall__* --disallowedTools Bash,Edit,Write,Read,...` from an empty folder, with mcp.json pointing at https://stallfront.onrender.com/mcp/corner-stall. Request: "New job on Monday: get me a leather work bag and a jacket, under $280 for both. Prepare the PayPal checkout and send me the link to approve it; I'll review the order in PayPal." Then `approve-sandbox.mjs` on the link; then the same session resumed with "I approved it in PayPal. Did the order go through?"; then the order and the seller view data read from the API
+Result:
+- Cold start: first request 21.8 s (HTTP 200); the next 0.4 s.
+- The agent made 6 shop calls in 25 s: search_products "leather work bag", search_products "jacket", get_product (briefcase), get_product (jacket), search_products "blazer coat outerwear", create_checkout (briefcase + jacket). Order ord_9fd433ff3c19, PayPal 0WG63763N0570993V, $271.00. It replied with the approval link, "Nothing has been charged", the line items, and why it chose the briefcase over the $180 tote ($306 with the jacket). It passed on the listing's "size M (per visible label, unverified)" and noted the checkout is PayPal's sandbox.
+- After approval, the resumed session called get_order_status and answered "Yes, the order went through", with capture 9FW18031CS098121D.
+- Seller view: channel MCP, agent "claude-code 2.1.322", paid, all 6 steps listed.
+- The agent also told the buyer "The shop says it ships in 2 to 4 days". That text came from our get_product default, not from the seller; fixed in ee1dca2 (E-028).
+Label: OBSERVED
+Limits: One agent, one run. The agent came from this machine's editor, not a consumer chat app. Cost of the two agent runs: about $0.19 plus the resume.
+
+## E-028: get_product no longer promises a delivery time
+Date (UTC): 2026-11-12T03:09Z
+Commit: ee1dca2 (deployed)
+Environment: Render, Groq, headless Chrome
+Method: POST /api/shops/corner-stall/tools/get_product for the jacket; `npm run smoke` against Render; `node scripts/agent-check.mjs https://stallfront.onrender.com`; `npm test` before the push
+Result: shipping now reads "$6.00 flat" (was "$6.00 flat, ships in 2 to 4 days"). Smoke: all steps passed. Assistant: search_products, create_checkout, $271.00, handoff in 3.3 s. `npm test` 13/13.
+Label: OBSERVED
+Limits: One assistant run after the change.
+
+## E-029: No shop directory or discovery file exists
+Date (UTC): 2026-11-12T03:09Z
+Commit: ee1dca2
+Environment: Render; server/index.js
+Method: GET /.well-known/mcp, /.well-known/mcp.json, /llms.txt, /api/shops and /sitemap.xml on https://stallfront.onrender.com; search server/index.js for such routes
+Result: all five return 404; server/index.js has no route that lists shops or describes them to agents.
+Label: OBSERVED (live requests) and DERIVED (code)
+Limits: Covers the common discovery paths only.

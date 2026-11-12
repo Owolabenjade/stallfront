@@ -29,6 +29,7 @@ If the team also uses GitHub Issues, put the GitHub number in the Title cell and
 | I-021 | Rebuild the demo shop from the human's six new photos | claude | done | M3 | New seed through the real pipeline; demo prompts pass on Render | E-019, D-007 |
 | I-022 | Seller-first headline everywhere: site hero and page title, README title and intro, cover image, video title card and narration, package.json description, GitHub About | claude (human approved the line) | done | M4 | New headline live on Render, always followed by the AI-assistant line (E-021); cover retaken; ops/DEMO.md and README updated; presubmit clean | E-022 |
 | I-023 | Seller view: an opened "What the assistant did" list closed on every 4 s refresh | claude | done | M4 | List stays open across refreshes | E-024 |
+| I-024 | Shop tools promised "ships in 2 to 4 days" that no seller set; an outside agent repeated it | claude | done | M4 | Shipping states only what the seller set | E-027, E-028 |
 
 ## Notes
 Add a `### I-00N` section only when an issue needs more than its row.
