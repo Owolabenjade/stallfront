@@ -1,6 +1,6 @@
 # STATE
 
-Updated (UTC): 2026-11-12T03:24Z
+Updated (UTC): 2026-11-12T03:42Z
 Verified at commit: ee1dca2 on Render (E-028)
 Phase: submission (video made; upload and Devpost submit by the human)
 
@@ -21,7 +21,7 @@ Overwrite this file at every handoff and keep it under 60 lines. It describes th
 - Git history: Owolabenjade identity, no co-author lines (D-008).
 
 ## Video
-- Demo video v2 ready (2:45, adds an outside AI agent buying over MCP): C:\Users\PAB-NETWORK\Videos\Stallfront demo v2.mp4 (E-030). Version 1 is public at https://youtu.be/KDiFgml6RH0 (E-025) until v2 replaces it.
+- Demo video v2 public on YouTube: https://youtu.be/y0kJiRzCfWo (2:45, includes an outside AI agent buying over MCP; E-030, E-031). Version 1 is no longer public.
 
 ## Written, not yet verified
 - Nothing on the demo path.
@@ -33,10 +33,8 @@ Overwrite this file at every handoff and keep it under 60 lines. It describes th
 - The sandbox buyer's PayPal review page is in Arabic; PayPal ignores every English setting we tried (E-024). The video explains it on screen.
 
 ## Next action
-1. Human: upload Stallfront demo v2.mp4 to YouTube as Public (ops/DEMO.md), set the old video to Private, and send the new link.
-2. Claude: replace the video link in README.md, ops/SUBMISSION.md and the Devpost doc; run presubmit --online.
-3. Human: submit on Devpost by 2026-11-12T18:00+01:00 (I-012).
-4. Claude: tag the submitted commit; record the submission as evidence.
+1. Human: submit on Devpost by 2026-11-12T18:00+01:00 (I-012), with the video link above and the text in ops/SUBMISSION.md.
+2. Claude: tag the submitted commit; record the submission as evidence.
 
 ## Blockers and waiting on
 - Human: the Devpost submit.

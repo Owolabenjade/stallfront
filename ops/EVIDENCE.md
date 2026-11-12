@@ -336,3 +336,12 @@ Result:
 - File: C:\Users\PAB-NETWORK\Videos\Stallfront demo v2.mp4, 2:44.8, 1920x1080; mean volume -19.2 dB, peak -3.6 dB. Sampled frames show the replay segment (106 to 120 s) with captions in sync, the seller view, the GitHub sections and the end card.
 Label: OBSERVED
 Limits: The agent segment is a replay of the logged run, not a screen recording of the agent's own interface; it is labelled as a replay on screen and in the narration ("a real run").
+
+## E-031: Demo video v2 public on YouTube; v1 no longer public
+Date (UTC): 2026-11-12T03:41Z
+Commit: 0163176
+Environment: YouTube oEmbed and the public watch page, signed out
+Method: oEmbed for https://youtu.be/y0kJiRzCfWo and https://youtu.be/KDiFgml6RH0; the v2 watch page's player data
+Result: v2: oEmbed 200, title "Stallfront: turn product photos into a PayPal shop in minutes", isUnlisted false, playability OK, length 165 s (the E-030 file is 164.8 s). v1: oEmbed 404 (private or removed).
+Label: OBSERVED
+Limits: Signed out, one network; playback on a phone not checked.

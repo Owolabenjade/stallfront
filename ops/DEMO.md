@@ -6,7 +6,7 @@ Every claim spoken or shown is in `ops/CLAIMS.md`. The story leads with the sell
 ## The video
 - File: `C:\Users\PAB-NETWORK\Videos\Stallfront demo v2.mp4` (2:45, 1920x1080, captions burned in; `Stallfront demo v2.srt` beside it). Evidence: E-030. Version 1 (`Stallfront demo.mp4`, 2:38, E-024) has no outside-agent segment.
 - Made on 2026-11-11 from the live site: a scripted browser ran the demo path on https://stallfront.onrender.com and PayPal's sandbox, and the narration was generated with ElevenLabs in the builder's cloned voice. Waits (the AI drafting the listings, PayPal page loads) are cut.
-- Version 1 uploaded: https://youtu.be/KDiFgml6RH0 (public, 2:38; E-025). Version 2 is to be uploaded and replaces it everywhere.
+- Uploaded: https://youtu.be/y0kJiRzCfWo (version 2, public, 2:45; E-031). Version 1 (https://youtu.be/KDiFgml6RH0, E-025) is no longer public.
 - To rebuild it: `ops/private/video-tools/README.md` (private, not in git).
 
 ## Script as recorded
