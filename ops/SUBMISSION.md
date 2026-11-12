@@ -71,7 +71,7 @@ We wanted a seller with a phone full of product photos to get a real PayPal shop
 - **An assistant that asked instead of acting.** In early runs it replied "should I add it to your cart?", or said "I'll create a checkout" and stopped. We measured it, rewrote the instructions, and added a one-time reminder when a reply promises an action without taking it. The gift request went from 0 of 3 to 5 of 5.
 - **Cut-off AI replies.** Once, a half-finished reply from the vision model became a listing called "Untitled product" at $10. Drafts now need a title and a price, or the next fallback runs.
 - **The free AI plan.** Groq's strict JSON mode rejects `enum` in schemas and sometimes fails to decode, so drafts fall back to partial output, then to JSON mode. The plan allows about 8,000 tokens a minute, so drafting sends one photo per request and waits out rate limits with a countdown.
-- **A sandbox merchant that couldn't be paid.** The first sandbox business account returned `PAYEE_ACCOUNT_LOCKED_OR_CLOSED`. A new US business account fixed it.
+- **A sandbox merchant that couldn't be paid.** Our first sandbox business account was registered in Nigeria, where PayPal restricts receiving payments, so every checkout failed with `PAYEE_ACCOUNT_LOCKED_OR_CLOSED`. A new sandbox business account registered in Saudi Arabia fixed it.
 - **Plain language.** The first version of the site was full of tool and model names. We rewrote every page in plain words and kept the technical names as small labels for developers.
 
 ### Accomplishments that we're proud of

@@ -76,12 +76,12 @@ Environment: headless Chrome via scripts/approve-sandbox.mjs, sandbox personal b
 Method: `node --env-file=.env scripts/approve-sandbox.mjs https://www.sandbox.paypal.com/checkoutnow?token=3GK14662EH504750K`
 Result: buyer login succeeded; PayPal redirected to genericError?code=UEFZRUVfQUNDT1VOVF9MT0NLRURfT1JfQ0xPU0VE (base64 for PAYEE_ACCOUNT_LOCKED_OR_CLOSED), page text "The merchant isn't able to accept PayPal payments at this time."
 Label: OBSERVED
-Limits: Cause INFERRED: the app's sandbox business account cannot receive payments (likely its country). Fix in progress: a US sandbox business account and a new app (I-002).
+Limits: Cause INFERRED: the app's sandbox business account cannot receive payments (likely its country). Fix in progress: a US sandbox business account and a new app (I-002). Corrected in E-032: the account was registered in Nigeria, where PayPal restricts receiving payments, and the fix was a business account registered in Saudi Arabia.
 
 ## E-008: Full payment loop in the PayPal sandbox (create, buyer approval, capture)
 Date (UTC): 2026-11-11T09:35Z
 Commit: 09a9c2c
-Environment: local server, PayPal sandbox app "Original Stallfront" (US sandbox business account), sandbox personal buyer sb-n1jy253844531 (account set to Arabic, Dubai address), headless Chrome
+Environment: local server, PayPal sandbox app "Original Stallfront" (sandbox business account registered in Saudi Arabia, not US; corrected in E-032), sandbox personal buyer sb-n1jy253844531 (account set to Arabic, Dubai address), headless Chrome
 Method: create_checkout via the WebMCP tool endpoint (strainer + chai), then `node --env-file=.env scripts/approve-sandbox.mjs <approve_url>`, then GET /api/orders/ord_f48eed84bb2d
 Result: buyer logged in, pressed the purchase button, PayPal redirected to /s/kiln-and-leaf/orders/ord_f48eed84bb2d; order page "Paid with PayPal"; status paid, PayPal order 9SU8772198274373F, capture 99K72367WP461105U, total $38.00
 Label: OBSERVED
@@ -345,3 +345,12 @@ Method: oEmbed for https://youtu.be/y0kJiRzCfWo and https://youtu.be/KDiFgml6RH0
 Result: v2: oEmbed 200, title "Stallfront: turn product photos into a PayPal shop in minutes", isUnlisted false, playability OK, length 165 s (the E-030 file is 164.8 s). v1: oEmbed 404 (private or removed).
 Label: OBSERVED
 Limits: Signed out, one network; playback on a phone not checked.
+
+## E-032: Correction from the builder: sandbox business account countries
+Date (UTC): 2026-11-12T04:17Z
+Commit: 342ff62
+Environment: the builder's PayPal developer account (sandbox)
+Method: the human's statement on 2026-11-12, checked against E-008 and E-009
+Result: the first sandbox business account was registered in Nigeria; PayPal restricts Nigerian accounts from receiving payments, which is why buyer approval failed with PAYEE_ACCOUNT_LOCKED_OR_CLOSED (E-008). The working sandbox business account is registered in Saudi Arabia, not the US as E-008 and E-009 had it. The test buyer's PayPal review page shows a Dubai shipping address (E-024). The human attributes the Arabic pages to the Saudi business account. In E-024 the login page was in English and the page switched to Arabic only after the test buyer signed in, so the buyer account may play a part too; the cause is not established.
+Label: DERIVED (the human's account of their own PayPal setup)
+Limits: Not checked through a PayPal API; the business account's country is not visible in the order data the app reads.
