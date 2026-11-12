@@ -50,3 +50,16 @@ Every listed requirement is met at this commit: PayPal sandbox on the critical p
 - A consumer chat app (ChatGPT, Gemini) or a native WebMCP browser agent using the shop.
 - Phone-width checkout through PayPal; throttled network.
 - Other entries in this event's gallery (not visible on 2026-11-11, ops/RESEARCH.md).
+
+## Rescore after the outside-agent proof and video v2
+Date (UTC): 2026-11-12T03:56Z    Commit: dbe84a6    Evaluated: ops/SUBMISSION.md, video v2 script (ops/DEMO.md), README "What is real", live URL
+| Criterion | Before (2026-11-11T19:23Z) | Now, own estimate | Fresh reviewer | What changed |
+|---|---|---|---|---|
+| Technological Implementation | 4 | 4 | 4 | AI side stronger: an outside agent bought over MCP and confirmed payment (E-027, E-030). PayPal side unchanged: Orders v2 and Catalog only, no JS SDK or webhooks |
+| Design | 4 | 4 | 3.5 | Seller view keeps opened step lists open (E-024); no persistence and no seller accounts |
+| Potential Impact | 3 | 3 | 3.5 | Unchanged: sellers are not paid into their own accounts, no real sellers yet, agents cannot discover shops on their own |
+| Innovation/Idea | 3.5 | 4 | 4 | The distinctive moment is now shown and proven: another AI assistant buys from a shop built from photos |
+| Presentation | 4 | 4.5 | 4 | Video v2 shows the full path plus the outside agent in 2:45 with captions (E-030, E-031); the narration voice was not reviewed by ear in this session |
+| Average | 3.7 | 3.9 | 3.8 | |
+
+Fresh reviewer: openai/gpt-oss-120b on Groq, no prior context, given only the submission text, the video script, the README limits and the rubric, told to be strict (2026-11-12T03:55Z). Its top weaknesses: one sandbox merchant for every shop; free hosting (cold start, data lost on redeploy); no test with a standard WebMCP browser agent. Its prize view: "Strong candidate for Best Use of Agentic Commerce." A model is a second opinion, not a judge; both sets of scores are INFERRED.
